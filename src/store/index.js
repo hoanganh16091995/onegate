@@ -180,8 +180,6 @@ export const store = new Vuex.Store({
       })
     },
     loadDistricts ({commit, state}, data) {
-      console.log(data)
-      // commit('setLoading', true)
       let param = {
         headers: {
           groupId: state.api.groupId
@@ -191,15 +189,11 @@ export const store = new Vuex.Store({
         }
       }
       axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setLoading', false)
         commit('setDistrict', response.data.data)
-        console.log(state.districts)
       }).catch(function (xhr) {
-        commit('setLoading', false)
       })
     },
     loadWards ({commit, state}, data) {
-      // commit('setLoading', true)
       let param = {
         headers: {
           groupId: state.api.groupId
@@ -209,12 +203,8 @@ export const store = new Vuex.Store({
         }
       }
       axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setLoading', false)
         commit('setWard', response.data.data)
-        return []
       }).catch(function (xhr) {
-        commit('setLoading', false)
-        return []
       })
     }
   },
@@ -337,25 +327,10 @@ export const store = new Vuex.Store({
       }
     },
     districts (state) {
-      return (data) => {
-        if (state.districts && state.districts.length === 0) {
-          store.dispatch('loadDistricts', data)
-        } else {
-          return state.districts
-        }
-      }
-    },
-    districtsdddd (state) {
       return state.districts
     },
     wards (state) {
-      return (data) => {
-        if (state.wards && state.wards.length === 0) {
-          store.dispatch('loadWards', data)
-        } else {
-          return state.wards
-        }
-      }
+      return state.wards
     }
   }
 })
