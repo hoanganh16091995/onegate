@@ -37,17 +37,44 @@ export const store = new Vuex.Store({
     citys: [],
     districts: [],
     wards: [],
+    delegateCitys: [],
+    delegateDistricts: [],
+    delegateWards: [],
+    resultCitys: [],
+    resultDistricts: [],
+    resultWards: [],
+    resultServices: [],
     thongTinChuHoSo: {
       userType: 'cong_dan',
       city: '',
       district: '',
-      ward: ''
+      ward: '',
+      applicantNote: '',
+      applicantIdNo: '',
+      contactEmail: '',
+      contactName: '',
+      address: '',
+      applicantName: ''
     },
     thongTinNguoiNopHoSo: {
-      sameUser: false
+      sameUser: '',
+      delegateApplicantName: '',
+      delegateCity: '',
+      delegateAddress: '',
+      delegateDistrict: '',
+      delegateWard: '',
+      delegateContactEmail: '',
+      delegateContactTelNo: '',
+      delegateApplicantIdNo: ''
     },
     dichVuChuyenPhatKetQua: {
-      homeRegister: false
+      homeRegister: false,
+      resultService: '',
+      resultAddress: '',
+      resultCity: '',
+      resultDistrict: '',
+      resultWard: '',
+      resultTelNo: ''
     }
   },
   actions: {
@@ -189,7 +216,7 @@ export const store = new Vuex.Store({
         }
       }
       axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setDistrict', response.data.data)
+        commit('setDistricts', response.data.data)
       }).catch(function (xhr) {
       })
     },
@@ -203,9 +230,128 @@ export const store = new Vuex.Store({
         }
       }
       axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setWard', response.data.data)
+        commit('setWards', response.data.data)
       }).catch(function (xhr) {
       })
+    },
+    loadDelegateCitys ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: 0
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setLoading', false)
+        commit('setDelegateCitys', response.data.data)
+      }).catch(function (xhr) {
+        commit('setLoading', false)
+      })
+    },
+    loadDelegateDistricts ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setLoading', false)
+        commit('setDelegateDistricts', response.data.data)
+      }).catch(function (xhr) {
+        commit('setLoading', false)
+      })
+    },
+    loadDelegateWards ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setLoading', false)
+        commit('setDelegateWards', response.data.data)
+      }).catch(function (xhr) {
+        commit('setLoading', false)
+      })
+    },
+    loadResultCitys ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: 0
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setResultCitys', response.data.data)
+      }).catch(function (xhr) {
+      })
+    },
+    loadResultDistricts ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setResultDistricts', response.data.data)
+      }).catch(function (xhr) {
+      })
+    },
+    loadResultWards ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setResultWards', response.data.data)
+      }).catch(function (xhr) {
+      })
+    },
+    loadResultServices ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setResultServices', response.data.data)
+      }).catch(function (xhr) {
+      })
+    },
+    resetThongTinNguoiNopHoSo ({commit}) {
+      console.log('reset')
+      let data = {
+        sameUser: '',
+        delegateApplicantName: '',
+        delegateCity: '',
+        delegateAddress: '',
+        delegateDistrict: '',
+        delegateWard: '',
+        delegateContactEmail: '',
+        delegateContactTelNo: '',
+        delegateApplicantIdNo: ''
+      }
+      commit('setThongTinNguoiNopHoSo', data)
     }
   },
   mutations: {
@@ -254,11 +400,32 @@ export const store = new Vuex.Store({
     setCitys (state, payload) {
       state.citys = payload
     },
-    setDistrict (state, payload) {
+    setDistricts (state, payload) {
       state.districts = payload
     },
-    setWard (state, payload) {
+    setWards (state, payload) {
       state.wards = payload
+    },
+    setDelegateCitys (state, payload) {
+      state.delegateCitys = payload
+    },
+    setDelegateDistricts (state, payload) {
+      state.delegateDistricts = payload
+    },
+    setDelegateWards (state, payload) {
+      state.delegateWards = payload
+    },
+    setResultCitys (state, payload) {
+      state.resultCitys = payload
+    },
+    setResultDistricts (state, payload) {
+      state.resultDistricts = payload
+    },
+    setResultWards (state, payload) {
+      state.resultWards = payload
+    },
+    setResultServices (state, payload) {
+      state.resultServices = payload
     }
   },
   getters: {
@@ -331,6 +498,39 @@ export const store = new Vuex.Store({
     },
     wards (state) {
       return state.wards
+    },
+    delegateCitys (state) {
+      if (state.delegateCitys.length === 0) {
+        store.dispatch('loadDelegateCitys')
+      } else {
+        return state.delegateCitys
+      }
+    },
+    delegateDistricts (state) {
+      return state.delegateDistricts
+    },
+    delegateWards (state) {
+      return state.delegateWards
+    },
+    resultCitys (state) {
+      if (state.resultCitys.length === 0) {
+        store.dispatch('loadResultCitys')
+      } else {
+        return state.resultCitys
+      }
+    },
+    resultDistricts (state) {
+      return state.resultDistricts
+    },
+    resultWards (state) {
+      return state.resultWards
+    },
+    resultServices (state) {
+      if (state.resultServices.length === 0) {
+        store.dispatch('loadResultServices')
+      } else {
+        return state.resultServices
+      }
     }
   }
 })

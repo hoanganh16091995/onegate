@@ -23,8 +23,10 @@
                   </content-placeholders>
                   <v-select
                     v-else
-                    :items="states"
-                    v-model="a1"
+                    :items="resultServices"
+                    item-text="itemName"
+                    item-value="itemCode"
+                    v-model="dichVuChuyenPhatKetQua.resultService"
                     autocomplete
                   ></v-select>
                 </v-flex>
@@ -34,8 +36,10 @@
                   </content-placeholders>
                   <v-select
                     v-else
-                    :items="states"
-                    v-model="a1"
+                    :items="resultServices"
+                    item-text="itemName"
+                    item-value="itemCode"
+                    v-model="dichVuChuyenPhatKetQua.resultService"
                     autocomplete
                   ></v-select>
                 </v-flex>
@@ -54,7 +58,8 @@
                   </content-placeholders>
                   <v-text-field
                     v-else
-                    name="lePhi.totalMoney"
+                    name="resultTelNo"
+                    v-model="dichVuChuyenPhatKetQua.resultTelNo"
                     append-icon="phone"
                   ></v-text-field>
                 </v-flex>
@@ -73,7 +78,8 @@
                   </content-placeholders>
                   <v-text-field
                     v-else
-                    name="lePhi.totalMoney"
+                    name="resultAddress"
+                    v-model="dichVuChuyenPhatKetQua.resultAddress"
                     multi-line
                     rows="2"
                   ></v-text-field>
@@ -90,8 +96,11 @@
                   </content-placeholders>
                   <v-select
                     v-else
-                    :items="states"
-                    v-model="a1"
+                    :items="resultCitys"
+                    item-text="itemName"
+                    item-value="itemCode"
+                    @change="onChangeResultCity"
+                    v-model="dichVuChuyenPhatKetQua.resultCity"
                     autocomplete
                   ></v-select>
                 </v-flex>
@@ -107,8 +116,11 @@
                   </content-placeholders>
                   <v-select
                     v-else
-                    :items="states"
-                    v-model="a1"
+                    :items="resultDistricts"
+                    item-text="itemName"
+                    item-value="itemCode"
+                    @change="onChangeResultDistrict"
+                    v-model="dichVuChuyenPhatKetQua.resultDistrict"
                     autocomplete
                   ></v-select>
                 </v-flex>
@@ -124,8 +136,10 @@
                   </content-placeholders>
                   <v-select
                     v-else
-                    :items="states"
-                    v-model="a1"
+                    :items="resultWards"
+                    item-text="itemName"
+                    item-value="itemCode"
+                    v-model="dichVuChuyenPhatKetQua.resultWard"
                     autocomplete
                   ></v-select>
                 </v-flex>
@@ -158,8 +172,27 @@ export default {
     },
     dichVuChuyenPhatKetQua () {
       return this.$store.getters.dichVuChuyenPhatKetQua
+    },
+    resultCitys () {
+      return this.$store.getters.resultCitys
+    },
+    resultDistricts () {
+      return this.$store.getters.resultDistricts
+    },
+    resultWards () {
+      return this.$store.getters.resultWards
+    },
+    resultServices () {
+      return this.$store.getters.resultServices
     }
   },
-  methods: {}
+  methods: {
+    onChangeResultCity (data) {
+      this.$store.dispatch('loadResultDistricts', data)
+    },
+    onChangeResultDistrict (data) {
+      this.$store.dispatch('loadResultWards', data)
+    }
+  }
 }
 </script>
