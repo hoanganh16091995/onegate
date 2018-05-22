@@ -64,12 +64,15 @@
                 <content-placeholders class="mt-3" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-select
-                  v-else
-                  :items="states"
-                  v-model="a1"
-                  autocomplete
-                ></v-select>
+               <v-select
+                 v-else
+                 :items="citys"
+                 item-text="itemName"
+                 item-value="itemCode"
+                 v-model="thongTinChuHoSo.city"
+                 @change="onChangeCity"
+                 autocomplete
+               ></v-select>
               </v-flex>
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-3" v-if="loading">
@@ -83,8 +86,11 @@
                 </content-placeholders>
                 <v-select
                   v-else
-                  :items="states"
-                  v-model="a1"
+                  :items="districts"
+                  item-text="itemName"
+                  item-value="itemCode"
+                  v-model="thongTinChuHoSo.district"
+                  @change="onChangeDistrict"
                   autocomplete
                 ></v-select>
               </v-flex>
@@ -100,8 +106,10 @@
                 </content-placeholders>
                 <v-select
                   v-else
-                  :items="states"
-                  v-model="a1"
+                  :items="wards"
+                  item-text="itemName"
+                  item-value="itemCode"
+                  v-model="thongTinChuHoSo.ward"
                   autocomplete
                 ></v-select>
               </v-flex>
@@ -194,8 +202,28 @@ export default {
     },
     thongTinChuHoSo () {
       return this.$store.getters.thongTinChuHoSo
+    },
+    citys () {
+      return this.$store.getters.citys
+    },
+    districts () {
+      return this.$store.getters.districts(this.thongTinChuHoSo.city)
+    },
+    wards () {
+      return this.$store.getters.wards(this.thongTinChuHoSo.district)
     }
   },
-  methods: {}
+  methods: {
+    onChangeCity (data) {
+      this.$store.commit('setDistrict', [])
+      this.$store.getters.districts(data)
+      console.log('uuuuuuuuuuuuu', this.$store.getters.districtsdddd)
+    },
+    onChangeDistrict (data) {
+      this.$store.commit('setWard', [])
+      let newWards = this.$store.getters.districts(data)
+      this.$store.commit('setWard', newWards)
+    }
+  }
 }
 </script>
