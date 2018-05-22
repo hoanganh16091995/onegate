@@ -18,25 +18,10 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="lePhi.totalMoney"
+                  name="applicantName"
+                  v-model="thongTinChuHoSo.applicantName"
                 ></v-text-field>
               </v-flex>
-              <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-subheader v-else class="pl-0">Người đại diện: </v-subheader>
-              </v-flex>
-              <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-text-field
-                  v-else
-                  name="lePhi.totalMoney"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs12></v-flex>
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-3" v-if="loading">
                   <content-placeholders-text :lines="1" />
@@ -49,7 +34,8 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="lePhi.ghiChuMoney"
+                  name="address"
+                  v-model="thongTinChuHoSo.address"
                   multi-line
                   rows="2"
                 ></v-text-field>
@@ -125,7 +111,8 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="lePhi.totalMoney"
+                  name="contactTelNo"
+                  v-model="thongTinChuHoSo.contactTelNo"
                   append-icon="phone"
                 ></v-text-field>
               </v-flex>
@@ -141,7 +128,8 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="lePhi.totalMoney"
+                  name="contactEmail"
+                  v-model="thongTinChuHoSo.contactEmail"
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm2>
@@ -156,24 +144,8 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="lePhi.totalMoney"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-subheader v-else class="pl-0">Ghi chú: </v-subheader>
-              </v-flex>
-              <v-flex xs12 sm10>
-                <content-placeholders class="mt-3" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-text-field
-                  v-else
-                  name="lePhi.ghiChuMoney"
-                  multi-line
-                  rows="2"
+                  name="applicantIdNo"
+                  v-model="thongTinChuHoSo.applicantIdNo"
                 ></v-text-field>
               </v-flex>
             </v-layout>

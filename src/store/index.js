@@ -37,14 +37,31 @@ export const store = new Vuex.Store({
     citys: [],
     districts: [],
     wards: [],
+    delegateCitys: [],
+    delegateDistricts: [],
+    delegateWards: [],
     thongTinChuHoSo: {
       userType: 'cong_dan',
       city: '',
       district: '',
-      ward: ''
+      ward: '',
+      applicantNote: '',
+      applicantIdNo: '',
+      contactEmail: '',
+      contactName: '',
+      address: '',
+      applicantName: ''
     },
     thongTinNguoiNopHoSo: {
-      sameUser: false
+      sameUser: '',
+      delegateApplicantName: '',
+      delegateCity: '',
+      delegateAddress: '',
+      delegateDistrict: '',
+      delegateWard: '',
+      delegateContactEmail: '',
+      delegateContactTelNo: '',
+      delegateApplicantIdNo: ''
     },
     dichVuChuyenPhatKetQua: {
       homeRegister: false
@@ -216,6 +233,72 @@ export const store = new Vuex.Store({
         commit('setLoading', false)
         return []
       })
+    },
+    loadDelegateCitys ({commit, state}, data) {
+      commit('setLoading', true)
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: 0
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setLoading', false)
+        commit('setDelegateCity', response.data.data)
+      }).catch(function (xhr) {
+        commit('setLoading', false)
+      })
+    },
+    loadDelegateDistricts ({commit, state}, data) {
+      commit('setLoading', true)
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: 0
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setLoading', false)
+        commit('setDelegateDistrict', response.data.data)
+      }).catch(function (xhr) {
+        commit('setLoading', false)
+      })
+    },
+    loadDelegateWards ({commit, state}, data) {
+      commit('setLoading', true)
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: 0
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setLoading', false)
+        commit('setDelegateWard', response.data.data)
+      }).catch(function (xhr) {
+        commit('setLoading', false)
+      })
+    },
+    resetThongTinNguoiNopHoSo ({commit}) {
+      console.log('reset')
+      let data = {
+        sameUser: '',
+        delegateApplicantName: '',
+        delegateCity: '',
+        delegateAddress: '',
+        delegateDistrict: '',
+        delegateWard: '',
+        delegateContactEmail: '',
+        delegateContactTelNo: '',
+        delegateApplicantIdNo: ''
+      }
+      commit('setThongTinNguoiNopHoSo', data)
     }
   },
   mutations: {
@@ -269,6 +352,15 @@ export const store = new Vuex.Store({
     },
     setWard (state, payload) {
       state.wards = payload
+    },
+    setDelegateCity (state, payload) {
+      state.delegateCitys = payload
+    },
+    setDelegateDistrict (state, payload) {
+      state.delegateDistricts = payload
+    },
+    setDelegateWard (state, payload) {
+      state.delegateWards = payload
     }
   },
   getters: {
@@ -354,6 +446,31 @@ export const store = new Vuex.Store({
           store.dispatch('loadWards', data)
         } else {
           return state.wards
+        }
+      }
+    },
+    delegateCitys (state) {
+      if (state.delegateCitys.length === 0) {
+        store.dispatch('loadDelegateCitys')
+      } else {
+        return state.delegateCitys
+      }
+    },
+    delegateDistricts (state) {
+      return (data) => {
+        if (state.delegateDistricts && state.delegateDistricts.length === 0) {
+          store.dispatch('loadDelegateDistricts', data)
+        } else {
+          return state.delegateDistricts
+        }
+      }
+    },
+    delegateWards (state) {
+      return (data) => {
+        if (state.delegateWards && state.delegateWards.length === 0) {
+          store.dispatch('loadDelegateWards', data)
+        } else {
+          return state.delegateWards
         }
       }
     }
