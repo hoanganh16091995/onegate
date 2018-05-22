@@ -207,22 +207,18 @@ export default {
       return this.$store.getters.citys
     },
     districts () {
-      return this.$store.getters.districts(this.thongTinChuHoSo.city)
+      return this.$store.getters.districts
     },
     wards () {
-      return this.$store.getters.wards(this.thongTinChuHoSo.district)
+      return this.$store.getters.wards
     }
   },
   methods: {
     onChangeCity (data) {
-      this.$store.commit('setDistrict', [])
-      this.$store.getters.districts(data)
-      console.log('uuuuuuuuuuuuu', this.$store.getters.districtsdddd)
+      this.$store.dispatch('loadDistricts', data)
     },
     onChangeDistrict (data) {
-      this.$store.commit('setWard', [])
-      let newWards = this.$store.getters.districts(data)
-      this.$store.commit('setWard', newWards)
+      this.$store.dispatch('loadWards', data)
     }
   }
 }
