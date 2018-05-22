@@ -177,6 +177,7 @@
                 ></v-text-field>
               </v-flex>
             </v-layout>
+            <div id="form1"></div>
           </v-card-text>
         </v-card>
       </v-expansion-panel-content>
@@ -194,6 +195,8 @@
 </template>
 
 <script>
+import $ from 'jquery'
+
 export default {
   data: () => ({}),
   computed: {
@@ -212,6 +215,28 @@ export default {
     wards () {
       return this.$store.getters.wards
     }
+  },
+  created () {
+    var vm = this
+    vm.$nextTick(function () {
+      $('#form1').alpaca({
+        'schema': {
+          'title': 'What do you think of Alpaca?',
+          'type': 'object',
+          'properties': {
+            'name': {
+              'type': 'string',
+              'title': 'Name'
+            },
+            'ranking': {
+              'type': 'string',
+              'title': 'Ranking',
+              'enum': ['excellent', 'not too shabby', 'alpaca built my hotrod']
+            }
+          }
+        }
+      })
+    })
   },
   methods: {
     onChangeCity (data) {
