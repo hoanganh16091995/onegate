@@ -30,24 +30,61 @@ export const store = new Vuex.Store({
     },
     thongTinChungHoSo: {
       serviceInfo: '',
-      serviceConfig: ''
+      serviceConfig: '',
+      dossierNo: '',
+      startDateTime: '',
+      endDateTime: '',
+      timeStartMenu: true,
+      timeStart: '',
+      dateStart: '',
+      dateStartMd: null,
+      dateStartMenu: true,
+      dueDate: '',
+      valid: false
     },
-    serviceInfos: [],
-    serviceConfigs: [],
+    serviceInfoItems: [],
+    serviceConfigItems: [],
     citys: [],
     districts: [],
     wards: [],
+    delegateCitys: [],
+    delegateDistricts: [],
+    delegateWards: [],
+    resultCitys: [],
+    resultDistricts: [],
+    resultWards: [],
+    resultServices: [],
     thongTinChuHoSo: {
       userType: 'cong_dan',
       city: '',
       district: '',
-      ward: ''
+      ward: '',
+      applicantNote: '',
+      applicantIdNo: '',
+      contactEmail: '',
+      contactName: '',
+      address: '',
+      applicantName: ''
     },
     thongTinNguoiNopHoSo: {
-      sameUser: false
+      sameUser: '',
+      delegateApplicantName: '',
+      delegateCity: '',
+      delegateAddress: '',
+      delegateDistrict: '',
+      delegateWard: '',
+      delegateContactEmail: '',
+      delegateContactTelNo: '',
+      delegateApplicantIdNo: ''
     },
     dichVuChuyenPhatKetQua: {
-      homeRegister: false
+      homeRegister: false,
+      resultService: '',
+      resultAddress: '',
+      resultCity: '',
+      resultDistrict: '',
+      resultWard: '',
+      resultTelNo: ''
     }
   },
   actions: {
@@ -145,7 +182,7 @@ export const store = new Vuex.Store({
       }
       axios.get(state.api.serviceInfoApi, param).then(function (response) {
         commit('setLoading', false)
-        commit('setServiceInfos', response.data.data)
+        commit('setServiceInfoItems', response.data.data)
       }).catch(function (xhr) {
         commit('setLoading', false)
       })
@@ -157,7 +194,7 @@ export const store = new Vuex.Store({
       }
       axios.get(state.api.serviceConfigApi, param).then(function (response) {
         commit('setLoading', false)
-        commit('setServiceConfigs', response.data.data)
+        commit('setServiceConfigItems', response.data.data)
       }).catch(function (xhr) {
         commit('setLoading', false)
       })
@@ -189,7 +226,7 @@ export const store = new Vuex.Store({
         }
       }
       axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setDistrict', response.data.data)
+        commit('setDistricts', response.data.data)
       }).catch(function (xhr) {
       })
     },
@@ -203,9 +240,128 @@ export const store = new Vuex.Store({
         }
       }
       axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setWard', response.data.data)
+        commit('setWards', response.data.data)
       }).catch(function (xhr) {
       })
+    },
+    loadDelegateCitys ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: 0
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setLoading', false)
+        commit('setDelegateCitys', response.data.data)
+      }).catch(function (xhr) {
+        commit('setLoading', false)
+      })
+    },
+    loadDelegateDistricts ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setLoading', false)
+        commit('setDelegateDistricts', response.data.data)
+      }).catch(function (xhr) {
+        commit('setLoading', false)
+      })
+    },
+    loadDelegateWards ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setLoading', false)
+        commit('setDelegateWards', response.data.data)
+      }).catch(function (xhr) {
+        commit('setLoading', false)
+      })
+    },
+    loadResultCitys ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: 0
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setResultCitys', response.data.data)
+      }).catch(function (xhr) {
+      })
+    },
+    loadResultDistricts ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setResultDistricts', response.data.data)
+      }).catch(function (xhr) {
+      })
+    },
+    loadResultWards ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setResultWards', response.data.data)
+      }).catch(function (xhr) {
+      })
+    },
+    loadResultServices ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setResultServices', response.data.data)
+      }).catch(function (xhr) {
+      })
+    },
+    resetThongTinNguoiNopHoSo ({commit}) {
+      console.log('reset')
+      let data = {
+        sameUser: '',
+        delegateApplicantName: '',
+        delegateCity: '',
+        delegateAddress: '',
+        delegateDistrict: '',
+        delegateWard: '',
+        delegateContactEmail: '',
+        delegateContactTelNo: '',
+        delegateApplicantIdNo: ''
+      }
+      commit('setThongTinNguoiNopHoSo', data)
     }
   },
   mutations: {
@@ -245,20 +401,41 @@ export const store = new Vuex.Store({
     setThongTinChungHoSo (state, payload) {
       state.thongTinChungHoSo = payload
     },
-    setServiceInfos (state, payload) {
-      state.serviceInfos = payload
+    setServiceInfoItems (state, payload) {
+      state.serviceInfoItems = payload
     },
-    setServiceConfigs (state, payload) {
-      state.serviceConfigs = payload
+    setServiceConfigItems (state, payload) {
+      state.serviceConfigItems = payload
     },
     setCitys (state, payload) {
       state.citys = payload
     },
-    setDistrict (state, payload) {
+    setDistricts (state, payload) {
       state.districts = payload
     },
-    setWard (state, payload) {
+    setWards (state, payload) {
       state.wards = payload
+    },
+    setDelegateCitys (state, payload) {
+      state.delegateCitys = payload
+    },
+    setDelegateDistricts (state, payload) {
+      state.delegateDistricts = payload
+    },
+    setDelegateWards (state, payload) {
+      state.delegateWards = payload
+    },
+    setResultCitys (state, payload) {
+      state.resultCitys = payload
+    },
+    setResultDistricts (state, payload) {
+      state.resultDistricts = payload
+    },
+    setResultWards (state, payload) {
+      state.resultWards = payload
+    },
+    setResultServices (state, payload) {
+      state.resultServices = payload
     }
   },
   getters: {
@@ -305,18 +482,18 @@ export const store = new Vuex.Store({
     dichVuChuyenPhatKetQua (state) {
       return state.dichVuChuyenPhatKetQua
     },
-    serviceInfos (state) {
-      if (state.serviceInfos.length === 0) {
+    serviceInfoItems (state) {
+      if (state.serviceInfoItems.length === 0) {
         store.dispatch('loadServiceInfos')
       } else {
-        return state.serviceInfos
+        return state.serviceInfoItems
       }
     },
-    serviceConfigs (state) {
-      if (state.serviceConfigs.length === 0) {
+    serviceConfigItems (state) {
+      if (state.serviceConfigItems.length === 0) {
         store.dispatch('loadServiceConfigs')
       } else {
-        return state.serviceConfigs
+        return state.serviceConfigItems
       }
     },
     citys (state) {
@@ -331,6 +508,39 @@ export const store = new Vuex.Store({
     },
     wards (state) {
       return state.wards
+    },
+    delegateCitys (state) {
+      if (state.delegateCitys.length === 0) {
+        store.dispatch('loadDelegateCitys')
+      } else {
+        return state.delegateCitys
+      }
+    },
+    delegateDistricts (state) {
+      return state.delegateDistricts
+    },
+    delegateWards (state) {
+      return state.delegateWards
+    },
+    resultCitys (state) {
+      if (state.resultCitys.length === 0) {
+        store.dispatch('loadResultCitys')
+      } else {
+        return state.resultCitys
+      }
+    },
+    resultDistricts (state) {
+      return state.resultDistricts
+    },
+    resultWards (state) {
+      return state.resultWards
+    },
+    resultServices (state) {
+      if (state.resultServices.length === 0) {
+        store.dispatch('loadResultServices')
+      } else {
+        return state.resultServices
+      }
     }
   }
 })

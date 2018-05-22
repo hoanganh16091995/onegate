@@ -10,7 +10,7 @@
                 <content-placeholders class="mt-3" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader v-else class="pl-0">Tên tổ chức cá nhân: </v-subheader>
+              <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].nguoi_nop }}: </v-subheader>
               </v-flex>
               <v-flex xs12 sm10>
                 <content-placeholders class="mt-3" v-if="loading">
@@ -18,25 +18,10 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="lePhi.totalMoney"
+                  name="applicantName"
+                  v-model="thongTinChuHoSo.applicantName"
                 ></v-text-field>
               </v-flex>
-              <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-subheader v-else class="pl-0">Người đại diện: </v-subheader>
-              </v-flex>
-              <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-text-field
-                  v-else
-                  name="lePhi.totalMoney"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs12></v-flex>
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-3" v-if="loading">
                   <content-placeholders-text :lines="1" />
@@ -49,7 +34,8 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="lePhi.ghiChuMoney"
+                  name="address"
+                  v-model="thongTinChuHoSo.address"
                   multi-line
                   rows="2"
                 ></v-text-field>
@@ -125,7 +111,8 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="lePhi.totalMoney"
+                  name="contactTelNo"
+                  v-model="thongTinChuHoSo.contactTelNo"
                   append-icon="phone"
                 ></v-text-field>
               </v-flex>
@@ -141,14 +128,15 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="lePhi.totalMoney"
+                  name="contactEmail"
+                  v-model="thongTinChuHoSo.contactEmail"
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-3" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader v-else class="pl-0">CMND/Hộ chiếu: </v-subheader>
+                <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-3" v-if="loading">
@@ -156,24 +144,8 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="lePhi.totalMoney"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-subheader v-else class="pl-0">Ghi chú: </v-subheader>
-              </v-flex>
-              <v-flex xs12 sm10>
-                <content-placeholders class="mt-3" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-text-field
-                  v-else
-                  name="lePhi.ghiChuMoney"
-                  multi-line
-                  rows="2"
+                  name="applicantIdNo"
+                  v-model="thongTinChuHoSo.applicantIdNo"
                 ></v-text-field>
               </v-flex>
             </v-layout>
@@ -187,7 +159,7 @@
         <content-placeholders-text :lines="1" />
       </content-placeholders>
       <v-radio-group v-else v-model="thongTinChuHoSo.userType" row>
-        <v-radio label="Công Dân" value="cong_dan" ></v-radio>
+        <v-radio label="Công Dân" value="cong_dan"></v-radio>
         <v-radio label="Doanh Nghiệp" value="doanh_nghiep"></v-radio>
       </v-radio-group>
     </div>
@@ -198,7 +170,20 @@
 import $ from 'jquery'
 
 export default {
-  data: () => ({}),
+  data: () => ({
+    districts: [],
+    wards: [],
+    labelSwitch: {
+      cong_dan: {
+        cmtnd: 'CMND/ Hộ chiếu',
+        nguoi_nop: 'Họ và tên'
+      },
+      doanh_nghiep: {
+        cmtnd: 'Mã số thuế',
+        nguoi_nop: 'Tên tổ chức/ cá nhân'
+      }
+    }
+  }),
   computed: {
     loading () {
       return this.$store.getters.loading
@@ -209,10 +194,10 @@ export default {
     citys () {
       return this.$store.getters.citys
     },
-    districts () {
+    districtsArr () {
       return this.$store.getters.districts
     },
-    wards () {
+    wardsArr () {
       return this.$store.getters.wards
     }
   },
@@ -238,9 +223,21 @@ export default {
       })
     })
   },
+  watch: {
+    districtsArr (value) {
+      this.districts = value
+    },
+    wardsArr (value) {
+      this.wards = value
+    }
+  },
   methods: {
     onChangeCity (data) {
       this.$store.dispatch('loadDistricts', data)
+      setTimeout(function () {
+        console.log(this.districtsArr)
+        console.log(this.districts)
+      }, 100)
     },
     onChangeDistrict (data) {
       this.$store.dispatch('loadWards', data)
