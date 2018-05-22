@@ -40,6 +40,10 @@ export const store = new Vuex.Store({
     delegateCitys: [],
     delegateDistricts: [],
     delegateWards: [],
+    resultCitys: [],
+    resultDistricts: [],
+    resultWards: [],
+    resultServices: [],
     thongTinChuHoSo: {
       userType: 'cong_dan',
       city: '',
@@ -64,7 +68,13 @@ export const store = new Vuex.Store({
       delegateApplicantIdNo: ''
     },
     dichVuChuyenPhatKetQua: {
-      homeRegister: false
+      homeRegister: false,
+      resultService: '',
+      resultAddress: '',
+      resultCity: '',
+      resultDistrict: '',
+      resultWard: '',
+      resultTelNo: ''
     }
   },
   actions: {
@@ -197,8 +207,6 @@ export const store = new Vuex.Store({
       })
     },
     loadDistricts ({commit, state}, data) {
-      console.log(data)
-      // commit('setLoading', true)
       let param = {
         headers: {
           groupId: state.api.groupId
@@ -208,15 +216,11 @@ export const store = new Vuex.Store({
         }
       }
       axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setLoading', false)
-        commit('setDistrict', response.data.data)
-        console.log(state.districts)
+        commit('setDistricts', response.data.data)
       }).catch(function (xhr) {
-        commit('setLoading', false)
       })
     },
     loadWards ({commit, state}, data) {
-      // commit('setLoading', true)
       let param = {
         headers: {
           groupId: state.api.groupId
@@ -226,16 +230,11 @@ export const store = new Vuex.Store({
         }
       }
       axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setLoading', false)
-        commit('setWard', response.data.data)
-        return []
+        commit('setWards', response.data.data)
       }).catch(function (xhr) {
-        commit('setLoading', false)
-        return []
       })
     },
     loadDelegateCitys ({commit, state}, data) {
-      commit('setLoading', true)
       let param = {
         headers: {
           groupId: state.api.groupId
@@ -246,30 +245,44 @@ export const store = new Vuex.Store({
       }
       axios.get(state.api.regionApi, param).then(function (response) {
         commit('setLoading', false)
-        commit('setDelegateCity', response.data.data)
+        commit('setDelegateCitys', response.data.data)
       }).catch(function (xhr) {
         commit('setLoading', false)
       })
     },
     loadDelegateDistricts ({commit, state}, data) {
-      commit('setLoading', true)
       let param = {
         headers: {
           groupId: state.api.groupId
         },
         params: {
-          parent: 0
+          parent: data
         }
       }
       axios.get(state.api.regionApi, param).then(function (response) {
         commit('setLoading', false)
-        commit('setDelegateDistrict', response.data.data)
+        commit('setDelegateDistricts', response.data.data)
       }).catch(function (xhr) {
         commit('setLoading', false)
       })
     },
     loadDelegateWards ({commit, state}, data) {
-      commit('setLoading', true)
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setLoading', false)
+        commit('setDelegateWards', response.data.data)
+      }).catch(function (xhr) {
+        commit('setLoading', false)
+      })
+    },
+    loadResultCitys ({commit, state}, data) {
       let param = {
         headers: {
           groupId: state.api.groupId
@@ -279,10 +292,50 @@ export const store = new Vuex.Store({
         }
       }
       axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setLoading', false)
-        commit('setDelegateWard', response.data.data)
+        commit('setResultCitys', response.data.data)
       }).catch(function (xhr) {
-        commit('setLoading', false)
+      })
+    },
+    loadResultDistricts ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setResultDistricts', response.data.data)
+      }).catch(function (xhr) {
+      })
+    },
+    loadResultWards ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setResultWards', response.data.data)
+      }).catch(function (xhr) {
+      })
+    },
+    loadResultServices ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          parent: data
+        }
+      }
+      axios.get(state.api.regionApi, param).then(function (response) {
+        commit('setResultServices', response.data.data)
+      }).catch(function (xhr) {
       })
     },
     resetThongTinNguoiNopHoSo ({commit}) {
@@ -347,20 +400,32 @@ export const store = new Vuex.Store({
     setCitys (state, payload) {
       state.citys = payload
     },
-    setDistrict (state, payload) {
+    setDistricts (state, payload) {
       state.districts = payload
     },
-    setWard (state, payload) {
+    setWards (state, payload) {
       state.wards = payload
     },
-    setDelegateCity (state, payload) {
+    setDelegateCitys (state, payload) {
       state.delegateCitys = payload
     },
-    setDelegateDistrict (state, payload) {
+    setDelegateDistricts (state, payload) {
       state.delegateDistricts = payload
     },
-    setDelegateWard (state, payload) {
+    setDelegateWards (state, payload) {
       state.delegateWards = payload
+    },
+    setResultCitys (state, payload) {
+      state.resultCitys = payload
+    },
+    setResultDistricts (state, payload) {
+      state.resultDistricts = payload
+    },
+    setResultWards (state, payload) {
+      state.resultWards = payload
+    },
+    setResultServices (state, payload) {
+      state.resultServices = payload
     }
   },
   getters: {
@@ -429,25 +494,10 @@ export const store = new Vuex.Store({
       }
     },
     districts (state) {
-      return (data) => {
-        if (state.districts && state.districts.length === 0) {
-          store.dispatch('loadDistricts', data)
-        } else {
-          return state.districts
-        }
-      }
-    },
-    districtsdddd (state) {
       return state.districts
     },
     wards (state) {
-      return (data) => {
-        if (state.wards && state.wards.length === 0) {
-          store.dispatch('loadWards', data)
-        } else {
-          return state.wards
-        }
-      }
+      return state.wards
     },
     delegateCitys (state) {
       if (state.delegateCitys.length === 0) {
@@ -457,21 +507,29 @@ export const store = new Vuex.Store({
       }
     },
     delegateDistricts (state) {
-      return (data) => {
-        if (state.delegateDistricts && state.delegateDistricts.length === 0) {
-          store.dispatch('loadDelegateDistricts', data)
-        } else {
-          return state.delegateDistricts
-        }
-      }
+      return state.delegateDistricts
     },
     delegateWards (state) {
-      return (data) => {
-        if (state.delegateWards && state.delegateWards.length === 0) {
-          store.dispatch('loadDelegateWards', data)
-        } else {
-          return state.delegateWards
-        }
+      return state.delegateWards
+    },
+    resultCitys (state) {
+      if (state.resultCitys.length === 0) {
+        store.dispatch('loadResultCitys')
+      } else {
+        return state.resultCitys
+      }
+    },
+    resultDistricts (state) {
+      return state.resultDistricts
+    },
+    resultWards (state) {
+      return state.resultWards
+    },
+    resultServices (state) {
+      if (state.resultServices.length === 0) {
+        store.dispatch('loadResultServices')
+      } else {
+        return state.resultServices
       }
     }
   }

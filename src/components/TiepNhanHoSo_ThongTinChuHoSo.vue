@@ -10,7 +10,7 @@
                 <content-placeholders class="mt-3" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader v-else class="pl-0">Tên tổ chức cá nhân: </v-subheader>
+              <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].nguoi_nop }}: </v-subheader>
               </v-flex>
               <v-flex xs12 sm10>
                 <content-placeholders class="mt-3" v-if="loading">
@@ -136,7 +136,7 @@
                 <content-placeholders class="mt-3" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader v-else class="pl-0">CMND/Hộ chiếu: </v-subheader>
+                <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-3" v-if="loading">
@@ -158,7 +158,7 @@
         <content-placeholders-text :lines="1" />
       </content-placeholders>
       <v-radio-group v-else v-model="thongTinChuHoSo.userType" row>
-        <v-radio label="Công Dân" value="cong_dan" ></v-radio>
+        <v-radio label="Công Dân" value="cong_dan"></v-radio>
         <v-radio label="Doanh Nghiệp" value="doanh_nghiep"></v-radio>
       </v-radio-group>
     </div>
@@ -167,7 +167,20 @@
 
 <script>
 export default {
-  data: () => ({}),
+  data: () => ({
+    districts: [],
+    wards: [],
+    labelSwitch: {
+      cong_dan: {
+        cmtnd: 'CMND/ Hộ chiếu',
+        nguoi_nop: 'Họ và tên'
+      },
+      doanh_nghiep: {
+        cmtnd: 'Mã số thuế',
+        nguoi_nop: 'Tên tổ chức/ cá nhân'
+      }
+    }
+  }),
   computed: {
     loading () {
       return this.$store.getters.loading
@@ -178,23 +191,31 @@ export default {
     citys () {
       return this.$store.getters.citys
     },
-    districts () {
-      return this.$store.getters.districts(this.thongTinChuHoSo.city)
+    districtsArr () {
+      return this.$store.getters.districts
     },
-    wards () {
-      return this.$store.getters.wards(this.thongTinChuHoSo.district)
+    wardsArr () {
+      return this.$store.getters.wards
+    }
+  },
+  watch: {
+    districtsArr (value) {
+      this.districts = value
+    },
+    wardsArr (value) {
+      this.wards = value
     }
   },
   methods: {
     onChangeCity (data) {
-      this.$store.commit('setDistrict', [])
-      this.$store.getters.districts(data)
-      console.log('uuuuuuuuuuuuu', this.$store.getters.districtsdddd)
+      this.$store.dispatch('loadDistricts', data)
+      setTimeout(function () {
+        console.log(this.districtsArr)
+        console.log(this.districts)
+      }, 100)
     },
     onChangeDistrict (data) {
-      this.$store.commit('setWard', [])
-      let newWards = this.$store.getters.districts(data)
-      this.$store.commit('setWard', newWards)
+      this.$store.dispatch('loadWards', data)
     }
   }
 }
