@@ -7,10 +7,17 @@
           <v-card-text>
             <v-layout wrap>
               <v-flex xs12 sm2>
-                <v-subheader class="pl-0 text-right">Tổng tiền: </v-subheader>
+                <content-placeholders class="mt-3" v-if="loading">
+                    <content-placeholders-text :lines="1" />
+                  </content-placeholders>
+                <v-subheader v-else class="pl-0 text-right">Tổng tiền: </v-subheader>
               </v-flex>
               <v-flex xs12 sm4>
+                <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
                 <v-text-field
+                  v-else
                   v-model="lePhi.totalMoney"
                   :rules="[rules.number]"
                   v-on:keyup.native="clearTotalMoney"
@@ -18,10 +25,17 @@
               </v-flex>
               <v-flex xs12 sm6 class="hidden-xs-and-down"></v-flex>
               <v-flex xs12 sm2>
-                <v-subheader class="pl-0 text-right">Ghi chú: </v-subheader>
+                <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else class="pl-0 text-right">Ghi chú: </v-subheader>
               </v-flex>
               <v-flex xs12 sm10>
+                <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
                 <v-text-field
+                  v-else
                   v-model="lePhi.ghiChuMoney"
                   multi-line
                   rows="2"
