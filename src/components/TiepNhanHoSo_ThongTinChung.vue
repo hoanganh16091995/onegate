@@ -18,8 +18,10 @@
                 </content-placeholders>
                 <v-select
                   v-else
-                  :items="states"
-                  v-model="a1"
+                  :items="serviceInfos"
+                  item-text="serviceName"
+                  item-value="serviceCode"
+                  v-model="thongTinChungHoSo.serviceInfo"
                   autocomplete
                 ></v-select>
               </v-flex>
@@ -35,8 +37,10 @@
                 </content-placeholders>
                 <v-select
                   v-else
-                  :items="states"
-                  v-model="a1"
+                  :items="serviceConfigs"
+                  item-text="serviceName"
+                  item-value="serviceConfigId"
+                  v-model="thongTinChungHoSo.serviceConfig"
                   autocomplete
                 ></v-select>
               </v-flex>
@@ -127,6 +131,15 @@ export default {
   computed: {
     loading () {
       return this.$store.getters.loading
+    },
+    thongTinChungHoSo () {
+      return this.$store.getters.thongTinChungHoSo
+    },
+    serviceInfos () {
+      return this.$store.getters.serviceInfos
+    },
+    serviceConfigs () {
+      return this.$store.getters.serviceConfigs
     }
   },
   methods: {}
