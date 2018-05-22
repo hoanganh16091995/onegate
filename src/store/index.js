@@ -30,10 +30,20 @@ export const store = new Vuex.Store({
     },
     thongTinChungHoSo: {
       serviceInfo: '',
-      serviceConfig: ''
+      serviceConfig: '',
+      dossierNo: '',
+      startDateTime: '',
+      endDateTime: '',
+      timeStartMenu: true,
+      timeStart: '',
+      dateStart: '',
+      dateStartMd: null,
+      dateStartMenu: true,
+      dueDate: '',
+      valid: false
     },
-    serviceInfos: [],
-    serviceConfigs: [],
+    serviceInfoItems: [],
+    serviceConfigItems: [],
     citys: [],
     districts: [],
     wards: [],
@@ -172,7 +182,7 @@ export const store = new Vuex.Store({
       }
       axios.get(state.api.serviceInfoApi, param).then(function (response) {
         commit('setLoading', false)
-        commit('setServiceInfos', response.data.data)
+        commit('setServiceInfoItems', response.data.data)
       }).catch(function (xhr) {
         commit('setLoading', false)
       })
@@ -184,7 +194,7 @@ export const store = new Vuex.Store({
       }
       axios.get(state.api.serviceConfigApi, param).then(function (response) {
         commit('setLoading', false)
-        commit('setServiceConfigs', response.data.data)
+        commit('setServiceConfigItems', response.data.data)
       }).catch(function (xhr) {
         commit('setLoading', false)
       })
@@ -391,11 +401,11 @@ export const store = new Vuex.Store({
     setThongTinChungHoSo (state, payload) {
       state.thongTinChungHoSo = payload
     },
-    setServiceInfos (state, payload) {
-      state.serviceInfos = payload
+    setServiceInfoItems (state, payload) {
+      state.serviceInfoItems = payload
     },
-    setServiceConfigs (state, payload) {
-      state.serviceConfigs = payload
+    setServiceConfigItems (state, payload) {
+      state.serviceConfigItems = payload
     },
     setCitys (state, payload) {
       state.citys = payload
@@ -472,18 +482,18 @@ export const store = new Vuex.Store({
     dichVuChuyenPhatKetQua (state) {
       return state.dichVuChuyenPhatKetQua
     },
-    serviceInfos (state) {
-      if (state.serviceInfos.length === 0) {
+    serviceInfoItems (state) {
+      if (state.serviceInfoItems.length === 0) {
         store.dispatch('loadServiceInfos')
       } else {
-        return state.serviceInfos
+        return state.serviceInfoItems
       }
     },
-    serviceConfigs (state) {
-      if (state.serviceConfigs.length === 0) {
+    serviceConfigItems (state) {
+      if (state.serviceConfigItems.length === 0) {
         store.dispatch('loadServiceConfigs')
       } else {
-        return state.serviceConfigs
+        return state.serviceConfigItems
       }
     },
     citys (state) {
