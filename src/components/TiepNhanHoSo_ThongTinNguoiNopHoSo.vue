@@ -7,13 +7,13 @@
           <v-card-text>
             <v-layout wrap>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Tên tổ chức cá nhân: </v-subheader>
               </v-flex>
               <v-flex xs12 sm10>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-text-field
@@ -23,13 +23,13 @@
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Địa chỉ: </v-subheader>
               </v-flex>
               <v-flex xs12 sm10>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-text-field
@@ -41,13 +41,13 @@
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Tỉnh/Thành phố: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-select
@@ -61,13 +61,13 @@
                 ></v-select>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Quận/Huyện: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-select
@@ -81,13 +81,13 @@
                 ></v-select>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Xã/Phường: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-select
@@ -100,13 +100,13 @@
                 ></v-select>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Số điện thoại: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-text-field
@@ -117,13 +117,13 @@
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Email: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-text-field
@@ -134,13 +134,13 @@
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">CMND/Hộ chiếu: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-text-field
@@ -155,7 +155,7 @@
       </v-expansion-panel-content>
     </v-expansion-panel>
     <div class="absolute__btn" style="width: 150px;margin-top: 4px;">
-      <content-placeholders class="mt-3" v-if="loading">
+      <content-placeholders class="mt-1" v-if="loading">
         <content-placeholders-text :lines="1" />
       </content-placeholders>
       <v-checkbox

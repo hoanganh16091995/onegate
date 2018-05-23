@@ -1,5 +1,7 @@
 import 'vuetify/dist/vuetify.min.css'
 import 'toastr/build/toastr.min.css'
+import 'alpaca/dist/alpaca/bootstrap/alpaca.min.css'
+import 'alpaca/dist/alpaca/bootstrap/alpaca.min.js'
 import Vue from 'vue'
 import App from './App'
 import router from './router'

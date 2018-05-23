@@ -7,13 +7,13 @@
           <v-card-text>
             <v-layout wrap>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                 <v-subheader v-else class="pl-0 text-right">Tổng tiền: </v-subheader>
               </v-flex>
               <v-flex xs12 sm4>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-text-field
@@ -25,13 +25,13 @@
               </v-flex>
               <v-flex xs12 sm6 class="hidden-xs-and-down"></v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0 text-right">Ghi chú: </v-subheader>
               </v-flex>
               <v-flex xs12 sm10>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-text-field
