@@ -8,13 +8,13 @@
             <v-card-text>
               <v-layout wrap>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Thủ tục: </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm10>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-select
@@ -28,13 +28,13 @@
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Dịch vụ: </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm10>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-select
@@ -48,7 +48,7 @@
                 </v-flex>
                 <v-flex xs12></v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0" >
@@ -56,7 +56,7 @@
                   </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-text-field
@@ -68,37 +68,37 @@
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Thời gian giải quyết: </v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4 style="padding-top: 6px">
-                  <content-placeholders class="mt-3" v-if="loading">
+                <v-flex xs12 sm4>
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <p v-else><i> {{thongTinChungHoSo.dueDate}} ngày làm việc</i> </p>
                 </v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Ngày giờ tiếp nhận * : </v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4 style="padding-top: 6px">
-                  <content-placeholders class="mt-3" v-if="loading">
+                <v-flex xs12 sm4>
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <p><i>{{thongTinChungHoSo.startDateTime}}</i></p>
                 </v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Ngày hẹn trả * : </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                     <v-menu style="display: inline-block;width: 69%"
