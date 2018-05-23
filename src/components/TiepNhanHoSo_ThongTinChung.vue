@@ -8,13 +8,13 @@
             <v-card-text>
               <v-layout wrap>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders class="mt-3" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Thủ tục: </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm10>
-                  <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders class="mt-3" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-select
@@ -28,27 +28,27 @@
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders class="mt-3" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Dịch vụ: </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm10>
-                  <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders class="mt-3" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-select
                     v-else
-                    :items="serviceConfigItems"
-                    item-text="serviceName"
-                    item-value="serviceConfigId"
-                    v-model="thongTinChungHoSo.serviceConfig"
+                    :items="serviceOptionItems"
+                    item-text="optionName"
+                    @change="onChangeServiceOption"
+                    v-model="thongTinChungHoSo.serviceOption"
                     autocomplete
                   ></v-select>
                 </v-flex>
                 <v-flex xs12></v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders class="mt-3" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0" >
@@ -56,7 +56,7 @@
                   </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
-                  <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders class="mt-3" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-text-field
@@ -69,37 +69,37 @@
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders class="mt-3" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Thời gian giải quyết: </v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4>
-                  <content-placeholders class="mt-1" v-if="loading">
+                <v-flex xs12 sm4 style="padding-top: 6px">
+                  <content-placeholders class="mt-3" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <p v-else><i> {{thongTinChungHoSo.dueDate}} ngày làm việc</i> </p>
                 </v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders class="mt-3" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Ngày giờ tiếp nhận * : </v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4>
-                  <content-placeholders class="mt-1" v-if="loading">
+                <v-flex xs12 sm4 style="padding-top: 6px">
+                  <content-placeholders class="mt-3" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <p><i>{{thongTinChungHoSo.startDateTime}}</i></p>
                 </v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders class="mt-3" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Ngày hẹn trả * : </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
-                  <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders class="mt-3" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                     <v-menu style="display: inline-block;width: 69%"
@@ -154,7 +154,6 @@
         </v-expansion-panel-content>
       </v-expansion-panel>
     </v-form>
-
     <v-btn flat class="absolute__btn">
       <v-icon size="16">file_copy</v-icon>
       Hướng dẫn
@@ -163,8 +162,14 @@
 </template>
 
 <script>
+import { Datetime } from 'vue-datetime'
 export default {
-  data: () => ({}),
+  data: () => ({
+    datetime: ''
+  }),
+  components: {
+    datetime: Datetime
+  },
   computed: {
     loading () {
       return this.$store.getters.loading
@@ -176,14 +181,14 @@ export default {
     serviceInfoItems () {
       return this.$store.getters.serviceInfoItems
     },
-    serviceConfigItems () {
-      return this.$store.getters.serviceConfigItems
+    serviceOptionItems () {
+      return this.$store.getters.serviceOptionItems
     }
   },
   methods: {
-    changeServiceInfo () {
-      console.log('Run change')
-      console.log(this.thongTinChungHoSo)
+    changeServiceInfo (data) {
+      console.log('data============>', data)
+      this.$store.dispatch('loadServiceOptions', data)
     },
     changeDate () {
       console.log('Run change Date')
@@ -214,6 +219,10 @@ export default {
     validateThongtinchung () {
       this.thongTinChungHoSo.valid = this.$refs.formThongtinchung.validate()
       return this.thongTinChungHoSo.valid
+    },
+    postDossier () {
+    },
+    onChangeServiceOption (data) {
     }
   }
 }

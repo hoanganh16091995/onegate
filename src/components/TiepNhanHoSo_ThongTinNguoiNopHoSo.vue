@@ -10,9 +10,26 @@
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
+                <v-subheader v-else class="pl-0">CMND/Hộ chiếu: </v-subheader>
+              </v-flex>
+              <v-flex xs12 sm2>
+                {{labelSwitch[thongTinNguoiNopHoSo.sameUser].thongTinUser.applicantIdNo}}
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-text-field
+                  v-else
+                  name="delegateApplicantIdNo"
+                  v-model="labelSwitch[thongTinNguoiNopHoSo.sameUser].thongTinUser.applicantIdNo"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm2>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
                 <v-subheader v-else class="pl-0">Tên tổ chức cá nhân: </v-subheader>
               </v-flex>
-              <v-flex xs12 sm10>
+              <v-flex xs12 sm6>
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
@@ -122,7 +139,7 @@
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Email: </v-subheader>
               </v-flex>
-              <v-flex xs12 sm2>
+              <v-flex xs12 sm6>
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
@@ -130,23 +147,6 @@
                   v-else
                   name="delegateContactEmail"
                   v-model="thongTinNguoiNopHoSo.delegateContactEmail"
-                  append-icon="phone"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm2>
-                <content-placeholders class="mt-1" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-subheader v-else class="pl-0">CMND/Hộ chiếu: </v-subheader>
-              </v-flex>
-              <v-flex xs12 sm2>
-                <content-placeholders class="mt-1" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-text-field
-                  v-else
-                  name="delegateApplicantIdNo"
-                  v-model="thongTinNguoiNopHoSo.delegateApplicantIdNo"
                 ></v-text-field>
               </v-flex>
             </v-layout>
@@ -170,13 +170,25 @@
 
 <script>
 export default {
-  data: () => ({}),
+  data: () => ({
+    labelSwitch: {
+      'true': {
+        thongTinUser: {}
+      },
+      'false': {
+        thongTinUser: {}
+      }
+    }
+  }),
   computed: {
     loading () {
       return this.$store.getters.loading
     },
     thongTinNguoiNopHoSo () {
       return this.$store.getters.thongTinNguoiNopHoSo
+    },
+    thongTinChuHoSo () {
+      return this.$store.getters.thongTinChuHoSo
     },
     delegateCitys () {
       return this.$store.getters.delegateCitys
@@ -186,6 +198,25 @@ export default {
     },
     delegateWards () {
       return this.$store.getters.delegateWards
+    }
+  },
+  watch: {
+    thongTinNguoiNopHoSo (value) {
+      if (!value.sameUser) {
+        this.labelSwitch['false'].thongTinUser = value
+      } else {
+        this.labelSwitch['true'].thongTinUser = this.thongTinChuHoSo
+        this.labelSwitch['true'].thongTinUser['sameUser'] = true
+      }
+    },
+    thongTinChuHoSo (value) {
+      console.log(value)
+      if (this.thongTinNguoiNopHoSo.sameUser) {
+        this.labelSwitch['true'].thongTinUser = value
+        this.labelSwitch['true'].thongTinUser['sameUser'] = true
+      } else {
+        this.labelSwitch['false'].thongTinUser = this.thongTinChuHoSo
+      }
     }
   },
   methods: {

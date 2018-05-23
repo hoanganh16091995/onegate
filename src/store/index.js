@@ -13,6 +13,9 @@ export const store = new Vuex.Store({
       serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
       serviceConfigApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs',
       regionApi: 'http://hanoi.fds.vn:2281/api/dictcollections/101/dictItems',
+      serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
+      dossierApi: 'http://hanoi.fds.vn:2281/api/dossier',
+      govAgency: 'abc',
       groupId: 0
     },
     loadedVueProjects: [
@@ -28,9 +31,12 @@ export const store = new Vuex.Store({
       totalMoney: 0,
       ghiChuMoney: ''
     },
+    dossier: {
+    },
+    dossierMarkItems: [],
     thongTinChungHoSo: {
       serviceInfo: '',
-      serviceConfig: '',
+      serviceOption: '',
       dossierNo: '',
       startDateTime: '',
       endDateTime: '',
@@ -43,7 +49,7 @@ export const store = new Vuex.Store({
       valid: false
     },
     serviceInfoItems: [],
-    serviceConfigItems: [],
+    serviceOptionItems: [],
     citys: [],
     districts: [],
     wards: [],
@@ -54,8 +60,66 @@ export const store = new Vuex.Store({
     resultDistricts: [],
     resultWards: [],
     resultServices: [],
+    thanhPhanHoso: {
+      fileTypes: []
+    },
+    dossierTemplates: [{
+      'partNo': '1',
+      'partName': 'Giấy đăng ký hợp đồng xuất khẩu sản phẩm thủy sản',
+      'partTip': '',
+      'partType': 0,
+      'multiple': false,
+      'required': false,
+      'esign': false,
+      'fileTemplateNo': '',
+      'hasForm': true
+    },
+    {
+      'partNo': '2',
+      'partName': 'Giấy đăng ký hợp đồng xuất khẩu sản phẩm thủy sản (tải bản scan)',
+      'partTip': '',
+      'partType': 0,
+      'multiple': false,
+      'required': false,
+      'esign': false,
+      'fileTemplateNo': '',
+      'hasForm': true
+    },
+    {
+      'partNo': '3',
+      'partName': 'Giấy đăng ký nuôi thủy sản thương phẩm',
+      'partTip': '',
+      'partType': 0,
+      'multiple': false,
+      'required': false,
+      'esign': false,
+      'fileTemplateNo': '',
+      'hasForm': false
+    },
+    {
+      'partNo': '4',
+      'partName': 'Giấy đăng ký nuôi thủy sản thương phẩm',
+      'partTip': '',
+      'partType': 0,
+      'multiple': false,
+      'required': false,
+      'esign': false,
+      'fileTemplateNo': '',
+      'hasForm': false
+    },
+    {
+      'partNo': '5',
+      'partName': 'Hợp đồng mua thủy sản nguyên liệu với tổ chức, cá nhân có cơ sở nuôi thủy sản thương phẩm',
+      'partTip': '',
+      'partType': 0,
+      'multiple': false,
+      'required': false,
+      'esign': false,
+      'fileTemplateNo': '',
+      'hasForm': false
+    }],
     thongTinChuHoSo: {
-      userType: 'cong_dan',
+      userType: true,
       city: '',
       district: '',
       ward: '',
@@ -67,15 +131,15 @@ export const store = new Vuex.Store({
       applicantName: ''
     },
     thongTinNguoiNopHoSo: {
-      sameUser: '',
-      delegateApplicantName: '',
-      delegateCity: '',
-      delegateAddress: '',
-      delegateDistrict: '',
-      delegateWard: '',
-      delegateContactEmail: '',
-      delegateContactTelNo: '',
-      delegateApplicantIdNo: ''
+      sameUser: true,
+      applicantName: '',
+      city: '',
+      address: '',
+      district: '',
+      ward: '',
+      contactEmail: '',
+      contactTelNo: '',
+      applicantIdNo: ''
     },
     dichVuChuyenPhatKetQua: {
       homeRegister: false,
@@ -176,27 +240,31 @@ export const store = new Vuex.Store({
     setThongTinChungHoSo ({commit}, data) {
     },
     loadServiceInfos ({commit, state}, data) {
-      commit('setLoading', true)
       let param = {
         groupId: state.api.groupId
       }
       axios.get(state.api.serviceInfoApi, param).then(function (response) {
-        commit('setLoading', false)
         commit('setServiceInfoItems', response.data.data)
       }).catch(function (xhr) {
-        commit('setLoading', false)
       })
     },
-    loadServiceConfigs ({commit, state}, data) {
-      commit('setLoading', true)
+    loadServiceOptions ({commit, state}, data) {
       let param = {
-        groupId: state.api.groupId
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          govAgency: state.api.govAgency,
+          serviceInfo: data
+        }
       }
-      axios.get(state.api.serviceConfigApi, param).then(function (response) {
-        commit('setLoading', false)
-        commit('setServiceConfigItems', response.data.data)
+      axios.get(state.api.serviceOptionApi, param).then(function (response) {
+        let serviceConfig = response.data
+        axios.get('http://hanoi.fds.vn:2281/api/serviceconfigs/' + serviceConfig.serverConfigId + '/processes', param).then(function (response) {
+          commit('setServiceOptionItems', response.data.data)
+        }).catch(function (xhr) {
+        })
       }).catch(function (xhr) {
-        commit('setLoading', false)
       })
     },
     loadCitys ({commit, state}, data) {
@@ -362,6 +430,70 @@ export const store = new Vuex.Store({
         delegateApplicantIdNo: ''
       }
       commit('setThongTinNguoiNopHoSo', data)
+    },
+    loadDossierTemplates ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        }
+      }
+      axios.get('http://hanoi.fds.vn:2281/api/dossiertemplates/' + data, param).then(function (response) {
+        commit('setDossierTemplates', response.data.dossierParts)
+      }).catch(function (xhr) {
+      })
+    },
+    loadDossierMarkItems ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        }
+      }
+      axios.get('http://hanoi.fds.vn:2281/api/dossiers/' + data + '/marks', param).then(function (response) {
+        commit('setDossierMarkItems', response.data.data)
+      }).catch(function (xhr) {
+      })
+    },
+    getMoreInfoThongTinChung ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        }
+      }
+      axios.get('http://hanoi.fds.vn:2281/api/dossiers/' + data + '/marks', param).then(function (response) {
+        state.thongTinChuHoSo.dossierNo = response.data.dossierNo
+        state.thongTinChuHoSo.startDateTime = response.data.startDateTime
+        state.thongTinChuHoSo.endDateTime = response.data.endDateTime
+        state.thongTinChuHoSo.dueDate = response.data.dueDate
+      }).catch(function (xhr) {
+      })
+    },
+    postDossier ({commit, state}, data) {
+      commit('setLoading', true)
+      let option = {
+        headers: {
+          groupId: state.api.groupId
+        }
+      }
+      let param = {
+        serviceCode: data.serviceCode,
+        govAgencyCode: data.govAgency,
+        dossierTemplateNo: data.dossierTemplateNo
+      }
+      if (state.dossier) {
+        axios.put(state.api.dossierApi + '/' + state.dossier.dossierId, param, option).then(function (response) {
+          commit('setLoading', false)
+          commit('setDossier', response.data)
+        }).catch(function (xhr) {
+          commit('setLoading', false)
+        })
+      } else {
+        axios.post(state.api.dossierApi, param, option).then(function (response) {
+          commit('setLoading', false)
+          commit('setDossier', response.data)
+        }).catch(function (xhr) {
+          commit('setLoading', false)
+        })
+      }
     }
   },
   mutations: {
@@ -389,6 +521,9 @@ export const store = new Vuex.Store({
     setLePhi (state, payload) {
       state.lePhi = payload
     },
+    setThanhPhanHoso (state, payload) {
+      state.thanhPhanHoso = payload
+    },
     setThongTinChuHoSo (state, payload) {
       state.thongTinChuHoSo = payload
     },
@@ -404,8 +539,8 @@ export const store = new Vuex.Store({
     setServiceInfoItems (state, payload) {
       state.serviceInfoItems = payload
     },
-    setServiceConfigItems (state, payload) {
-      state.serviceConfigItems = payload
+    setServiceOptionItems (state, payload) {
+      state.serviceOptionItems = payload
     },
     setCitys (state, payload) {
       state.citys = payload
@@ -436,6 +571,15 @@ export const store = new Vuex.Store({
     },
     setResultServices (state, payload) {
       state.resultServices = payload
+    },
+    setDossierTemplates (state, payload) {
+      state.dossierTemplates = payload
+    },
+    setDossier (state, payload) {
+      state.dossier = payload
+    },
+    setDossierMarkItems (state, payload) {
+      state.dossierMarkItems = payload
     }
   },
   getters: {
@@ -476,6 +620,9 @@ export const store = new Vuex.Store({
     thongTinChuHoSo (state) {
       return state.thongTinChuHoSo
     },
+    thanhPhanHoSo (state) {
+      return state.thanhPhanHoso
+    },
     thongTinNguoiNopHoSo (state) {
       return state.thongTinNguoiNopHoSo
     },
@@ -489,12 +636,8 @@ export const store = new Vuex.Store({
         return state.serviceInfoItems
       }
     },
-    serviceConfigItems (state) {
-      if (state.serviceConfigItems.length === 0) {
-        store.dispatch('loadServiceConfigs')
-      } else {
-        return state.serviceConfigItems
-      }
+    serviceOptionItems (state) {
+      return state.serviceOptionItems
     },
     citys (state) {
       if (state.citys.length === 0) {
@@ -541,6 +684,15 @@ export const store = new Vuex.Store({
       } else {
         return state.resultServices
       }
+    },
+    dossierTemplates (state) {
+      return state.dossierTemplates
+    },
+    dossier (state) {
+      return state.dossier
+    },
+    dossierMarkItems (state) {
+      return state.dossierMarkItems
     }
   }
 })
