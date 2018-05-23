@@ -1,5 +1,6 @@
 import 'vuetify/dist/vuetify.min.css'
 import 'toastr/build/toastr.min.css'
+import 'vue-datetime/dist/vue-datetime.css'
 import 'alpaca/dist/alpaca/bootstrap/alpaca.min.css'
 import 'alpaca/dist/alpaca/bootstrap/alpaca.min.js'
 import Vue from 'vue'
@@ -9,11 +10,12 @@ import Vuetify from 'vuetify'
 import { store } from './store'
 import VueContentPlaceholders from 'vue-content-placeholders'
 import VueMoment from 'vue-moment'
+import Datetime from 'vue-datetime'
 
 Vue.use(VueMoment)
 Vue.use(VueContentPlaceholders)
 Vue.use(Vuetify)
-
+Vue.use(Datetime)
 Vue.config.productionTip = false
 
 new Vue({ // eslint-disable-line no-new
