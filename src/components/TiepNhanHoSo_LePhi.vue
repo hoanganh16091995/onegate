@@ -18,7 +18,7 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  v-model="lePhi.totalMoney"
+                  v-model="lePhi.fee"
                   :rules="[rules.number]"
                   v-on:keyup.native="clearTotalMoney"
                 ></v-text-field>
@@ -36,7 +36,8 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  v-model="lePhi.ghiChuMoney"
+                  :value="dossier.feeNote"
+                  v-model="lePhi.feeNote"
                   multi-line
                   rows="2"
                 ></v-text-field>
@@ -65,12 +66,15 @@ export default {
     },
     lePhi () {
       return this.$store.getters.lePhi
+    },
+    dossier () {
+      return this.$store.getters.dossier
     }
   },
   methods: {
     clearTotalMoney () {
-      if (this.lePhi.totalMoney === '') {
-        this.lePhi.totalMoney = 0
+      if (this.lePhi.fee === '') {
+        this.lePhi.fee = 0
       }
     }
   }

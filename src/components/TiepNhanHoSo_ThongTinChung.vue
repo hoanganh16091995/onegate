@@ -8,16 +8,16 @@
             <v-card-text>
               <v-layout wrap>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Thủ tục: </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm10>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-select
+                  <!-- <v-select
                     v-else
                     :items="serviceInfoItems"
                     item-text="serviceName"
@@ -25,30 +25,32 @@
                     v-model="thongTinChungHoSo.serviceInfo"
                     autocomplete
                     @change = "changeServiceInfo"
-                  ></v-select>
+                  ></v-select> -->
+                  <v-subheader style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceInfo}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Dịch vụ: </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm10>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-select
+                  <!-- <v-select
                     v-else
-                    :items="serviceOptionItems"
-                    item-text="optionName"
-                    @change="onChangeServiceOption"
-                    v-model="thongTinChungHoSo.serviceOption"
+                    :items="serviceConfigItems"
+                    item-text="serviceName"
+                    item-value="serviceConfigId"
+                    v-model="thongTinChungHoSo.serviceConfig"
                     autocomplete
-                  ></v-select>
+                  ></v-select> -->
+                  <v-subheader v-else style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceOption}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12></v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0" >
@@ -56,56 +58,56 @@
                   </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-text-field
+                  <!-- <v-text-field
                     v-else
                     name="thongTinChungHoSo.dossierNo"
-                    multi-line
                     rows="2"
                     :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                     required
-                  ></v-text-field>
+                  ></v-text-field> -->
+                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.dossierNo}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Thời gian giải quyết: </v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4 style="padding-top: 6px">
-                  <content-placeholders class="mt-3" v-if="loading">
+                <v-flex xs12 sm4>
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <p v-else><i> {{thongTinChungHoSo.dueDate}} ngày làm việc</i> </p>
+                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.dueDate}} ngày làm việc</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Ngày giờ tiếp nhận * : </v-subheader>
                 </v-flex>
-                <v-flex xs12 sm4 style="padding-top: 6px">
-                  <content-placeholders class="mt-3" v-if="loading">
+                <v-flex xs12 sm4>
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <p><i>{{thongTinChungHoSo.startDateTime}}</i></p>
+                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.startDateTime}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Ngày hẹn trả * : </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm4>
-                  <content-placeholders class="mt-3" v-if="loading">
+                  <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
+                  <v-flex v-else>
                     <v-menu style="display: inline-block;width: 69%"
                     lazy
                     :close-on-content-click = "true"
-                    v-model = "thongTinChungHoSo.dateStartMenu"
                     transition = "scale-transition"
                     offset-y
                     full-width
@@ -115,38 +117,35 @@
                       <v-text-field
                         slot="activator"
                         placeholder="dd/mm/yyyy"
-                        v-model="thongTinChungHoSo.dateStart"
-                        @blur="thongTinChungHoSo.dateStartMd = parseDate(thongTinChungHoSo.dateStart)"
+                        v-model="thongTinChungHoSo.dateEnd"
+                        @blur="thongTinChungHoSo.dateEndMd = parseDate(thongTinChungHoSo.dateEnd)"
                         :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
                         required
                       ></v-text-field>
-                      <v-date-picker v-model="thongTinChungHoSo.dateStartMd" :first-day-of-week="1" @change="changeDate" @input="thongTinChungHoSo.dateStart = formatDate($event)" autosave locale="vi">
+                      <v-date-picker :min="minDate" ref="datepicker" v-model="thongTinChungHoSo.dateEndMd" :first-day-of-week="1" @change="changeDate" @input="thongTinChungHoSo.dateEnd = formatDate($event)" autosave locale="vi">
                       </v-date-picker>
                     </v-menu>
-
+                  
                     <v-menu style="display: inline-block; width: 30%"
-                    ref="menuTimestart"
+                    ref="menuTimeEnd"
                     lazy
                     :close-on-content-click="false"
-                    v-model="thongTinChungHoSo.timeStartMenu"
                     transition="scale-transition"
                     offset-y
                     full-width
                     :nudge-right="40"
                     max-width="290px"
-
-                    :return-value.sync="thongTinChungHoSo.timeStart"
+                    :return-value.sync="thongTinChungHoSo.timeEndText"
                     >
                       <v-text-field
                         slot="activator"
-                        v-model="thongTinChungHoSo.timeStart"
+                        v-model="thongTinChungHoSo.timeEndText"
                         placeholder="hh:mm"
                         readonly
-                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
-                        required
                       ></v-text-field>
-                      <v-time-picker v-model="thongTinChungHoSo.timeStart" format="24hr" @change="$refs.menuTimestart.save(thongTinChungHoSo.timeStart)"></v-time-picker>
+                      <v-time-picker v-model="thongTinChungHoSo.timeEnd" format="24hr" @change="$refs.menuTimeEnd.save(thongTinChungHoSo.timeEnd)"></v-time-picker>
                     </v-menu>
+                  </v-flex>
                 </v-flex>
               </v-layout>
             </v-card-text>
@@ -162,68 +161,83 @@
 </template>
 
 <script>
-import { Datetime } from 'vue-datetime'
-export default {
-  data: () => ({
-    datetime: ''
-  }),
-  components: {
-    datetime: Datetime
-  },
-  computed: {
-    loading () {
-      return this.$store.getters.loading
-    },
-    thongTinChungHoSo () {
-      this.$store.getters.thongTinChungHoSo.startDateTime = this.getCurentDateTime()
-      return this.$store.getters.thongTinChungHoSo
-    },
-    serviceInfoItems () {
-      return this.$store.getters.serviceInfoItems
-    },
-    serviceOptionItems () {
-      return this.$store.getters.serviceOptionItems
-    }
-  },
-  methods: {
-    changeServiceInfo (data) {
-      console.log('data============>', data)
-      this.$store.dispatch('loadServiceOptions', data)
-    },
-    changeDate () {
-      console.log('Run change Date')
-      this.thongTinChungHoSo.dueDate = this.getDuedate()
-    },
-    getCurentDateTime () {
-      let date = new Date()
-      return `${date.getDate()}/${(date.getMonth() + 1)}/${date.getFullYear()} | ${date.getHours()}:${date.getMinutes()}`
-    },
-    getDuedate () {
-      let dueDateMs = (new Date(this.thongTinChungHoSo.dateStartMd).getTime() - new Date().getTime())
-      return Math.round(dueDateMs / 1000 / 60 / 60 / 24)
-    },
-    parseDate (date) {
-      if (!date) {
-        return null
+  export default {
+    data: () => ({
+      minDate: null
+    }),
+    computed: {
+      loading () {
+        return this.$store.getters.loading
+      },
+      thongTinChungHoSo () {
+        let date = new Date()
+        this.$store.getters.thongTinChungHoSo.startDateTime = this.getCurentDateTime('datetime')
+        this.$store.getters.thongTinChungHoSo.dateEndMd = this.getCurentDateTime('date')
+        this.$store.getters.thongTinChungHoSo.dateEnd = this.parseCurrentDate(date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear())
+        this.$store.getters.thongTinChungHoSo.timeEndText = this.parseCurrentTime(date.getHours() + ':' + date.getMinutes())
+        this.$store.getters.thongTinChungHoSo.dueDate = 1
+        this.minDate = this.getCurentDateTime('date')
+        return this.$store.getters.thongTinChungHoSo
+      },
+      serviceInfoItems () {
+        return this.$store.getters.serviceInfoItems
+      },
+      serviceConfigItems () {
+        return this.$store.getters.serviceConfigItems
       }
-      const [day, month, year] = date.split('/')
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
-    formatDate (date) {
-      if (!date) {
-        return null
+    methods: {
+      changeDate () {
+        this.thongTinChungHoSo.dueDate = this.getDuedate()
+        console.log(this.thongTinChungHoSo)
+      },
+      getCurentDateTime (type) {
+        let date = new Date()
+        if (type === 'datetime') {
+          return `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} | ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+        } else if (type === 'date') {
+          return `${date.getFullYear()}-${(date.getMonth() + 1).toString().padStart(2, '0')}-${date.getDate()}`
+        }
+      },
+      getDuedate () {
+        let dueDateMs = (new Date(this.thongTinChungHoSo.dateEndMd).getTime() - new Date().getTime())
+        if (Math.ceil(dueDateMs / 1000 / 60 / 60 / 24) === 0) {
+          return 1
+        }
+        return Math.ceil(dueDateMs / 1000 / 60 / 60 / 24)
+      },
+      parseDate (date) {
+        if (!date) {
+          return null
+        }
+        const [day, month, year] = date.split('/')
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+      },
+      parseCurrentDate (date) {
+        if (!date) {
+          return null
+        }
+        const [day, month, year] = date.split('/')
+        return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`
+      },
+      parseCurrentTime (time) {
+        if (!time) {
+          return null
+        }
+        const [hh, mm] = time.split(':')
+        return `${hh.padStart(2, '0')}:${mm.padStart(2, '0')}`
+      },
+      formatDate (date) {
+        if (!date) {
+          return null
+        }
+        const [year, month, day] = date.split('-')
+        return `${day}/${month}/${year}`
+      },
+      validateThongtinchung () {
+        this.thongTinChungHoSo.valid = this.$refs.formThongtinchung.validate()
+        return this.thongTinChungHoSo.valid
       }
-      const [year, month, day] = date.split('-')
-      return `${day}/${month}/${year}`
-    },
-    validateThongtinchung () {
-      this.thongTinChungHoSo.valid = this.$refs.formThongtinchung.validate()
-      return this.thongTinChungHoSo.valid
-    },
-    postDossier () {
-    },
-    onChangeServiceOption (data) {
     }
   }
-}
 </script>

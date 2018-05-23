@@ -18,7 +18,7 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="applicantIdNo"
+                  @change="onChangeApplicantIdNo"
                   v-model="thongTinChuHoSo.applicantIdNo"
                 ></v-text-field>
               </v-flex>
@@ -34,7 +34,7 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="applicantName"
+                  :value="dossier.applicantName"
                   v-model="thongTinChuHoSo.applicantName"
                 ></v-text-field>
               </v-flex>
@@ -50,7 +50,7 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  name="address"
+                  :value="dossier.address"
                   v-model="thongTinChuHoSo.address"
                   multi-line
                   rows="2"
@@ -72,6 +72,7 @@
                  item-text="itemName"
                  item-value="itemCode"
                  v-model="thongTinChuHoSo.city"
+                 :value="dossier.city"
                  @change="onChangeCity"
                  autocomplete
                ></v-select>
@@ -92,6 +93,7 @@
                   item-text="itemName"
                   item-value="itemCode"
                   v-model="thongTinChuHoSo.district"
+                  :value="dossier.district"
                   @change="onChangeDistrict"
                   autocomplete
                 ></v-select>
@@ -111,6 +113,7 @@
                   :items="wards"
                   item-text="itemName"
                   item-value="itemCode"
+                  :value="dossier.ward"
                   v-model="thongTinChuHoSo.ward"
                   autocomplete
                 ></v-select>
@@ -128,6 +131,7 @@
                 <v-text-field
                   v-else
                   name="contactTelNo"
+                  :value="dossier.contactTelNo"
                   v-model="thongTinChuHoSo.contactTelNo"
                   append-icon="phone"
                 ></v-text-field>
@@ -145,6 +149,7 @@
                 <v-text-field
                   v-else
                   name="contactEmail"
+                  :value="dossier.contacEmail"
                   v-model="thongTinChuHoSo.contactEmail"
                 ></v-text-field>
               </v-flex>
@@ -199,6 +204,9 @@ export default {
     },
     wardsArr () {
       return this.$store.getters.wards
+    },
+    dossier () {
+      return this.$store.getters.dossier
     }
   },
   watch: {
@@ -215,14 +223,14 @@ export default {
   methods: {
     onChangeCity (data) {
       this.$store.dispatch('loadDistricts', data)
-      setTimeout(function () {
-        console.log(this.districtsArr)
-        console.log(this.districts)
-      }, 100)
     },
     onChangeDistrict (data) {
       this.$store.dispatch('loadWards', data)
+    },
+    onChangeApplicantIdNo (data) {
+      this.$store.dispatch('getUserInfoFromApplicantIdNo', data)
     }
   }
 }
 </script>
+
