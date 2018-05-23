@@ -22,17 +22,17 @@
                 </v-card>
               </v-expansion-panel-content>
             </v-expansion-panel>
-            <div class="absolute__btn group__thanh_phan" style="width: 530px;">
+            <div class="absolute__btn group__thanh_phan">
               <content-placeholders class="mt-1" v-if="loading">
                 <content-placeholders-text :lines="1" />
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox">
-                <v-flex xs7 class="layout wrap">
+                <v-flex style="width: 300px;" class="layout wrap">
                   <v-checkbox class="flex" v-model="thanhPhanHoSo.fileTypes" value="John"></v-checkbox>
                   <v-checkbox class="flex" v-model="thanhPhanHoSo.fileTypes" value="John"></v-checkbox>
                   <v-checkbox class="flex" v-model="thanhPhanHoSo.fileTypes" value="John"></v-checkbox>
                 </v-flex>
-                <v-flex xs5 class="text-right">
+                <v-flex style="width: 150px;" class="text-right">
                   <v-btn icon class="mt-0 ml-0 mr-2">
                     <v-badge left>
                       <span slot="badge">6</span>
