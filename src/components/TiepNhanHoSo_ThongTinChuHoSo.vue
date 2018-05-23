@@ -10,9 +10,25 @@
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
+                <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
+              </v-flex>
+              <v-flex xs12 sm2>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-text-field
+                  v-else
+                  name="applicantIdNo"
+                  v-model="thongTinChuHoSo.applicantIdNo"
+                ></v-text-field>
+              </v-flex>
+              <v-flex xs12 sm2>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
               <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].nguoi_nop }}: </v-subheader>
               </v-flex>
-              <v-flex xs12 sm10>
+              <v-flex xs12 sm6>
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
@@ -122,7 +138,7 @@
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Địa chỉ E-mail: </v-subheader>
               </v-flex>
-              <v-flex xs12 sm2>
+              <v-flex xs12 sm6>
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
@@ -130,22 +146,6 @@
                   v-else
                   name="contactEmail"
                   v-model="thongTinChuHoSo.contactEmail"
-                ></v-text-field>
-              </v-flex>
-              <v-flex xs12 sm2>
-                <content-placeholders class="mt-1" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
-              </v-flex>
-              <v-flex xs12 sm2>
-                <content-placeholders class="mt-1" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-text-field
-                  v-else
-                  name="applicantIdNo"
-                  v-model="thongTinChuHoSo.applicantIdNo"
                 ></v-text-field>
               </v-flex>
             </v-layout>
@@ -158,8 +158,8 @@
         <content-placeholders-text :lines="1" />
       </content-placeholders>
       <v-radio-group v-else v-model="thongTinChuHoSo.userType" row>
-        <v-radio label="Công Dân" value="cong_dan"></v-radio>
-        <v-radio label="Doanh Nghiệp" value="doanh_nghiep"></v-radio>
+        <v-radio label="Công Dân" :value="true"></v-radio>
+        <v-radio label="Doanh Nghiệp" :value="false"></v-radio>
       </v-radio-group>
     </div>
   </div>
@@ -172,13 +172,15 @@ export default {
     districts: [],
     wards: [],
     labelSwitch: {
-      cong_dan: {
+      'true': {
         cmtnd: 'CMND/ Hộ chiếu',
-        nguoi_nop: 'Họ và tên'
+        nguoi_nop: 'Họ và tên',
+        thongTinUser: {}
       },
-      doanh_nghiep: {
+      'false': {
         cmtnd: 'Mã số thuế',
-        nguoi_nop: 'Tên tổ chức/ cá nhân'
+        nguoi_nop: 'Tên tổ chức/ cá nhân',
+        thongTinUser: {}
       }
     }
   }),
@@ -205,6 +207,9 @@ export default {
     },
     wardsArr (value) {
       this.wards = value
+    },
+    thongTinChuHoSo (value) {
+      console.log(value)
     }
   },
   methods: {
