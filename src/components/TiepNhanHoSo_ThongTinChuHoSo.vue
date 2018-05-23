@@ -7,13 +7,13 @@
           <v-card-text>
             <v-layout wrap>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
               <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].nguoi_nop }}: </v-subheader>
               </v-flex>
               <v-flex xs12 sm10>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-text-field
@@ -23,13 +23,13 @@
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Địa chỉ: </v-subheader>
               </v-flex>
               <v-flex xs12 sm10>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-text-field
@@ -41,13 +41,13 @@
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Tỉnh/Thành phố: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                <v-select
@@ -61,13 +61,13 @@
                ></v-select>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Quận/Huyện: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-select
@@ -81,13 +81,13 @@
                 ></v-select>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Xã/Phường: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-select
@@ -100,13 +100,13 @@
                 ></v-select>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Số điện thoại: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-text-field
@@ -117,13 +117,13 @@
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Địa chỉ E-mail: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-text-field
@@ -133,13 +133,13 @@
                 ></v-text-field>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
-                <content-placeholders class="mt-3" v-if="loading">
+                <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-text-field
@@ -149,13 +149,12 @@
                 ></v-text-field>
               </v-flex>
             </v-layout>
-            <div id="form1"></div>
           </v-card-text>
         </v-card>
       </v-expansion-panel-content>
     </v-expansion-panel>
     <div class="absolute__btn" style="width: 270px;margin-top: 4px;">
-      <content-placeholders class="mt-3" v-if="loading">
+      <content-placeholders class="mt-1" v-if="loading">
         <content-placeholders-text :lines="1" />
       </content-placeholders>
       <v-radio-group v-else v-model="thongTinChuHoSo.userType" row>
@@ -167,7 +166,6 @@
 </template>
 
 <script>
-import $ from 'jquery'
 
 export default {
   data: () => ({
@@ -200,28 +198,6 @@ export default {
     wardsArr () {
       return this.$store.getters.wards
     }
-  },
-  created () {
-    var vm = this
-    vm.$nextTick(function () {
-      $('#form1').alpaca({
-        'schema': {
-          'title': 'What do you think of Alpaca?',
-          'type': 'object',
-          'properties': {
-            'name': {
-              'type': 'string',
-              'title': 'Name'
-            },
-            'ranking': {
-              'type': 'string',
-              'title': 'Ranking',
-              'enum': ['excellent', 'not too shabby', 'alpaca built my hotrod']
-            }
-          }
-        }
-      })
-    })
   },
   watch: {
     districtsArr (value) {
