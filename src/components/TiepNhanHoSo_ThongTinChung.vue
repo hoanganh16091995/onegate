@@ -62,7 +62,6 @@
                   <v-text-field
                     v-else
                     name="thongTinChungHoSo.dossierNo"
-                    multi-line
                     rows="2"
                     :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                     required
@@ -145,7 +144,7 @@
                         :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
                         required
                       ></v-text-field>
-                      <v-time-picker v-model="thongTinChungHoSo.timeStart" format="24hr" @change="$refs.menuTimestart.save(thongTinChungHoSo.timeStart)"></v-time-picker>
+                      <v-time-picker ref="timer" v-model="thongTinChungHoSo.timeStart" format="24hr" @change="$refs.menuTimestart.save(thongTinChungHoSo.timeStart)"></v-time-picker>
                     </v-menu>
                 </v-flex>
               </v-layout>
@@ -163,58 +162,59 @@
 </template>
 
 <script>
-export default {
-  data: () => ({}),
-  computed: {
-    loading () {
-      return this.$store.getters.loading
-    },
-    thongTinChungHoSo () {
-      this.$store.getters.thongTinChungHoSo.startDateTime = this.getCurentDateTime()
-      return this.$store.getters.thongTinChungHoSo
-    },
-    serviceInfoItems () {
-      return this.$store.getters.serviceInfoItems
-    },
-    serviceConfigItems () {
-      return this.$store.getters.serviceConfigItems
-    }
-  },
-  methods: {
-    changeServiceInfo () {
-      console.log('Run change')
-      console.log(this.thongTinChungHoSo)
-    },
-    changeDate () {
-      console.log('Run change Date')
-      this.thongTinChungHoSo.dueDate = this.getDuedate()
-    },
-    getCurentDateTime () {
-      let date = new Date()
-      return `${date.getDate()}/${(date.getMonth() + 1)}/${date.getFullYear()} | ${date.getHours()}:${date.getMinutes()}`
-    },
-    getDuedate () {
-      let dueDateMs = (new Date(this.thongTinChungHoSo.dateStartMd).getTime() - new Date().getTime())
-      return Math.round(dueDateMs / 1000 / 60 / 60 / 24)
-    },
-    parseDate (date) {
-      if (!date) {
-        return null
+  export default {
+    data: () => ({}),
+    computed: {
+      loading () {
+        return this.$store.getters.loading
+      },
+      thongTinChungHoSo () {
+        this.$store.getters.thongTinChungHoSo.startDateTime = this.getCurentDateTime()
+        return this.$store.getters.thongTinChungHoSo
+      },
+      serviceInfoItems () {
+        return this.$store.getters.serviceInfoItems
+      },
+      serviceConfigItems () {
+        return this.$store.getters.serviceConfigItems
       }
-      const [day, month, year] = date.split('/')
-      return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
     },
-    formatDate (date) {
-      if (!date) {
-        return null
+    methods: {
+      changeServiceInfo () {
+        console.log('Run change')
+        console.log(this.$refs.timer)
+        console.log(this.thongTinChungHoSo)
+      },
+      changeDate () {
+        console.log('Run change Date')
+        this.thongTinChungHoSo.dueDate = this.getDuedate()
+      },
+      getCurentDateTime () {
+        let date = new Date()
+        return `${date.getDate()}/${(date.getMonth() + 1)}/${date.getFullYear()} | ${date.getHours()}:${date.getMinutes()}`
+      },
+      getDuedate () {
+        let dueDateMs = (new Date(this.thongTinChungHoSo.dateStartMd).getTime() - new Date().getTime())
+        return Math.ceil(dueDateMs / 1000 / 60 / 60 / 24)
+      },
+      parseDate (date) {
+        if (!date) {
+          return null
+        }
+        const [day, month, year] = date.split('/')
+        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+      },
+      formatDate (date) {
+        if (!date) {
+          return null
+        }
+        const [year, month, day] = date.split('-')
+        return `${day}/${month}/${year}`
+      },
+      validateThongtinchung () {
+        this.thongTinChungHoSo.valid = this.$refs.formThongtinchung.validate()
+        return this.thongTinChungHoSo.valid
       }
-      const [year, month, day] = date.split('-')
-      return `${day}/${month}/${year}`
-    },
-    validateThongtinchung () {
-      this.thongTinChungHoSo.valid = this.$refs.formThongtinchung.validate()
-      return this.thongTinChungHoSo.valid
     }
   }
-}
 </script>
