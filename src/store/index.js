@@ -46,7 +46,8 @@ export const store = new Vuex.Store({
       dateEnd: '',
       dateEndMd: '',
       dueDate: 1,
-      valid: false
+      valid: false,
+      dossierId: ''
     },
     serviceInfoItems: [],
     serviceOptionItems: [],
@@ -61,7 +62,7 @@ export const store = new Vuex.Store({
     resultWards: [],
     resultServices: [],
     thanhPhanHoso: {
-      fileTypes: []
+      dossierTemplates: []
     },
     dossierTemplates: [{
       'partNo': '1',
@@ -434,9 +435,42 @@ export const store = new Vuex.Store({
           groupId: state.api.groupId
         }
       }
-      axios.get(state.api.dossierTemplatesApi + '/' + data, param).then(function (response) {
-        commit('setDossierTemplates', response.data.dossierParts)
-      }).catch(function (xhr) {
+      axios.all([axios.get(state.api.dossierTemplatesApi + '/' + data.dossierTemplateNo, param), axios.get(state.api.dossierApi + '/' + data.dossierId, param)])
+      .then(axios.spread(function (dossierTemplates, dossierMarks) {
+        let dossierTemplateItems = dossierTemplates.data
+        let dossierMarkItems = dossierMarks.data
+        dossierTemplateItems = dossierTemplateItems.map(itemTmeplate => {
+          return Object.assign(itemTmeplate, dossierMarkItems.find(itemMark => {
+            return itemMark && itemTmeplate.partNo === itemMark.partNo
+          }))
+        })
+        commit('setDossierTemplates', dossierTemplateItems)
+        state.thanhPhanHoso.dossierTemplates = dossierTemplateItems
+      })).catch(function (xhr) {
+        console.log(xhr)
+      })
+    },
+    deleteAttackFile ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        }
+      }
+      if (data.hasForm) {
+        // TODO
+      } else {
+        axios.delete('http://hanoi.fds.vn:2281/api/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + data.fileTemplateNo + '/resetformdata', {}, param).then(function (response) {
+        }).catch(function (xhr) {
+        })
+      }
+    },
+    deleteSingleFile ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        }
+      }
+      axios.put('http://hanoi.fds.vn:2281/api/dossiers/' + state.thonTinChungHoSo.dossierId + '/files/' + data.referenceUid + 'resetformdata', {}, param).then(function () {
       })
     },
     loadDossierMarkItems ({commit, state}, data) {
@@ -473,7 +507,7 @@ export const store = new Vuex.Store({
       }
       let param = {
         serviceCode: data.serviceCode,
-        govAgencyCode: data.govAgency,
+        govAgencyCode: data.govAgencyCode,
         dossierTemplateNo: data.dossierTemplateNo
         // TODO
       }
@@ -559,7 +593,8 @@ export const store = new Vuex.Store({
         serviceInfo: payload.applicantIdNo,
         serviceOption: payload.serviceOption,
         receiveDate: payload.receiveDate,
-        dueDate: payload.dueDate
+        dueDate: payload.dueDate,
+        dossierId: payload.dossierId
       }
       state.thongTinChungHoSo = thongTinChungHoSoPayLoad
     },
