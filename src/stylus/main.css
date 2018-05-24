@@ -4,6 +4,12 @@
 .nav_trang_thai_ho_so .list__tile__action {
     min-width: 32px;
 }
+.nav_trang_thai_ho_so .list__tile__action .icon {
+    color: #efce48;
+}
+.nav_trang_thai_ho_so .list__tile--active .list__tile__action:first-of-type .icon {
+    color: rgb(53, 99, 193);
+}
 .nav_trang_thai_ho_so .list__tile{
     height: 32px;
 }
@@ -85,7 +91,7 @@ body .expansion-panel__header .card__text {
 .absolute__btn {
     position: absolute !important;
     top: 0;
-    right 0;
+    right: 0;
     margin: 0;
 }
 body .btn > .btn__content .icon {
@@ -175,4 +181,81 @@ body .expaned__list__data .expansion-panel__header {
 .group__thanh_phan .badge--left .badge__badge {
     top: 0;
     left: 26px;
+}
+body .application.theme--light {
+    background: #f6f6f6 !important;
+}
+body .input-group--text-field input, 
+body .input-group--text-field textarea {
+    font-size: 14px;
+}
+
+
+table.datatable--select-all thead th:first-child, 
+table.datatable--select-all tbody td:first-child{
+    padding: 0px !important;
+    width: 32px !important;
+}
+
+table .stt_column , 
+table .action_column {
+    padding: 2px 5px !important;
+}
+table .action_column {
+    width: 125px;
+}
+
+.table-bordered table.table thead tr {
+    height: 42px;
+    background: #dae8e8;
+}
+.application .theme--light.table thead th, .theme--light .table thead th {
+    color: #201c1c;
+    font-size: 13px;
+}
+
+body .table-bordered {
+    border: 1px solid lightgray;
+    border-right: 0;
+    border-top: 0;
+}
+body .table__overflow .table > thead > tr > th {
+    border-right: 1px solid lightgray;
+    border-top: 1px solid lightgray;
+    color: #0d2434 !important;
+}
+body .table-bordered tbody > tr > td {
+    border-right: 1px solid lightgray;
+    vertical-align: top;
+}
+body table.table tbody td, body table.table tbody th {
+    height: 38px;
+}
+body .datatable__actions .btn, 
+body .datatable__actions .input-group--select{
+    margin-bottom: 0 !important;
+    margin-top: 0 !important;
+}
+.table-bordered table.table tbody td:first-child, 
+.table-bordered table.table tbody td:not(:first-child), 
+.table-bordered table.table tbody th:first-child, 
+.table-bordered table.table tbody th:not(:first-child), 
+.table-bordered table.table thead td:first-child, 
+.table-bordered table.table thead td:not(:first-child), 
+.table-bordered table.table thead th:first-child, 
+.table-bordered table.table thead th:not(:first-child) {
+    padding: 2px 5px;
+}
+
+table.table tbody .input-group--selection-controls.checkbox .icon {
+    align-items: start;
+    padding-top: 4px;
+    font-size: 15px;
+}
+
+table.table .input-group--selection-controls.checkbox .icon {
+    font-size: 15px;
+}
+body table.table tbody td[colspan="9"] {
+    padding-top: 10px !important;
 }
