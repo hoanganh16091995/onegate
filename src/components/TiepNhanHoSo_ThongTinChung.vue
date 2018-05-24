@@ -46,7 +46,7 @@
                     v-model="thongTinChungHoSo.serviceConfig"
                     autocomplete
                   ></v-select> -->
-                  <v-subheader v-else style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceConfig}}</i></v-subheader>
+                  <v-subheader v-else style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceOption}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12></v-flex>
                 <v-flex xs12 sm2>
@@ -104,6 +104,7 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
+                  <v-flex v-else>
                     <v-menu style="display: inline-block;width: 69%"
                     lazy
                     :close-on-content-click = "true"
@@ -124,7 +125,7 @@
                       <v-date-picker :min="minDate" ref="datepicker" v-model="thongTinChungHoSo.dateEndMd" :first-day-of-week="1" @change="changeDate" @input="thongTinChungHoSo.dateEnd = formatDate($event)" autosave locale="vi">
                       </v-date-picker>
                     </v-menu>
-
+                  
                     <v-menu style="display: inline-block; width: 30%"
                     ref="menuTimeEnd"
                     lazy
@@ -144,6 +145,7 @@
                       ></v-text-field>
                       <v-time-picker v-model="thongTinChungHoSo.timeEnd" format="24hr" @change="$refs.menuTimeEnd.save(thongTinChungHoSo.timeEnd)"></v-time-picker>
                     </v-menu>
+                  </v-flex>
                 </v-flex>
               </v-layout>
             </v-card-text>

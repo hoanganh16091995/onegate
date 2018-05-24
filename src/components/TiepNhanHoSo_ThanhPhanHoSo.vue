@@ -5,14 +5,14 @@
         <div slot="header">IV. THÀNH PHẦN HỒ SƠ</div>
         <v-card>
 
-          <div style="position: relative;">
+          <div style="position: relative;" v-for="(item,index) in dossierTemplates">
             <v-expansion-panel class="expaned__list__data">
-              <v-expansion-panel-content hide-actions value="1">
-                <div slot="header">1. Đơn đề nghị cấp giấy phép</div>
+              <v-expansion-panel-content hide-actions :value="false">
+                <div slot="header"> {{ (index + 1) + ' . ' + item.partName }} </div>
                 <v-card>
                   <v-card-text>
                     <v-layout wrap>
-
+                      
                       <v-flex xs12>
                         
                       </v-flex>
@@ -28,9 +28,9 @@
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox">
                 <v-flex style="width: 300px;" class="layout wrap">
-                  <v-checkbox class="flex" v-model="thanhPhanHoSo.fileTypes" value="John"></v-checkbox>
-                  <v-checkbox class="flex" v-model="thanhPhanHoSo.fileTypes" value="John"></v-checkbox>
-                  <v-checkbox class="flex" v-model="thanhPhanHoSo.fileTypes" value="John"></v-checkbox>
+                  <v-checkbox class="flex" v-model="thanhPhanHoSo.fileTypes" value="2"></v-checkbox>
+                  <v-checkbox class="flex" v-model="thanhPhanHoSo.fileTypes" value="0"></v-checkbox>
+                  <v-checkbox class="flex" v-model="thanhPhanHoSo.fileTypes" value="1"></v-checkbox>
                 </v-flex>
                 <v-flex style="width: 150px;" class="text-right">
                   <v-btn icon class="mt-0 ml-0 mr-2">
@@ -39,7 +39,7 @@
                       <v-icon size="20" color="primary">attach_file</v-icon>
                     </v-badge>
                   </v-btn>
-                  <v-btn flat class="mt-0 mx-0">
+                  <v-btn flat class="mt-0 mx-0" @click="deleteAttackFile(item)">
                     <v-icon size="20">delete</v-icon>
                     Xoá
                   </v-btn>
@@ -68,7 +68,7 @@
                   rows="2"
                 ></v-text-field>
               </v-flex>
-
+              
             </v-layout>
           </v-card-text>
         </v-card>
@@ -81,15 +81,23 @@
 // import $ from 'jquery'
 
 export default {
-  data: () => ({}),
+  data: () => ({
+  }),
   computed: {
     loading () {
       return this.$store.getters.loading
     },
     thanhPhanHoSo () {
-      return {}
+      return this.$store.getters.thanhPhanHoSo
+    },
+    dossierTemplates () {
+      return this.$store.getters.dossierTemplates
     }
   },
-  methods: {}
+  methods: {
+    deleteAttackFile (item) {
+      this.$store.dispatch('deleteAttackFile', item)
+    }
+  }
 }
 </script>
