@@ -39,7 +39,7 @@
                       <v-icon size="20" color="primary">attach_file</v-icon>
                     </v-badge>
                   </v-btn>
-                  <v-btn flat class="mt-0 mx-0">
+                  <v-btn flat class="mt-0 mx-0" @click="deleteAttackFile(item)">
                     <v-icon size="20">delete</v-icon>
                     Xoá
                   </v-btn>
@@ -94,6 +94,10 @@ export default {
       return this.$store.getters.dossierTemplates
     }
   },
-  methods: {}
+  methods: {
+    deleteAttackFile (item) {
+      this.$store.dispatch('deleteAttackFile', item)
+    }
+  }
 }
 </script>
