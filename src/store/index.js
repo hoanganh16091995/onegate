@@ -450,7 +450,7 @@ export const store = new Vuex.Store({
         console.log(xhr)
       })
     },
-    deleteAttackFile ({commit, state}, data) {
+    deleteAttackFiles ({commit, state}, data) {
       let param = {
         headers: {
           groupId: state.api.groupId
@@ -458,11 +458,33 @@ export const store = new Vuex.Store({
       }
       if (data.hasForm) {
         // TODO
-      } else {
-        axios.delete('http://hanoi.fds.vn:2281/api/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + data.fileTemplateNo + '/resetformdata', {}, param).then(function (response) {
+        axios.put('http://hanoi.fds.vn:2281/api/dossiers/' + state.thonTinChungHoSo.dossierId + '/files/' + data.referenceUid + 'resetformdata', {}, param).then(function (response) {
+          console.log('success')
         }).catch(function (xhr) {
+          console.log(xhr)
+        })
+      } else {
+        axios.delete('http://hanoi.fds.vn:2281/api/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + data.fileTemplateNo + '/all', param).then(function (response) {
+          console.log('success!')
+        }).catch(function (xhr) {
+          console.log(xhr)
         })
       }
+    },
+    uploadSingleFile ({commit, state}, data) {
+      let formData = new FormData()
+      formData.append('fileName', data.fileName)
+      formData.append('fileType', '')
+      formData.append('isSign', 'true')
+      axios.post(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(function (reponse) {
+        console.log('upload file success!')
+      }).catch(function (xhr) {
+        console.log(xhr)
+      })
     },
     deleteSingleFile ({commit, state}, data) {
       let param = {
@@ -470,7 +492,10 @@ export const store = new Vuex.Store({
           groupId: state.api.groupId
         }
       }
-      axios.put('http://hanoi.fds.vn:2281/api/dossiers/' + state.thonTinChungHoSo.dossierId + '/files/' + data.referenceUid + 'resetformdata', {}, param).then(function () {
+      axios.delete('http://hanoi.fds.vn:2281/api/dossiers/' + state.thonTinChungHoSo.dossierId + '/files/' + data.referenceUid, param).then(function (response) {
+        console.log('success')
+      }).catch(function (xhr) {
+        console.log(xhr)
       })
     },
     loadDossierMarkItems ({commit, state}, data) {
