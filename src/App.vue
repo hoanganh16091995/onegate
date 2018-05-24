@@ -15,7 +15,8 @@
       <v-list v-else class="py-0 nav_trang_thai_ho_so">
         <v-list-tile v-for="(item, index) in trangThaiHoSoList" :key="item.id" :to="'/danh-sach-ho-so/' + index">
           <v-list-tile-action>
-            <v-icon>{{item.action}}</v-icon>
+            <v-icon v-if="index == currentIndex">{{item.action_active}}</v-icon>
+            <v-icon v-else>{{item.action}}</v-icon>
           </v-list-tile-action>
           <v-list-tile-content>
             <v-list-tile-title v-text="item.title"></v-list-tile-title>
@@ -53,7 +54,3 @@
     }
   }
 </script>
-
-<style lang="stylus">
-  @import './stylus/main'
-</style>

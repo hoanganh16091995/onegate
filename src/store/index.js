@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import toastr from 'toastr'
 import axios from 'axios'
+import support from './support.json'
 // import router from '@/router'
 
 Vue.use(toastr)
@@ -14,15 +15,17 @@ export const store = new Vuex.Store({
       serviceConfigApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs',
       regionApi: 'http://hanoi.fds.vn:2281/api/dictcollections/101/dictItems',
       serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
-      dossierApi: 'http://hanoi.fds.vn:2281/api/dossier',
+      dossierApi: '/o/rest/v2/dossiers',
       dossierTemplatesApi: 'http://hanoi.fds.vn:2281/api/dossiertemplates',
       govAgency: 'abc',
+      user: {},
       groupId: 0
     },
     loadedVueProjects: [
     ],
     loadedVueProject: null,
     loading: false,
+    loadingTable: false,
     error: null,
     user: null,
     trangThaiHoSoList: [
@@ -149,7 +152,8 @@ export const store = new Vuex.Store({
       resultDistrict: '',
       resultWard: '',
       resultTelNo: ''
-    }
+    },
+    danhSachHoSo: null
   },
   actions: {
     clearError ({commit}) {
@@ -161,6 +165,37 @@ export const store = new Vuex.Store({
     loadVueProject ({commit}, key) {
       commit('setLoading', true)
     },
+    loadInitResource ({commit, state}) {
+      axios.get(support.renderURLInit, {}).then(function (response) {
+        state.api = response.data
+      }).catch(function (xhr) {
+      })
+    },
+    loadDanhSachHoSo ({commit, state}, filter) {
+      return new Promise((resolve, reject) => {
+        commit('setLoadingTable', true)
+        let param = {
+          headers: {
+            groupId: state.api.groupId
+          },
+          params: {
+            status: filter.status.id,
+            keyword: filter.keywords,
+            start: filter.start,
+            end: filter.end
+          }
+        }
+        axios.get(state.api.dossierApi, param).then(function (response) {
+          let serializable = response.data
+          commit('setDanhSachHoSo', serializable)
+          resolve(response.data)
+          commit('setLoadingTable', false)
+        }, error => {
+          reject(error)
+          commit('setLoadingTable', false)
+        })
+      })
+    },
     loadtrangThaiHoSoList ({commit}) {
       commit('setLoading', true)
 
@@ -169,50 +204,50 @@ export const store = new Vuex.Store({
           title: 'Thông báo cần xử lý',
           id: '1',
           action: 'folder',
-          action_active: 'folder_open',
+          action_active: 'play_arrow',
           active: true,
           link: '/'
         },
         {
           title: 'Hồ sơ chờ chuyển xử lý',
-          id: '2',
+          id: 'new',
           action: 'folder',
-          action_active: 'folder_open',
+          action_active: 'play_arrow',
           link: '/'
         },
         {
           title: 'Hồ sơ bổ sung',
           id: '3',
           action: 'folder',
-          action_active: 'folder_open',
+          action_active: 'play_arrow',
           link: '/'
         },
         {
           title: 'Hồ sơ đang xử lý',
-          id: '4',
+          id: 'processing',
           action: 'folder',
-          action_active: 'folder_open',
+          action_active: 'play_arrow',
           link: '/'
         },
         {
           title: 'Hồ sơ chờ trả kết quả',
-          id: '5',
+          id: 'release',
           action: 'folder',
-          action_active: 'folder_open',
+          action_active: 'play_arrow',
           link: '/'
         },
         {
           title: 'Hồ sơ đã trả kết quả',
-          id: '6',
+          id: 'done',
           action: 'folder',
-          action_active: 'folder_open',
+          action_active: 'play_arrow',
           link: '/'
         },
         {
           title: 'Yêu cầu của chủ hồ sơ',
           id: '7',
           action: 'folder',
-          action_active: 'folder_open',
+          action_active: 'play_arrow',
           link: '/'
         }
       ]
@@ -510,6 +545,9 @@ export const store = new Vuex.Store({
     setLoading (state, payload) {
       state.loading = payload
     },
+    setLoadingTable (state, payload) {
+      state.loadingTable = payload
+    },
     setError (state, payload) {
       state.error = payload
     },
@@ -607,11 +645,17 @@ export const store = new Vuex.Store({
     },
     setDossierMarkItems (state, payload) {
       state.dossierMarkItems = payload
+    },
+    setDanhSachHoSo (state, payload) {
+      state.danhSachHoSo = payload
     }
   },
   getters: {
     loading (state) {
       return state.loading
+    },
+    loadingTable (state) {
+      return state.loadingTable
     },
     error (state) {
       return state.error
@@ -720,6 +764,12 @@ export const store = new Vuex.Store({
     },
     dossierMarkItems (state) {
       return state.dossierMarkItems
+    },
+    danhSachHoSo (state) {
+      return (filter) => {
+        let dataPromise = store.dispatch('loadDanhSachHoSo', filter)
+        return dataPromise
+      }
     }
   }
 })
