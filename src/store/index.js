@@ -11,12 +11,13 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     api: {
-      serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
-      serviceConfigApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs',
-      regionApi: 'http://hanoi.fds.vn:2281/api/dictcollections/101/dictItems',
-      serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
+      serviceInfoApi: '/o/rest/v2/serviceinfos',
+      serviceConfigApi: '/o/rest/v2/serviceconfigs',
+      regionApi: '/o/rest/v2/dictcollections/101/dictItems',
+      serviceOptionApi: '/o/rest/v2/serviceconfigs/301/processes',
+      applicantApi: '/o/rest/v2/applicant',
       dossierApi: '/o/rest/v2/dossiers',
-      dossierTemplatesApi: 'http://hanoi.fds.vn:2281/api/dossiertemplates',
+      dossierTemplatesApi: '/o/rest/v2/dossiertemplates',
       govAgency: 'abc',
       user: {},
       groupId: 0
@@ -38,7 +39,6 @@ export const store = new Vuex.Store({
     dossier: {
       applicantIdNo: 'ccc'
     },
-    dossierMarkItems: [],
     thongTinChungHoSo: {
       serviceInfo: '',
       serviceOption: '',
@@ -64,8 +64,70 @@ export const store = new Vuex.Store({
     resultDistricts: [],
     resultWards: [],
     resultServices: [],
+    dossierFiles: [],
     thanhPhanHoso: {
-      dossierTemplates: []
+      dossierTemplates: [
+        {
+          'partNo': '2',
+          'partName': 'Giấy đăng ký hợp đồng xuất khẩu sản phẩm thủy sản (tải bản scan)',
+          'partTip': '',
+          'partType': 0,
+          'multiple': false,
+          'required': false,
+          'esign': false,
+          'fileTemplateNo': '',
+          'hasForm': true,
+          'fileTypes': []
+        },
+        {
+          'partNo': '2',
+          'partName': 'Giấy đăng ký hợp đồng xuất khẩu sản phẩm thủy sản (tải bản scan)',
+          'partTip': '',
+          'partType': 0,
+          'multiple': false,
+          'required': false,
+          'esign': false,
+          'fileTemplateNo': '',
+          'hasForm': true,
+          'fileTypes': []
+        },
+        {
+          'partNo': '2',
+          'partName': 'Giấy đăng ký hợp đồng xuất khẩu sản phẩm thủy sản (tải bản scan)',
+          'partTip': '',
+          'partType': 0,
+          'multiple': false,
+          'required': false,
+          'esign': false,
+          'fileTemplateNo': '',
+          'hasForm': true,
+          'fileTypes': []
+        },
+        {
+          'partNo': '2',
+          'partName': 'Giấy đăng ký hợp đồng xuất khẩu sản phẩm thủy sản (tải bản scan)',
+          'partTip': '',
+          'partType': 0,
+          'multiple': false,
+          'required': false,
+          'esign': false,
+          'fileTemplateNo': '',
+          'hasForm': true,
+          'fileTypes': []
+        },
+        {
+          'partNo': '2',
+          'partName': 'Giấy đăng ký hợp đồng xuất khẩu sản phẩm thủy sản (tải bản scan)',
+          'partTip': '',
+          'partType': 0,
+          'multiple': false,
+          'required': false,
+          'esign': false,
+          'fileTemplateNo': '',
+          'hasForm': true,
+          'fileTypes': []
+        }
+      ]
     },
     dossierTemplates: [{
       'partNo': '1',
@@ -76,7 +138,8 @@ export const store = new Vuex.Store({
       'required': false,
       'esign': false,
       'fileTemplateNo': '',
-      'hasForm': true
+      'hasForm': true,
+      'fileType': 0
     },
     {
       'partNo': '2',
@@ -87,7 +150,8 @@ export const store = new Vuex.Store({
       'required': false,
       'esign': false,
       'fileTemplateNo': '',
-      'hasForm': true
+      'hasForm': true,
+      'fileType': 0
     },
     {
       'partNo': '3',
@@ -98,7 +162,8 @@ export const store = new Vuex.Store({
       'required': false,
       'esign': false,
       'fileTemplateNo': '',
-      'hasForm': false
+      'hasForm': false,
+      'fileType': 0
     },
     {
       'partNo': '4',
@@ -109,7 +174,8 @@ export const store = new Vuex.Store({
       'required': false,
       'esign': false,
       'fileTemplateNo': '',
-      'hasForm': false
+      'hasForm': false,
+      'fileType': 0
     },
     {
       'partNo': '5',
@@ -120,7 +186,8 @@ export const store = new Vuex.Store({
       'required': false,
       'esign': false,
       'fileTemplateNo': '',
-      'hasForm': false
+      'hasForm': false,
+      'fileType': 0
     }],
     thongTinChuHoSo: {
       userType: true,
@@ -296,7 +363,7 @@ export const store = new Vuex.Store({
       }
       axios.get(state.api.serviceOptionApi, param).then(function (response) {
         let serviceConfig = response.data
-        axios.get('http://hanoi.fds.vn:2281/api/serviceconfigs/' + serviceConfig.serverConfigId + '/processes', param).then(function (response) {
+        axios.get(state.api.serviceConfigApi + '/' + serviceConfig.serverConfigId + '/processes', param).then(function (response) {
           commit('setServiceOptionItems', response.data.data)
         }).catch(function (xhr) {
         })
@@ -470,14 +537,32 @@ export const store = new Vuex.Store({
           groupId: state.api.groupId
         }
       }
-      axios.all([axios.get(state.api.dossierTemplatesApi + '/' + data.dossierTemplateNo, param), axios.get(state.api.dossierApi + '/' + data.dossierId, param)])
-      .then(axios.spread(function (dossierTemplates, dossierMarks) {
-        let dossierTemplateItems = dossierTemplates.data
-        let dossierMarkItems = dossierMarks.data
-        dossierTemplateItems = dossierTemplateItems.map(itemTmeplate => {
-          return Object.assign(itemTmeplate, dossierMarkItems.find(itemMark => {
-            return itemMark && itemTmeplate.partNo === itemMark.partNo
-          }))
+      let paramDossierMark = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        params: {
+          type: 1
+        }
+      }
+      axios.all([axios.get(state.api.dossierTemplatesApi + '/' + data.dossierTemplateNo, param), axios.get(state.api.dossierApi + '/' + data.dossierId + '/marks', paramDossierMark)])
+      .then(axios.spread(function (resDossierTemplates, resDossierMarks) {
+        let dossierTemplateItems = resDossierTemplates.data.dossierParts.filter((item, index) => {
+          return item.partType === 1
+        })
+        let dossierMarkItems = resDossierMarks.data.data
+        dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
+          let itemMarkFinded = dossierMarkItems.find(itemMark => {
+            return itemMark && itemMark.partNo === itemTemplate.partNo
+          })
+          if (itemMarkFinded) {
+            itemTemplate.fileTypes.push(itemMarkFinded.fileType)
+          } else {
+            itemTemplate.fileTypes.push('')
+          }
+          /* return Object.assign(itemTemplate, dossierMarkItems.find(itemMark => {
+            return itemMark && itemTemplate.partNo === itemMark.partNo
+          })) */
         })
         commit('setDossierTemplates', dossierTemplateItems)
         state.thanhPhanHoso.dossierTemplates = dossierTemplateItems
@@ -493,24 +578,42 @@ export const store = new Vuex.Store({
       }
       if (data.hasForm) {
         // TODO
-        axios.put('http://hanoi.fds.vn:2281/api/dossiers/' + state.thonTinChungHoSo.dossierId + '/files/' + data.referenceUid + 'resetformdata', {}, param).then(function (response) {
+        axios.put(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + data.referenceUid + '/resetformdata', {}, param).then(function (response) {
           console.log('success')
         }).catch(function (xhr) {
           console.log(xhr)
         })
       } else {
-        axios.delete('http://hanoi.fds.vn:2281/api/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + data.fileTemplateNo + '/all', param).then(function (response) {
+        axios.delete(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + data.fileTemplateNo + '/all', param).then(function (response) {
           console.log('success!')
         }).catch(function (xhr) {
           console.log(xhr)
         })
       }
     },
-    uploadSingleFile ({commit, state}, data) {
+    deleteSingleFile ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        }
+      }
+      axios.delete(state.api.dossierApi + '/' + state.thonTinChungHoSo.dossierId + '/files/' + data.referenceUid, param).then(function (response) {
+        console.log('success')
+      }).catch(function (xhr) {
+        console.log(xhr)
+      })
+    },
+    uploadSingleFile ({commit, state}, e) {
+      let files = e.target.files || e.dataTransfer.files
+      let file = files[0]
+      let data = e.dataItem
       let formData = new FormData()
-      formData.append('fileName', data.fileName)
-      formData.append('fileType', '')
+      formData.append('fileName', file.name)
+      formData.append('fileType', file.type)
+      formData.append('fileSize', file.size)
       formData.append('isSign', 'true')
+      formData.append('file', file)
+      formData.append('dossierPartNo', data.partNo)
       axios.post(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
@@ -519,29 +622,6 @@ export const store = new Vuex.Store({
         console.log('upload file success!')
       }).catch(function (xhr) {
         console.log(xhr)
-      })
-    },
-    deleteSingleFile ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        }
-      }
-      axios.delete('http://hanoi.fds.vn:2281/api/dossiers/' + state.thonTinChungHoSo.dossierId + '/files/' + data.referenceUid, param).then(function (response) {
-        console.log('success')
-      }).catch(function (xhr) {
-        console.log(xhr)
-      })
-    },
-    loadDossierMarkItems ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        }
-      }
-      axios.get('http://hanoi.fds.vn:2281/api/dossiers/' + data + '/marks', param).then(function (response) {
-        commit('setDossierMarkItems', response.data.data)
-      }).catch(function (xhr) {
       })
     },
     getDetailDossier ({commit, state}, data) {
@@ -554,6 +634,18 @@ export const store = new Vuex.Store({
         commit('setDossier', response.data)
         commit('setThongTinChuHoSo', response.data)
         commit('setThongTinChungHoSo', response.data)
+      }).catch(function (xhr) {
+        console.log(xhr)
+      })
+    },
+    loadDossierFiles ({commit, state}) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        }
+      }
+      axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files', param).then(function (response) {
+        commit('setDossierFiles', response.data.data)
       }).catch(function (xhr) {
         console.log(xhr)
       })
@@ -586,7 +678,7 @@ export const store = new Vuex.Store({
           groupId: state.api.groupId
         }
       }
-      axios.get(state.api.dossierApi + '/' + data + '/applicant', param).then(function (response) {
+      axios.get(state.api.applicantApi + '/' + data, param).then(function (response) {
         state.thongTinChuHoSo.applicantIdNo = response.data.applicantIdNo
         state.thongTinChuHoSo.applicantName = response.data.applicantName
         state.thongTinChuHoSo.address = response.data.address
@@ -703,11 +795,11 @@ export const store = new Vuex.Store({
     setDossier (state, payload) {
       state.dossier = payload
     },
-    setDossierMarkItems (state, payload) {
-      state.dossierMarkItems = payload
-    },
     setDanhSachHoSo (state, payload) {
       state.danhSachHoSo = payload
+    },
+    setDossierFiles (state, payload) {
+      state.dossierFiles = payload
     }
   },
   getters: {
@@ -822,14 +914,14 @@ export const store = new Vuex.Store({
     dossier (state) {
       return state.dossier
     },
-    dossierMarkItems (state) {
-      return state.dossierMarkItems
-    },
     danhSachHoSo (state) {
       return (filter) => {
         let dataPromise = store.dispatch('loadDanhSachHoSo', filter)
         return dataPromise
       }
+    },
+    dossierFiles (state) {
+      return state.dossierFiles
     }
   }
 })

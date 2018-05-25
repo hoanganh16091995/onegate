@@ -28,18 +28,24 @@
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox">
                 <v-flex style="width: 300px;" class="layout wrap">
-                  <v-checkbox class="flex" v-model="thanhPhanHoSo.fileTypes" value="2"></v-checkbox>
-                  <v-checkbox class="flex" v-model="thanhPhanHoSo.fileTypes" value="0"></v-checkbox>
-                  <v-checkbox class="flex" v-model="thanhPhanHoSo.fileTypes" value="1"></v-checkbox>
+                  <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileTypes" value="2"></v-checkbox>
+                  <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileTypes" value="0"></v-checkbox>
+                  <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileTypes" value="1"></v-checkbox>
                 </v-flex>
                 <v-flex style="width: 150px;" class="text-right">
                   <v-btn icon class="mt-0 ml-0 mr-2">
                     <v-badge left>
                       <span slot="badge">6</span>
-                      <v-icon size="20" color="primary">attach_file</v-icon>
+                      <input
+                      type="file"
+                      style="display: none"
+                      :id="'file' + item.partNo"
+                      @change="onUploadSingleFile($event,item)"
+                      >
+                      <v-icon size="20" color="primary" @click="pickFile(item)">attach_file</v-icon>
                     </v-badge>
                   </v-btn>
-                  <v-btn flat class="mt-0 mx-0" @click="deleteAttackFile(item)">
+                  <v-btn flat class="mt-0 mx-0" @click="deleteAttackFiles(item)">
                     <v-icon size="20">delete</v-icon>
                     Xoá
                   </v-btn>
@@ -95,8 +101,15 @@ export default {
     }
   },
   methods: {
-    deleteAttackFile (item) {
-      this.$store.dispatch('deleteAttackFile', item)
+    deleteAttackFiles (item) {
+      this.$store.dispatch('deleteAttackFiles', item)
+    },
+    pickFile (item) {
+      document.getElementById('file' + item.partNo).click()
+    },
+    onUploadSingleFile (e, data) {
+      e.dataItem = data
+      this.$store.dispatch('uploadSingleFile', e)
     }
   }
 }
