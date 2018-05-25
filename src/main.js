@@ -10,13 +10,12 @@ import Vuetify from 'vuetify'
 import { store } from './store'
 import VueContentPlaceholders from 'vue-content-placeholders'
 import VueMoment from 'vue-moment'
-import Datetime from 'vue-datetime'
-import 'vue-datetime/dist/vue-datetime.css'
-Vue.use(Datetime)
+import Datetime from 'vue-datetime-2'
+
 Vue.use(VueMoment)
 Vue.use(VueContentPlaceholders)
 Vue.use(Vuetify)
-
+Vue.use(Datetime)
 Vue.config.productionTip = false
 
 new Vue({ // eslint-disable-line no-new
