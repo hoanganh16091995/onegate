@@ -19,7 +19,6 @@
     </div>
     <thong-tin-chung ref="thongtinchung"></thong-tin-chung>
     <thong-tin-chu-ho-so ref="thongtinchuhoso"></thong-tin-chu-ho-so>
-    <!-- <thong-tin-nguoi-nop-ho-so ref="thongtinnguoinophoso"></thong-tin-nguoi-nop-ho-so> -->
     <thanh-phan-ho-so ref="thanhphanhoso"></thanh-phan-ho-so>
     <le-phi ref="lephi"></le-phi>
     <dich-vu-chuyen-phat-ket-qua ref="dichvuchuyenphatketqua"></dich-vu-chuyen-phat-ket-qua>

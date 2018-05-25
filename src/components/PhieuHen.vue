@@ -14,12 +14,59 @@
         </div>
       </div>
     </div>
-    <content-placeholders class="mt-3" v-show="loading">
-      <content-placeholders-img />
-      <content-placeholders-heading />
-    </content-placeholders>
-    <div v-show="!loading" id="pdfViewer">
-
+    <div style="background-color: white;">
+        <div class="receipt-wrapper"><div class="row head">
+        <div class="left">
+          <p class="text-uppercase text-bold">Cuc ban quyen tac gia</p>
+          <span class="text-bold">Bộ phận một cửa và trả kết quả</span>
+          <p>==================</p>
+        </div>
+        <div class="right">
+          <p class="text-uppercase text-bold">Cộng hòa Xã hội Chủ nghĩa Việt Nam</p>
+          <p class="text-bold">Độc lập - Tự do - Hạnh phúc</p>
+          <p>==================</p>
+          <p>..., Ngày ... tháng ... năm ...</p>
+        </div>
+      </div>
+      <div class="row title">
+        <h4 class="text-uppercase">Phiếu tiếp nhận hồ sơ và hẹn trả kết quả</h4>
+        <p>Mã số hồ sơ: CBQTG2018051589HK</p>
+        <p><i>(Liên 1: Lưu)</i></p>
+      </div>
+      <div class="row">
+        <p>Bộ phận tiếp nhận và trả kết quả: Cục bản quyền tác giả</p>
+        <p>Tiếp nhận hồ sơ của: Nguyễn Khánh Toán</p>
+        <p>Địa chỉ: 324 Xuân Đỉnh, Từ Liêm, Hà Nội</p>
+        <p>Số điện thoại: 0987654333 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Email: khanhtoan@gmail.com</p>
+        <p>Lệ phí tạm thu: 80.000 đồng</p>
+        <p>Nội dung yêu cầu giải quyết: Cấp giấy phép sản xuất phim ảnh, xuất bản sách, tài liệu văn hóa</p>
+        <ol>
+          <li>Thành phần hồ sơ gồm có:
+            <br>
+            (1) Công văn đề nghị phê duyệt kế hoạch ứng phó sự cố bức xạ và hạt nhân cấp cơ sở (bản chính);
+            <br>
+            (2) Kế hoạch ứng phó sự cố bức xạ và hạt nhân cấp cơ sở
+            <br>
+            (3) Số bộ hồ sơ: 01 (bộ)
+          </li>
+          <li>Thời gian giải quyết hồ sơ theo quy định là: 7 ngày làm việc</li>
+          <li>Thời gian nhận hồ sơ: 14 giờ 23 phút, ngày 15 tháng 05 năm 2018</li>
+          <li>Thời gian trả kết quả giải quyết hồ sơ: Từ 13:30 Đến 17:00, ngày 24 tháng 05 năm 2018</li>
+          <li>Đăng ký nhận kết quả tại: [Dịch vụ chuyển phát kết quả]</li>
+        </ol>
+        <p class="note">Chú ý: Công dân đến nhận kết quả mang theo phiếu hẹn, CMTND, lệ phí và giấy ủy quyền (Trong trường hợp không phải chính chủ tới nhận)</p>
+        <p>Số điện thoại tiếp nhận ý kiến phản hồi của tổ chức, cá nhân: 19003111</p>
+      </div>
+      <div class="row">
+        <div class="submit left">
+          <p class="text-bold">Người nộp hồ sơ</p>
+          <p><i>(Ký và ghi rõ họ tên)</i></p>
+        </div>
+        <div class="reciever right">
+          <p class="text-bold">Cán bộ tiếp nhận</p>
+          <p><i>(Ký và ghi rõ họ tên)</i></p>
+        </div>
+      </div></div>
     </div>
     <content-placeholders class="mt-3" v-if="loading">
       <content-placeholders-text :lines="1" />
@@ -46,7 +93,6 @@
 // import router from '@/router'
 import ThongTinChung from './TiepNhanHoSo_ThongTinChung.vue'
 import ThongTinChuHoSo from './TiepNhanHoSo_ThongTinChuHoSo.vue'
-import ThongTinNguoiNopHoSo from './TiepNhanHoSo_ThongTinNguoiNopHoSo.vue'
 import ThanhPhanHoSo from './TiepNhanHoSo_ThanhPhanHoSo.vue'
 import LePhi from './TiepNhanHoSo_LePhi.vue'
 import DichVuChuyenPhatKetQua from './TiepNhanHoSo_DichVuChuyenPhatKetQua.vue'
@@ -56,7 +102,6 @@ export default {
   components: {
     'thong-tin-chung': ThongTinChung,
     'thong-tin-chu-ho-so': ThongTinChuHoSo,
-    'thong-tin-nguoi-nop-ho-so': ThongTinNguoiNopHoSo,
     'thanh-phan-ho-so': ThanhPhanHoSo,
     'le-phi': LePhi,
     'dich-vu-chuyen-phat-ket-qua': DichVuChuyenPhatKetQua

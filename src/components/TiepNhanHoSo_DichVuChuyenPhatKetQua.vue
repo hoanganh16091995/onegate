@@ -7,7 +7,7 @@
           <v-card-text>
             
             <v-slide-y-transition>
-              <span v-if="!dichVuChuyenPhatKetQua.homeRegister">
+              <span v-if="!dichVuChuyenPhatKetQua.viaPostal">
                 <v-icon size="16">check_circle</v-icon> <strong>Đăng ký kết quả tại nhà</strong> để điền thông tin chuyển phát tận nhà
               </span>
               <v-layout v-else wrap>
@@ -26,7 +26,7 @@
                     :items="resultServices"
                     item-text="itemName"
                     item-value="itemCode"
-                    v-model="dichVuChuyenPhatKetQua.resultService"
+                    v-model="dichVuChuyenPhatKetQua.postalServiceCode"
                     autocomplete
                   ></v-select>
                 </v-flex>
@@ -39,7 +39,7 @@
                     :items="resultServices"
                     item-text="itemName"
                     item-value="itemCode"
-                    v-model="dichVuChuyenPhatKetQua.resultService"
+                    v-model="dichVuChuyenPhatKetQua.postalServiceName"
                     autocomplete
                   ></v-select>
                 </v-flex>
@@ -59,7 +59,7 @@
                   <v-text-field
                     v-else
                     name="resultTelNo"
-                    v-model="dichVuChuyenPhatKetQua.resultTelNo"
+                    v-model="dichVuChuyenPhatKetQua.postalTelNo"
                     append-icon="phone"
                   ></v-text-field>
                 </v-flex>
@@ -79,7 +79,7 @@
                   <v-text-field
                     v-else
                     name="resultAddress"
-                    v-model="dichVuChuyenPhatKetQua.resultAddress"
+                    v-model="dichVuChuyenPhatKetQua.postalAddress"
                     multi-line
                     rows="2"
                   ></v-text-field>
@@ -96,11 +96,11 @@
                   </content-placeholders>
                   <v-select
                     v-else
-                    :items="resultCitys"
+                    :items="citys"
                     item-text="itemName"
                     item-value="itemCode"
                     @change="onChangeResultCity"
-                    v-model="dichVuChuyenPhatKetQua.resultCity"
+                    v-model="dichVuChuyenPhatKetQua.postalCityCode"
                     autocomplete
                   ></v-select>
                 </v-flex>
@@ -120,7 +120,7 @@
                     item-text="itemName"
                     item-value="itemCode"
                     @change="onChangeResultDistrict"
-                    v-model="dichVuChuyenPhatKetQua.resultDistrict"
+                    v-model="dichVuChuyenPhatKetQua.postalDistrictCode"
                     autocomplete
                   ></v-select>
                 </v-flex>
@@ -139,7 +139,7 @@
                     :items="resultWards"
                     item-text="itemName"
                     item-value="itemCode"
-                    v-model="dichVuChuyenPhatKetQua.resultWard"
+                    v-model="dichVuChuyenPhatKetQua.postalWardCode"
                     autocomplete
                   ></v-select>
                 </v-flex>
@@ -157,7 +157,7 @@
       <v-checkbox
         v-else
         label="Đăng ký kết quả tại nhà"
-        v-model="dichVuChuyenPhatKetQua.homeRegister"
+        v-model="dichVuChuyenPhatKetQua.viaPostal"
       ></v-checkbox>
     </div>
   </div>
@@ -165,33 +165,28 @@
 
 <script>
 export default {
-  data: () => ({}),
+  data: () => ({
+    citys: [],
+    resultDistricts: [],
+    resultWards: []
+  }),
+  created () {
+    var vm = this
+    vm.$nextTick(function () {
+    })
+  },
   computed: {
     loading () {
       return this.$store.getters.loading
     },
     dichVuChuyenPhatKetQua () {
       return this.$store.getters.dichVuChuyenPhatKetQua
-    },
-    resultCitys () {
-      return this.$store.getters.resultCitys
-    },
-    resultDistricts () {
-      return this.$store.getters.resultDistricts
-    },
-    resultWards () {
-      return this.$store.getters.resultWards
-    },
-    resultServices () {
-      return this.$store.getters.resultServices
     }
   },
   methods: {
     onChangeResultCity (data) {
-      this.$store.dispatch('loadResultDistricts', data)
     },
     onChangeResultDistrict (data) {
-      this.$store.dispatch('loadResultWards', data)
     }
   }
 }

@@ -225,7 +225,7 @@
                   </content-placeholders>
                   <v-select
                   v-else
-                  :items="delegateCitys"
+                  :items="citys"
                   item-text="itemName"
                   item-value="itemCode"
                   @change="onChangeDelegateCity"
@@ -327,7 +327,10 @@
 
 export default {
   data: () => ({
+    citys: [],
+    delegateDistricts: [],
     districts: [],
+    delegateWards: [],
     wards: [],
     labelSwitch: {
       'true': {
@@ -351,38 +354,23 @@ export default {
     },
     thongTinNguoiNopHoSo () {
       return this.$store.getters.thongTinNguoiNopHoSo
-    },
-    citys () {
-      return this.$store.getters.citys
-    },
-    districtsArr () {
-      return this.$store.getters.districts
-    },
-    wardsArr () {
-      return this.$store.getters.wards
-    },
-    dossier () {
-      return this.$store.getters.dossier
-    },
-    delegateCitys () {
-      return this.$store.getters.delegateCitys
-    },
-    delegateDistricts () {
-      return this.$store.getters.delegateDistricts
-    },
-    delegateWards () {
-      return this.$store.getters.delegateWards
     }
   },
+  created () {
+    var vm = this
+    vm.$nextTick(function () {
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 0,
+        parent: 0
+      }
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.citys = result.data
+      })
+    })
+  },
   watch: {
-    districtsArr (value) {
-      this.districts = value
-    },
-    wardsArr (value) {
-      this.wards = value
-    },
     thongTinNguoiNopHoSo (value) {
-      console.log(value)
       if (!value.sameUser) {
         this.labelSwitch['false'].thongTinUser = value
       } else {
@@ -391,7 +379,6 @@ export default {
       }
     },
     thongTinChuHoSo (value) {
-      console.log(value)
       if (this.thongTinNguoiNopHoSo.sameUser) {
         this.labelSwitch['true'].thongTinUser = value
         this.labelSwitch['true'].thongTinUser['sameUser'] = true
@@ -402,25 +389,65 @@ export default {
   },
   methods: {
     onChangeCity (data) {
-      this.$store.dispatch('loadDistricts', data)
-      if (this.thongTinNguoiNopHoSo.sameUser) {
-        this.$store.dispatch('loadDelegateDistricts', data)
+      var vm = this
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 1,
+        parent: data
       }
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.districts = result.data
+        vm.wards = []
+        if (vm.thongTinNguoiNopHoSo.sameUser) {
+          vm.delegateDistricts = result.data
+          vm.wards = []
+        }
+      })
     },
     onChangeDistrict (data) {
-      this.$store.dispatch('loadWards', data)
-      if (this.thongTinNguoiNopHoSo.sameUser) {
-        this.$store.dispatch('loadDelegateWards', data)
+      var vm = this
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 1,
+        parent: data
       }
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.wards = result.data
+        if (vm.thongTinNguoiNopHoSo.sameUser) {
+          vm.delegateWards = result.data
+        }
+      })
     },
     onChangeApplicantIdNo (data) {
       this.$store.dispatch('getUserInfoFromApplicantIdNo', data)
     },
     onChangeDelegateCity (data) {
-      this.$store.dispatch('loadDelegateDistricts', data)
+      var vm = this
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 1,
+        parent: data
+      }
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.delegateDistricts = result.data
+        if (vm.thongTinNguoiNopHoSo.sameUser) {
+          vm.districts = result.data
+        }
+      })
     },
     onChangeDelegateDistrict (data) {
-      this.$store.dispatch('loadDelegateWards', data)
+      var vm = this
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 1,
+        parent: data
+      }
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.delegateWards = result.data
+        if (vm.thongTinNguoiNopHoSo.sameUser) {
+          vm.wards = result.data
+        }
+      })
     }
   }
 }
