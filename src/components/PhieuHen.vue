@@ -7,7 +7,7 @@
           
         </div> 
         <div class="flex text-right" style="margin-left: auto;">
-          <v-btn flat class="my-0 mx-0 btn-border-left" :to="'/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so'" active-class="temp_active">
+          <v-btn flat class="my-0 mx-0 btn-border-left" :to="'/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id" active-class="temp_active">
             Quay lại &nbsp;
             <v-icon size="16">undo</v-icon>
           </v-btn>
@@ -81,7 +81,7 @@
       <v-btn outline color="primary" v-on:click.native="hoanThanh">
         Hoàn thành
       </v-btn>
-      <v-btn outline color="primary" :to="'/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so'" active-class="temp_active">
+      <v-btn outline color="primary" :to="'/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id" active-class="temp_active">
         Quay lại &nbsp;
         <v-icon>undo</v-icon>
       </v-btn>
@@ -98,7 +98,7 @@ import LePhi from './TiepNhanHoSo_LePhi.vue'
 import DichVuChuyenPhatKetQua from './TiepNhanHoSo_DichVuChuyenPhatKetQua.vue'
 
 export default {
-  props: ['index'],
+  props: ['index', 'id'],
   components: {
     'thong-tin-chung': ThongTinChung,
     'thong-tin-chu-ho-so': ThongTinChuHoSo,

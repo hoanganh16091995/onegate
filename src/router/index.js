@@ -3,8 +3,8 @@ import Router from 'vue-router'
 
 const routerOptions = [
   { path: '/danh-sach-ho-so/:index', component: 'Landing', props: true },
-  { path: '/danh-sach-ho-so/:index/tiep-nhan-ho-so', component: 'TiepNhanHoSo', props: true },
-  { path: '/danh-sach-ho-so/:index/tiep-nhan-ho-so/phieu-hen', component: 'PhieuHen', props: true },
+  { path: '/danh-sach-ho-so/:index/tiep-nhan-ho-so/:id', component: 'TiepNhanHoSo', props: true },
+  { path: '/danh-sach-ho-so/:index/tiep-nhan-ho-so/:id/phieu-hen', component: 'PhieuHen', props: true },
   { path: '*', component: 'NotFound' }
 ]
 

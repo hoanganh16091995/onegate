@@ -11,7 +11,7 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
+                  <v-subheader v-else class="pl-0"> {{thongTinChuHoSo.userType}} {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -112,6 +112,7 @@
                   item-value="itemCode"
                   v-model="labelSwitch['true'].thongTinUser.ward"
                   autocomplete
+                  @change="onChangeWard"
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -395,6 +396,7 @@ export default {
         level: 1,
         parent: data
       }
+      vm.$store.commit('setCityVal', data)
       vm.$store.getters.getDictItems(filter).then(function (result) {
         vm.districts = result.data
         vm.wards = []
@@ -411,12 +413,16 @@ export default {
         level: 1,
         parent: data
       }
+      vm.$store.commit('setDistrictVal', data)
       vm.$store.getters.getDictItems(filter).then(function (result) {
         vm.wards = result.data
         if (vm.thongTinNguoiNopHoSo.sameUser) {
           vm.delegateWards = result.data
         }
       })
+    },
+    onChangeWard (data) {
+      this.$store.commit('setWardVal', data)
     },
     onChangeApplicantIdNo (data) {
       this.$store.dispatch('getUserInfoFromApplicantIdNo', data)

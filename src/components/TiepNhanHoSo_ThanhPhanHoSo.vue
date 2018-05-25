@@ -5,7 +5,7 @@
         <div slot="header">IV. THÀNH PHẦN HỒ SƠ</div>
         <v-card>
 
-          <div style="position: relative;" v-for="(item,index) in dossierTemplates">
+          <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
                 <div slot="header"> {{ (index + 1) + ' . ' + item.partName }} </div>

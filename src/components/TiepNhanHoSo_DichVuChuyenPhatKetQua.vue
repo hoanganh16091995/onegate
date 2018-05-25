@@ -17,7 +17,7 @@
                   </content-placeholders>
                   <v-subheader v-else class="pl-0">Dịch vụ đăng ký: </v-subheader>
                 </v-flex>
-                <v-flex class="pr-4">
+                <v-flex xs12 sm10>
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
@@ -29,22 +29,6 @@
                     v-model="dichVuChuyenPhatKetQua.postalServiceCode"
                     autocomplete
                   ></v-select>
-                </v-flex>
-                <v-flex>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-select
-                    v-else
-                    :items="resultServices"
-                    item-text="itemName"
-                    item-value="itemCode"
-                    v-model="dichVuChuyenPhatKetQua.postalServiceName"
-                    autocomplete
-                  ></v-select>
-                </v-flex>
-                <v-flex xs12>
-
                 </v-flex>
                 <v-flex xs12 sm2>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -150,7 +134,7 @@
         </v-card>
       </v-expansion-panel-content>
     </v-expansion-panel>
-    <div class="absolute__btn" style="width: 195px;margin-top: 4px;">
+    <div class="absolute__btn" style="width: 198px; margin-top: 4px;">
       <content-placeholders class="mt-1" v-if="loading">
         <content-placeholders-text :lines="1" />
       </content-placeholders>
@@ -168,25 +152,61 @@ export default {
   data: () => ({
     citys: [],
     resultDistricts: [],
-    resultWards: []
+    resultWards: [],
+    dichVuChuyenPhatKetQua: {}
   }),
-  created () {
-    var vm = this
-    vm.$nextTick(function () {
-    })
-  },
   computed: {
     loading () {
       return this.$store.getters.loading
-    },
-    dichVuChuyenPhatKetQua () {
-      return this.$store.getters.dichVuChuyenPhatKetQua
     }
+  },
+  created () {
+    var vm = this
+    vm.$nextTick(function () {
+      vm.dichVuChuyenPhatKetQua = vm.$store.getters.dichVuChuyenPhatKetQua
+      vm.dichVuChuyenPhatKetQua.postalCityCode = vm.$store.getters.getCityVal
+      vm.dichVuChuyenPhatKetQua.postalDistrictCode = vm.$store.getters.getDistrictVal
+      vm.dichVuChuyenPhatKetQua.postalWardCode = vm.$store.getters.getWardVal
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 0,
+        parent: 0
+      }
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.citys = result.data
+      })
+      filter.parent = vm.dichVuChuyenPhatKetQua.postalCityCode
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.resultDistricts = result.data
+      })
+      filter.parent = vm.dichVuChuyenPhatKetQua.postalDistrictCode
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.resultWards = result.data
+      })
+    })
   },
   methods: {
     onChangeResultCity (data) {
+      var vm = this
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 1,
+        parent: data
+      }
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.resultDistricts = result.data
+      })
     },
     onChangeResultDistrict (data) {
+      var vm = this
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 2,
+        parent: data
+      }
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.resultWards = result.data
+      })
     }
   }
 }
