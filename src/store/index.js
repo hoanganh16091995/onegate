@@ -13,9 +13,9 @@ export const store = new Vuex.Store({
     api: {
       serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
       serviceConfigApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs',
-      regionApi: 'http://hanoi.fds.vn:2281/api/dictcollections/101/dictItems',
+      regionApi: 'http://127.0.0.1:8081/api/dictcollections',
       serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
-      dossierApi: 'http://hanoi.fds.vn:2281/api/dossiers',
+      dossierApi: 'http://127.0.0.1:8081/api/dossiers',
       dossierTemplatesApi: 'http://hanoi.fds.vn:2281/api/dossiertemplates',
       applicantApi: '/o/rest/v2/applicant',
       govAgency: 'abc',
@@ -40,13 +40,9 @@ export const store = new Vuex.Store({
       serviceInfo: '',
       serviceOption: '',
       dossierNo: '',
-      startDateTime: '',
-      timeEndText: '',
-      timeEnd: new Date(),
-      dateEnd: '',
-      dateEndMd: '',
-      dueDate: 1,
-      valid: false,
+      receiveDate: '',
+      dueDate: '',
+      durationDate: 1,
       dossierId: ''
     },
     serviceInfoItems: null,
@@ -324,8 +320,7 @@ export const store = new Vuex.Store({
     setThongTinNguoiNopHoSo ({commit}, data) {
       commit('setThongTinNguoiNopHoSo', data)
     },
-    setThongTinChungHoSo ({commit}, data) {
-    },
+
     loadServiceInfos ({commit, state}, data) {
       let param = {
         groupId: state.api.groupId
@@ -643,11 +638,22 @@ export const store = new Vuex.Store({
       let thongTinChungHoSoPayLoad = {
         serviceInfo: payload.applicantIdNo,
         serviceOption: payload.serviceOption,
-        receiveDate: payload.receiveDate,
-        dueDate: payload.dueDate,
-        dossierId: payload.dossierId
+        receiveDate: new Date(),
+        dueDate: (new Date()).toString(),
+        durationDate: 1,
+        dossierId: payload.dossierId,
+        dossierNo: payload.dossierNo
       }
       state.thongTinChungHoSo = thongTinChungHoSoPayLoad
+    },
+    setThongTinChungHoSoDueDate (state, payload) {
+      state.thongTinChungHoSo.dueDate = payload
+    },
+    setThongTinChungHoSoDurationDate (state, payload) {
+      state.thongTinChungHoSo.durationDate = payload
+    },
+    setThongTinChungHoSoReceiveDate (state, payload) {
+      state.thongTinChungHoSo.receiveDate = payload
     },
     setServiceInfoItems (state, payload) {
       state.serviceInfoItems = payload

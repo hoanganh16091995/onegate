@@ -80,7 +80,7 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.dueDate}} ngày làm việc</i></v-subheader>
+                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.durationDate}} ngày làm việc</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -92,7 +92,7 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.startDateTime}}</i></v-subheader>
+                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.receiveDate|dateTimeView}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -105,7 +105,7 @@
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else style="float:left;height: 100%">
-                    <datetime v-model="thongTinChungHoSo.dateEnd" v-on:input="changeDate"
+                    <datetime v-model="thongTinChungHoSo.dueDate" @input="changeDate"
                       type="datetime"
                       input-format="DD/MM/YYYY | HH:mm"
                       :i18n="{ok:'Chọn', cancel:'Thoát'}"
@@ -139,29 +139,28 @@
     data: () => ({
       minDate: null
     }),
+    created () {
+      var vm = this
+      vm.$nextTick(function () {
+        vm.minDate = vm.getCurentDateTime('date')
+        // vm.$store.commit('setThongTinChungHoSoDueDate', (new Date()).toString())
+        // vm.$store.commit('setThongTinChungHoSoReceiveDate', vm.getCurentDateTime('datetime'))
+      })
+    },
     computed: {
       loading () {
         return this.$store.getters.loading
       },
       thongTinChungHoSo () {
-        let date = new Date()
-        this.$store.getters.thongTinChungHoSo.startDateTime = this.getCurentDateTime('datetime')
-        this.$store.getters.thongTinChungHoSo.dateEnd = (new Date()).toString()
-        this.$store.getters.thongTinChungHoSo.timeEndText = this.parseCurrentTime(date.getHours() + ':' + date.getMinutes())
-        this.$store.getters.thongTinChungHoSo.dueDate = 1
-        this.minDate = this.getCurentDateTime('date')
         return this.$store.getters.thongTinChungHoSo
-      },
-      serviceInfoItems () {
-        return this.$store.getters.serviceInfoItems
-      },
-      serviceConfigItems () {
-        return this.$store.getters.serviceConfigItems
       }
     },
+    watch: {},
     methods: {
       changeDate () {
-        this.thongTinChungHoSo.dueDate = this.getDuedate()
+        var vm = this
+        let durationDate = vm.getDuedate()
+        vm.$store.commit('setThongTinChungHoSoDurationDate', durationDate)
       },
       getCurentDateTime (type) {
         let date = new Date()
@@ -173,43 +172,17 @@
       },
       getDuedate () {
         var vm = this
-        let dueDateMs = (new Date(vm.thongTinChungHoSo.dateEnd).getTime() - new Date().getTime())
+        let dueDateMs = (new Date(vm.thongTinChungHoSo.dueDate).getTime() - new Date().getTime())
         if (Math.ceil(dueDateMs / 1000 / 60 / 60 / 24) === 0) {
           return 1
         }
         return Math.ceil(dueDateMs / 1000 / 60 / 60 / 24)
-      },
-      parseDate (date) {
-        if (!date) {
-          return null
-        }
-        const [day, month, year] = date.split('/')
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-      },
-      parseCurrentDate (date) {
-        if (!date) {
-          return null
-        }
-        const [day, month, year] = date.split('/')
-        return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`
-      },
-      parseCurrentTime (time) {
-        if (!time) {
-          return null
-        }
-        const [hh, mm] = time.split(':')
-        return `${hh.padStart(2, '0')}:${mm.padStart(2, '0')}`
-      },
-      formatDate (date) {
-        if (!date) {
-          return null
-        }
-        const [year, month, day] = date.split('-')
-        return `${day}/${month}/${year}`
-      },
-      validateThongtinchung () {
-        this.thongTinChungHoSo.valid = this.$refs.formThongtinchung.validate()
-        return this.thongTinChungHoSo.valid
+      }
+    },
+    filters: {
+      dateTimeView (arg) {
+        let value = new Date(arg)
+        return `${value.getDate().toString().padStart(2, '0')}/${(value.getMonth() + 1).toString().padStart(2, '0')}/${value.getFullYear()} | ${value.getHours().toString().padStart(2, '0')}:${value.getMinutes().toString().padStart(2, '0')}`
       }
     }
   }
