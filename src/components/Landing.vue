@@ -6,9 +6,10 @@
     <div v-else class="row-header" style="margin-top: 6px;">
       <div class="background-triangle-big"> <span v-if="trangThaiHoSoList">{{trangThaiHoSoList[index].title}}</span> </div> 
       <div class="layout row wrap header_tools row-blue">
-        <div class="flex solo text-ellipsis">
+        <div class="flex text-ellipsis">
           <v-text-field
             v-model="keywords"
+            @change.native="keywordSearch"
             placeholder="Nhập từ khoá ..."
             prepend-icon="search"
             solo
@@ -30,84 +31,88 @@
       <content-placeholders-img />
       <content-placeholders-heading />
     </content-placeholders>
-    <v-data-table
-      v-else
-      :headers="headers"
-      :items="danhSachHoSoTables"
-      :total-items="total"
-      v-model="selected"
-      item-key="name"
-      select-all
-      class="table-bordered"
-      hide-actions
-      :no-data-text="'Không tìm thấy ' + trangThaiHoSoList[index].title"
-      :no-results-text="'Không tìm thấy ' + trangThaiHoSoList[index].title"
-    >
-      <template slot="headerCell" slot-scope="props">
-        <v-tooltip bottom>
-          <span slot="activator">
-            {{ props.header.text }}
-          </span>
-          <span>
-            {{ props.header.text }}
-          </span>
-        </v-tooltip>
-      </template>
-      <template slot="items" slot-scope="props">
-        <td>
-          <v-checkbox
-            v-model="props.selected"
-            primary
-            hide-details
-          ></v-checkbox>
-        </td>
-        <td class="text-xs-center stt_column">{{ props.index + 1 }}</td>
-        <td class="text-xs-left">{{ props.item.dossierIdCTN }}</td>
-        <td class="text-xs-left">{{ props.item.applicantName }}</td>
-        <td class="text-xs-left">{{ props.item.serviceName }}</td>
-        <td class="text-xs-left">{{ props.item.briefNote }}</td>
-        <td class="text-xs-center">{{ props.item.dueDate }}</td>
-        <td class="text-xs-left">{{ props.item.dueDate }}</td>
-        <td class="text-xs-right px-0">
-          <v-tooltip v-model="show1" top v-if="checkAction(trangThaiHoSoList[index].id).includes('print')">
-            <v-btn slot="activator" icon class="mx-0 my-0">
-              <v-icon size="16" class="mx-0">print</v-icon>
-            </v-btn>
-            <span>In phiếu hẹn</span>
+    <div v-else>
+      <v-data-table
+        :headers="headers"
+        :items="danhSachHoSoTables"
+        :total-items="total"
+        v-model="selected"
+        item-key="name"
+        select-all
+        class="table-bordered"
+        hide-actions
+        :no-data-text="'Không tìm thấy ' + trangThaiHoSoList[index].title"
+        :no-results-text="'Không tìm thấy ' + trangThaiHoSoList[index].title"
+      >
+        <template slot="headerCell" slot-scope="props">
+          <v-tooltip bottom>
+            <span slot="activator">
+              {{ props.header.text }}
+            </span>
+            <span>
+              {{ props.header.text }}
+            </span>
           </v-tooltip>
-          <v-tooltip v-model="show2" top v-if="checkAction(trangThaiHoSoList[index].id).includes('send')">
-            <v-btn slot="activator" icon class="mx-0 my-0">
-              <v-icon size="16" class="mx-0">send</v-icon>
-            </v-btn>
-            <span>Chuyển hồ sơ vào xử lý</span>
-          </v-tooltip>
-          <v-tooltip v-model="show3" top v-if="checkAction(trangThaiHoSoList[index].id).includes('ticket')">
-            <v-btn slot="activator" icon class="mx-0 my-0">
-              <v-icon size="16" class="mx-0">description</v-icon>
-            </v-btn>
-            <span>Phiếu kiểm soát</span>
-          </v-tooltip>
-          <v-tooltip v-model="show4" top v-if="checkAction(trangThaiHoSoList[index].id).includes('result')">
-            <v-btn slot="activator" icon class="mx-0 my-0">
-              <v-icon size="16" class="mx-0">exit_to_app</v-icon>
-            </v-btn>
-            <span>Trả kết quả</span>
-          </v-tooltip>
-          <v-tooltip v-model="show5" top v-if="checkAction(trangThaiHoSoList[index].id).includes('view')">
-            <v-btn slot="activator" icon class="mx-0 my-0">
-              <v-icon size="16" class="mx-0">remove_red_eye</v-icon>
-            </v-btn>
-            <span>Xem danh sách giấy tờ cần trả</span>
-          </v-tooltip>
-          <v-tooltip v-model="show6" top v-if="checkAction(trangThaiHoSoList[index].id).includes('delete')">
-            <v-btn slot="activator" icon class="mx-0 my-0">
-              <v-icon size="16" class="mx-0" color="red darken-3">delete</v-icon>
-            </v-btn>
-            <span>Xoá</span>
-          </v-tooltip>
-        </td>
-      </template>
-    </v-data-table>
+        </template>
+        <template slot="items" slot-scope="props">
+          <td>
+            <v-checkbox
+              v-model="props.selected"
+              primary
+              hide-details
+            ></v-checkbox>
+          </td>
+          <td class="text-xs-center stt_column">{{ props.index + 1 }}</td>
+          <td class="text-xs-left">{{ props.item.dossierIdCTN }}</td>
+          <td class="text-xs-left">{{ props.item.applicantName }}</td>
+          <td class="text-xs-left">{{ props.item.serviceName }}</td>
+          <td class="text-xs-left">{{ props.item.briefNote }}</td>
+          <td class="text-xs-center">{{ props.item.dueDate }}</td>
+          <td class="text-xs-left">{{ props.item.dueDate }}</td>
+          <td class="text-xs-right px-0">
+            <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('print')">
+              <v-btn slot="activator" icon class="mx-0 my-0">
+                <v-icon size="16" class="mx-0">print</v-icon>
+              </v-btn>
+              <span>In phiếu hẹn</span>
+            </v-tooltip>
+            <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('send')">
+              <v-btn slot="activator" icon class="mx-0 my-0">
+                <v-icon size="16" class="mx-0">send</v-icon>
+              </v-btn>
+              <span>Chuyển hồ sơ vào xử lý</span>
+            </v-tooltip>
+            <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('ticket')">
+              <v-btn slot="activator" icon class="mx-0 my-0">
+                <v-icon size="16" class="mx-0">description</v-icon>
+              </v-btn>
+              <span>Phiếu kiểm soát</span>
+            </v-tooltip>
+            <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('result')">
+              <v-btn slot="activator" icon class="mx-0 my-0">
+                <v-icon size="16" class="mx-0">exit_to_app</v-icon>
+              </v-btn>
+              <span>Trả kết quả</span>
+            </v-tooltip>
+            <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('view')">
+              <v-btn slot="activator" icon class="mx-0 my-0">
+                <v-icon size="16" class="mx-0">remove_red_eye</v-icon>
+              </v-btn>
+              <span>Xem danh sách giấy tờ cần trả</span>
+            </v-tooltip>
+            <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('delete')">
+              <v-btn slot="activator" icon class="mx-0 my-0">
+                <v-icon size="16" class="mx-0" color="red darken-3">delete</v-icon>
+              </v-btn>
+              <span>Xoá</span>
+            </v-tooltip>
+          </td>
+        </template>
+      </v-data-table>
+      <div class="pt-2 text-xs-right">
+        <v-pagination v-model="page" :length="pages"></v-pagination>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -115,7 +120,6 @@
 export default {
   props: ['index'],
   data: () => ({
-    show: false,
     keywords: '',
     selected: [],
     headers: [
@@ -163,8 +167,10 @@ export default {
       }
     ],
     danhSachHoSoTables: [],
-    total: 0,
-    page: 1
+    itemperpage: 3,
+    pages: 0,
+    page: 1,
+    total: 0
   }),
   computed: {
     loadingTable () {
@@ -178,17 +184,24 @@ export default {
     index (val) {
       var vm = this
       vm.$store.dispatch('setCurrentIndex', vm.index)
+      vm.keywords = ''
       vm.page = 1
       let filter = {
         keywords: vm.keywords,
         status: vm.trangThaiHoSoList[val],
-        start: vm.page * 15 - 15,
-        end: vm.page * 15
+        start: vm.page * vm.itemperpage - vm.itemperpage,
+        end: vm.page * vm.itemperpage
       }
       vm.$store.getters.danhSachHoSo(filter).then(function (result) {
         vm.danhSachHoSoTables = result.data
         vm.total = result.total
+        vm.pages = Math.ceil(vm.total / vm.itemperpage)
       })
+    },
+    page (val) {
+      var vm = this
+      vm.page = val
+      vm.loadDataTable()
     }
   },
   created () {
@@ -196,16 +209,7 @@ export default {
     vm.page = 1
     vm.$nextTick(function () {
       vm.$store.dispatch('setCurrentIndex', vm.index)
-      let filter = {
-        keywords: vm.keywords,
-        status: vm.trangThaiHoSoList[vm.index],
-        start: vm.page * 15 - 15,
-        end: vm.page * 15
-      }
-      vm.$store.getters.danhSachHoSo(filter).then(function (result) {
-        vm.danhSachHoSoTables = result.data
-        vm.total = result.total
-      })
+      vm.loadDataTable()
     })
   },
   methods: {
@@ -216,7 +220,35 @@ export default {
         return 'result,ticket'
       } else if (status === 'done') {
         return 'view,ticket'
+      } else if (status === 'waiting') {
+        return 'view,ticket'
+      } else if (status === 'receiving') {
+        return 'view,ticket'
+      } else if (status === 'correcting') {
+        return 'view,ticket'
+      } else if (status === 'processing') {
+        return 'view,ticket'
       }
+    },
+    keywordSearch () {
+      var vm = this
+      console.log('keyword change')
+      vm.page = 1
+      vm.loadDataTable()
+    },
+    loadDataTable () {
+      var vm = this
+      let filter = {
+        keywords: vm.keywords,
+        status: vm.trangThaiHoSoList[vm.index],
+        start: vm.page * vm.itemperpage - vm.itemperpage,
+        end: vm.page * vm.itemperpage
+      }
+      vm.$store.getters.danhSachHoSo(filter).then(function (result) {
+        vm.danhSachHoSoTables = result.data
+        vm.total = result.total
+        vm.pages = Math.ceil(vm.total / vm.itemperpage)
+      })
     }
   }
 }

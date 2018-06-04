@@ -17,7 +17,7 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <!-- <v-select
+                  <v-select
                     v-else
                     :items="serviceInfoItems"
                     item-text="serviceName"
@@ -25,8 +25,8 @@
                     v-model="thongTinChungHoSo.serviceInfo"
                     autocomplete
                     @change = "changeServiceInfo"
-                  ></v-select> -->
-                  <v-subheader style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceInfo}}</i></v-subheader>
+                  ></v-select>
+                  <!-- <v-subheader style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceInfo}}</i></v-subheader> -->
                 </v-flex>
                 <v-flex xs12 sm2>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -38,15 +38,15 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <!-- <v-select
+                  <v-select
                     v-else
-                    :items="serviceConfigItems"
+                    :items="thongTinChungHoSo.serviceOptionItems"
                     item-text="serviceName"
                     item-value="serviceConfigId"
-                    v-model="thongTinChungHoSo.serviceConfig"
+                    v-model="thongTinChungHoSo.serviceOption"
                     autocomplete
-                  ></v-select> -->
-                  <v-subheader v-else style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceOption}}</i></v-subheader>
+                  ></v-select>
+                  <!-- <v-subheader v-else style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceOption}}</i></v-subheader> -->
                 </v-flex>
                 <v-flex xs12></v-flex>
                 <v-flex xs12 sm2>
@@ -153,7 +153,13 @@
       },
       thongTinChungHoSo () {
         return this.$store.getters.thongTinChungHoSo
+      },
+      serviceInfoItems () {
+        return this.$store.getters.serviceInfoItems
       }
+      // serviceConfigItems () {
+      //   return this.$store.getters.serviceConfigItems
+      // }
     },
     watch: {},
     methods: {
@@ -177,6 +183,10 @@
           return 1
         }
         return Math.ceil(dueDateMs / 1000 / 60 / 60 / 24)
+      },
+      changeServiceInfo () {
+        var vm = this
+        vm.$store.dispatch('loadServiceOptions', vm.thongTinChungHoSo.serviceInfo)
       }
     },
     filters: {
