@@ -1,6 +1,5 @@
 <template>
   <v-app>
-    
     <v-navigation-drawer app clipped floating width="240">
       <content-placeholders class="mt-3" v-if="loading">
         <content-placeholders-text :lines="1" />

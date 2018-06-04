@@ -312,10 +312,15 @@
         <content-placeholders class="mt-1" v-if="loading">
           <content-placeholders-text :lines="1" />
         </content-placeholders>
-        <v-checkbox
+        <!-- <v-checkbox
         v-else
         label="Giống chủ hồ sơ"
         v-model="thongTinNguoiNopHoSo.sameUser"
+        ></v-checkbox> -->
+        <v-checkbox
+        v-else
+        label="Giống chủ hồ sơ 2"
+        v-model="sameUser2"
         ></v-checkbox>
       </div>
     </div>
@@ -372,6 +377,9 @@ export default {
     },
     delegateWards () {
       return this.$store.getters.delegateWards
+    },
+    sameUser2 () {
+      return this.$store.getters.sameUser2
     }
   },
   watch: {
