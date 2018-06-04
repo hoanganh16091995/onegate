@@ -19,7 +19,6 @@
     </div>
     <thong-tin-chung ref="thongtinchung"></thong-tin-chung>
     <thong-tin-chu-ho-so ref="thongtinchuhoso"></thong-tin-chu-ho-so>
-    <!-- <thong-tin-nguoi-nop-ho-so ref="thongtinnguoinophoso"></thong-tin-nguoi-nop-ho-so> -->
     <thanh-phan-ho-so ref="thanhphanhoso"></thanh-phan-ho-so>
     <le-phi ref="lephi"></le-phi>
     <dich-vu-chuyen-phat-ket-qua ref="dichvuchuyenphatketqua"></dich-vu-chuyen-phat-ket-qua>
@@ -40,17 +39,15 @@
 import router from '@/router'
 import ThongTinChung from './TiepNhanHoSo_ThongTinChung.vue'
 import ThongTinChuHoSo from './TiepNhanHoSo_ThongTinChuHoSo.vue'
-/* import ThongTinNguoiNopHoSo from './TiepNhanHoSo_ThongTinNguoiNopHoSo.vue' */
 import ThanhPhanHoSo from './TiepNhanHoSo_ThanhPhanHoSo.vue'
 import LePhi from './TiepNhanHoSo_LePhi.vue'
 import DichVuChuyenPhatKetQua from './TiepNhanHoSo_DichVuChuyenPhatKetQua.vue'
 
 export default {
-  props: ['index'],
+  props: ['index', 'id'],
   components: {
     'thong-tin-chung': ThongTinChung,
     'thong-tin-chu-ho-so': ThongTinChuHoSo,
-    /* 'thong-tin-nguoi-nop-ho-so': ThongTinNguoiNopHoSo, */
     'thanh-phan-ho-so': ThanhPhanHoSo,
     'le-phi': LePhi,
     'dich-vu-chuyen-phat-ket-qua': DichVuChuyenPhatKetQua
@@ -59,10 +56,13 @@ export default {
   computed: {
     loading () {
       return this.$store.getters.loading
-    },
-    trangThaiHoSoList () {
-      return this.$store.getters.loadtrangThaiHoSoList
     }
+  },
+  created () {
+    var vm = this
+    vm.$nextTick(function () {
+      vm.$store.dispatch('getDetailDossier', vm.id)
+    })
   },
   methods: {
     tiepNhanHoSo () {
@@ -78,7 +78,7 @@ export default {
       console.log(thanhphanhoso)
       console.log(lephi)
       console.log(dichvuchuyenphatketqua)
-      router.push('/danh-sach-ho-so/' + this.index + '/tiep-nhan-ho-so/phieu-hen')
+      router.push('/danh-sach-ho-so/' + this.index + '/tiep-nhan-ho-so/' + this.id + '/phieu-hen')
     }
   }
 }

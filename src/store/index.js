@@ -11,20 +11,17 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     api: {
-      serviceInfoApi: '/o/rest/v2/serviceinfos',
-      serviceConfigApi: '/o/rest/v2/serviceconfigs',
-      regionApi: '/o/rest/v2/dictcollections/101/dictItems',
-      serviceOptionApi: '/o/rest/v2/serviceconfigs/301/processes',
+      serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
+      serviceConfigApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs',
+      regionApi: 'http://hanoi.fds.vn:2281/api/dictcollections/101/dictItems',
+      serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
+      dossierApi: 'http://hanoi.fds.vn:2281/api/dossiers',
+      dossierTemplatesApi: 'http://hanoi.fds.vn:2281/api/dossiertemplates',
       applicantApi: '/o/rest/v2/applicant',
-      dossierApi: '/o/rest/v2/dossiers',
-      dossierTemplatesApi: '/o/rest/v2/dossiertemplates',
       govAgency: 'abc',
       user: {},
       groupId: 0
     },
-    loadedVueProjects: [
-    ],
-    loadedVueProject: null,
     loading: false,
     loadingTable: false,
     error: null,
@@ -53,18 +50,13 @@ export const store = new Vuex.Store({
       valid: false,
       dossierId: ''
     },
-    serviceInfoItems: [],
-    serviceOptionItems: [],
-    citys: [],
-    districts: [],
-    wards: [],
-    delegateCitys: [],
-    delegateDistricts: [],
-    delegateWards: [],
-    resultCitys: [],
-    resultDistricts: [],
-    resultWards: [],
-    resultServices: [],
+    serviceInfoItems: null,
+    serviceOptionItems: null,
+    citys: null,
+    cityVal: null,
+    districtVal: null,
+    wardVal: null,
+    resultServices: null,
     dossierFiles: [],
     thanhPhanHoSo: {
       dossierTemplates: [
@@ -214,25 +206,23 @@ export const store = new Vuex.Store({
       applicantIdNo: ''
     },
     dichVuChuyenPhatKetQua: {
-      homeRegister: false,
-      resultService: '',
-      resultAddress: '',
-      resultCity: '',
-      resultDistrict: '',
-      resultWard: '',
-      resultTelNo: ''
+      viaPostal: false,
+      postalServiceCode: '',
+      postalServiceName: '',
+      postalAddress: '',
+      postalCityCode: '',
+      postalCityName: '',
+      postalDistrictCode: '',
+      postalDistrictName: '',
+      postalWardCode: '',
+      postalWardName: '',
+      postalTelNo: ''
     },
     danhSachHoSo: null
   },
   actions: {
     clearError ({commit}) {
       commit('clearError')
-    },
-    loadVueProjects ({commit}, keywords) {
-      commit('setLoading', true)
-    },
-    loadVueProject ({commit}, key) {
-      commit('setLoading', true)
     },
     loadInitResource ({commit, state}) {
       axios.get(support.renderURLInit, {}).then(function (response) {
@@ -323,9 +313,6 @@ export const store = new Vuex.Store({
       commit('setLoading', false)
       commit('setTrangThaiHoSoList', data)
     },
-    clearVueProject ({commit}) {
-      commit('setLoadedVueProject', null)
-    },
     setCurrentIndex ({commit}, data) {
       commit('setIndex', data)
     },
@@ -337,9 +324,6 @@ export const store = new Vuex.Store({
     },
     setThongTinNguoiNopHoSo ({commit}, data) {
       commit('setThongTinNguoiNopHoSo', data)
-    },
-    setDichVuChuyenPhatKetQua ({commit}, data) {
-      commit('setDichVuChuyenPhatKetQua', data)
     },
     setThongTinChungHoSo ({commit}, data) {
     },
@@ -374,136 +358,27 @@ export const store = new Vuex.Store({
       }).catch(function (xhr) {
       })
     },
-    loadCitys ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        },
-        params: {
-          parent: 0
+    loadDictItems ({commit, state}, data) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            groupId: state.api.groupId
+          },
+          params: {
+            parent: data.parent
+          }
         }
-      }
-      axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setCitys', response.data.data)
-      }).catch(function (xhr) {
-      })
-    },
-    loadDistricts ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        },
-        params: {
-          parent: data
-        }
-      }
-      axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setDistricts', response.data.data)
-      }).catch(function (xhr) {
-      })
-    },
-    loadWards ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        },
-        params: {
-          parent: data
-        }
-      }
-      axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setWards', response.data.data)
-      }).catch(function (xhr) {
-      })
-    },
-    loadDelegateCitys ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        },
-        params: {
-          parent: 0
-        }
-      }
-      axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setLoading', false)
-        commit('setDelegateCitys', response.data.data)
-      }).catch(function (xhr) {
-        commit('setLoading', false)
-      })
-    },
-    loadDelegateDistricts ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        },
-        params: {
-          parent: data
-        }
-      }
-      axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setLoading', false)
-        commit('setDelegateDistricts', response.data.data)
-      }).catch(function (xhr) {
-        commit('setLoading', false)
-      })
-    },
-    loadDelegateWards ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        },
-        params: {
-          parent: data
-        }
-      }
-      axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setLoading', false)
-        commit('setDelegateWards', response.data.data)
-      }).catch(function (xhr) {
-        commit('setLoading', false)
-      })
-    },
-    loadResultCitys ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        },
-        params: {
-          parent: 0
-        }
-      }
-      axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setResultCitys', response.data.data)
-      }).catch(function (xhr) {
-      })
-    },
-    loadResultDistricts ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        },
-        params: {
-          parent: data
-        }
-      }
-      axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setResultDistricts', response.data.data)
-      }).catch(function (xhr) {
-      })
-    },
-    loadResultWards ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        },
-        params: {
-          parent: data
-        }
-      }
-      axios.get(state.api.regionApi, param).then(function (response) {
-        commit('setResultWards', response.data.data)
-      }).catch(function (xhr) {
+        axios.get(state.api.regionApi + '/' + data.collectionCode + '/dictitems', param).then(function (response) {
+          let serializable = response.data
+          if (data.collectionCode === 'ADMINISTRATIVE_REGION') {
+            if (data.level === 0) {
+              commit('setCitys', serializable.data)
+            }
+          }
+          resolve(response.data)
+        }, error => {
+          reject(error)
+        })
       })
     },
     loadResultServices ({commit, state}, data) {
@@ -634,17 +509,27 @@ export const store = new Vuex.Store({
       })
     },
     getDetailDossier ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            groupId: state.api.groupId
+          }
         }
-      }
-      axios.get(state.api.dossierApi + '/' + data, param).then(function (response) {
-        commit('setDossier', response.data)
-        commit('setThongTinChuHoSo', response.data)
-        commit('setThongTinChungHoSo', response.data)
-      }).catch(function (xhr) {
-        console.log(xhr)
+        if (data > 0) {
+          axios.get(state.api.dossierApi + '/' + data, param).then(function (response) {
+            commit('setDossier', response.data)
+            commit('setThongTinChuHoSo', response.data)
+            commit('setThongTinChungHoSo', response.data)
+            commit('setDichVuChuyenPhatKetQua', response.data)
+            resolve(response.data)
+          }, error => {
+            reject(error)
+          }).catch(function (xhr) {
+            console.log(xhr)
+          })
+        } else {
+          resolve()
+        }
       })
     },
     loadDossierFiles ({commit, state}) {
@@ -734,12 +619,6 @@ export const store = new Vuex.Store({
     clearError (state) {
       state.error = null
     },
-    setLoadedVueProjects (state, payload) {
-      state.loadedVueProjects = payload
-    },
-    setLoadedVueProject (state, payload) {
-      state.loadedVueProject = payload
-    },
     setTrangThaiHoSoList (state, payload) {
       state.trangThaiHoSoList = payload
     },
@@ -754,6 +633,10 @@ export const store = new Vuex.Store({
       state.thanhPhanHoSo = payload
     },
     setThongTinChuHoSo (state, payload) {
+      let userTypeCondition = true
+      if (payload.applicantIdType === 'business') {
+        userTypeCondition = false
+      }
       let thongTinChuHoSoPayLoad = {
         applicantIdNo: payload.applicantIdNo,
         applicantName: payload.applicantName,
@@ -763,7 +646,7 @@ export const store = new Vuex.Store({
         ward: payload.ward,
         contactEmail: payload.contactEmail,
         contactTelNo: payload.contactTelNo,
-        userType: true
+        userType: userTypeCondition
       }
       state.thongTinChuHoSo = thongTinChuHoSoPayLoad
     },
@@ -771,16 +654,20 @@ export const store = new Vuex.Store({
       state.thongTinNguoiNopHoSo = payload
     },
     setDichVuChuyenPhatKetQua (state, payload) {
-      let dichVuChuyenPhatKetQua = {
-        homeRegister: payload.homeRegister,
-        resultService: payload.resultService,
-        resultAddress: payload.resultAddress,
-        resultCity: payload.resultCity,
-        resultDistrict: payload.resultDistrict,
-        resultWard: payload.resultWard,
-        resultTelNo: payload.resultTelNo
+      let tempData = {
+        viaPostal: payload.viaPostal,
+        postalServiceCode: payload.postalServiceCode,
+        postalServiceName: payload.postalServiceName,
+        postalAddress: payload.postalAddress,
+        postalCityCode: payload.postalCityCode,
+        postalCityName: payload.postalCityName,
+        postalDistrictCode: payload.postalDistrictCode,
+        postalDistrictName: payload.postalDistrictName,
+        postalWardCode: payload.postalWardCode,
+        postalWardName: payload.postalWardName,
+        postalTelNo: payload.postalTelNo
       }
-      state.dichVuChuyenPhatKetQua = dichVuChuyenPhatKetQua
+      state.dichVuChuyenPhatKetQua = tempData
     },
     setThongTinChungHoSo (state, payload) {
       let thongTinChungHoSoPayLoad = {
@@ -801,30 +688,6 @@ export const store = new Vuex.Store({
     setCitys (state, payload) {
       state.citys = payload
     },
-    setDistricts (state, payload) {
-      state.districts = payload
-    },
-    setWards (state, payload) {
-      state.wards = payload
-    },
-    setDelegateCitys (state, payload) {
-      state.delegateCitys = payload
-    },
-    setDelegateDistricts (state, payload) {
-      state.delegateDistricts = payload
-    },
-    setDelegateWards (state, payload) {
-      state.delegateWards = payload
-    },
-    setResultCitys (state, payload) {
-      state.resultCitys = payload
-    },
-    setResultDistricts (state, payload) {
-      state.resultDistricts = payload
-    },
-    setResultWards (state, payload) {
-      state.resultWards = payload
-    },
     setResultServices (state, payload) {
       state.resultServices = payload
     },
@@ -836,6 +699,15 @@ export const store = new Vuex.Store({
     },
     setDanhSachHoSo (state, payload) {
       state.danhSachHoSo = payload
+    },
+    setCityVal (state, payload) {
+      state.cityVal = payload
+    },
+    setDistrictVal (state, payload) {
+      state.districtVal = payload
+    },
+    setWardVal (state, payload) {
+      state.wardVal = payload
     },
     setDossierFiles (state, payload) {
       state.dossierFiles = payload
@@ -856,22 +728,6 @@ export const store = new Vuex.Store({
     },
     index (state) {
       return state.index
-    },
-    loadVueProjects (state) {
-      if (state.loadedVueProjects.length === 0) {
-        store.dispatch('loadVueProjects', '')
-      } else {
-        return state.loadedVueProjects
-      }
-    },
-    loadVueProject (state) {
-      return (vueProjectId) => {
-        if (state.loadedVueProject == null) {
-          store.dispatch('loadVueProject', vueProjectId)
-        } else {
-          return state.loadedVueProject
-        }
-      }
     },
     loadtrangThaiHoSoList (state) {
       return state.trangThaiHoSoList
@@ -895,7 +751,7 @@ export const store = new Vuex.Store({
       return state.dichVuChuyenPhatKetQua
     },
     serviceInfoItems (state) {
-      if (state.serviceInfoItems.length === 0) {
+      if (state.serviceInfoItems == null) {
         store.dispatch('loadServiceInfos')
       } else {
         return state.serviceInfoItems
@@ -904,51 +760,26 @@ export const store = new Vuex.Store({
     serviceOptionItems (state) {
       return state.serviceOptionItems
     },
-    citys (state) {
-      if (state.citys.length === 0) {
-        store.dispatch('loadCitys')
-      } else {
-        return state.citys
+    getDictItems (state) {
+      return (filter) => {
+        if (filter.collectionCode === 'ADMINISTRATIVE_REGION' && filter.level === 0) {
+          if (state.citys == null) {
+            return store.dispatch('loadDictItems', filter)
+          } else {
+            return new Promise((resolve, reject) => {
+              resolve({
+                total: state.citys.length,
+                data: state.citys
+              })
+            })
+          }
+        } else {
+          return store.dispatch('loadDictItems', filter)
+        }
       }
-    },
-    districts (state) {
-      return state.districts
-    },
-    wards (state) {
-      return state.wards
-    },
-    delegateCitys (state) {
-      if (state.delegateCitys.length === 0) {
-        store.dispatch('loadDelegateCitys')
-      } else {
-        return state.delegateCitys
-      }
-    },
-    delegateDistricts (state) {
-      return state.delegateDistricts
-    },
-    delegateWards (state) {
-      return state.delegateWards
-    },
-    resultCitys (state) {
-      if (state.resultCitys.length === 0) {
-        store.dispatch('loadResultCitys')
-      } else {
-        return state.resultCitys
-      }
-    },
-    resultDistricts (state) {
-      return state.resultDistricts
-    },
-    resultWards (state) {
-      return state.resultWards
     },
     resultServices (state) {
-      if (state.resultServices.length === 0) {
-        store.dispatch('loadResultServices')
-      } else {
-        return state.resultServices
-      }
+      return state.resultServices
     },
     dossierTemplates (state) {
       return state.dossierTemplates
@@ -961,6 +792,15 @@ export const store = new Vuex.Store({
         let dataPromise = store.dispatch('loadDanhSachHoSo', filter)
         return dataPromise
       }
+    },
+    getCityVal (state) {
+      return state.cityVal
+    },
+    getDistrictVal (state) {
+      return state.districtVal
+    },
+    getWardVal (state) {
+      return state.wardVal
     },
     dossierFiles (state) {
       if (state.dossierFiles.length === 0) {

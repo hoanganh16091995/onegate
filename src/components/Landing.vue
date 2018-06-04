@@ -69,23 +69,41 @@
         <td class="text-xs-center">{{ props.item.dueDate }}</td>
         <td class="text-xs-left">{{ props.item.dueDate }}</td>
         <td class="text-xs-right px-0">
-          <v-tooltip v-model="show" top>
+          <v-tooltip v-model="show1" top v-if="checkAction(trangThaiHoSoList[index].id).includes('print')">
             <v-btn slot="activator" icon class="mx-0 my-0">
-              <v-icon size="16">print</v-icon>
+              <v-icon size="16" class="mx-0">print</v-icon>
             </v-btn>
             <span>In phiếu hẹn</span>
           </v-tooltip>
-          <v-tooltip v-model="show" top>
+          <v-tooltip v-model="show2" top v-if="checkAction(trangThaiHoSoList[index].id).includes('send')">
             <v-btn slot="activator" icon class="mx-0 my-0">
-              <v-icon size="16">send</v-icon>
+              <v-icon size="16" class="mx-0">send</v-icon>
             </v-btn>
-            <span>Chuyển hồ sơ vào xử lýlýlý</span>
+            <span>Chuyển hồ sơ vào xử lý</span>
           </v-tooltip>
-          <v-tooltip v-model="show" top>
+          <v-tooltip v-model="show3" top v-if="checkAction(trangThaiHoSoList[index].id).includes('ticket')">
             <v-btn slot="activator" icon class="mx-0 my-0">
-              <v-icon size="16" color="red darken-3">delete</v-icon>
+              <v-icon size="16" class="mx-0">description</v-icon>
             </v-btn>
-            <span>Xoá hồ sơ</span>
+            <span>Phiếu kiểm soát</span>
+          </v-tooltip>
+          <v-tooltip v-model="show4" top v-if="checkAction(trangThaiHoSoList[index].id).includes('result')">
+            <v-btn slot="activator" icon class="mx-0 my-0">
+              <v-icon size="16" class="mx-0">exit_to_app</v-icon>
+            </v-btn>
+            <span>Trả kết quả</span>
+          </v-tooltip>
+          <v-tooltip v-model="show5" top v-if="checkAction(trangThaiHoSoList[index].id).includes('view')">
+            <v-btn slot="activator" icon class="mx-0 my-0">
+              <v-icon size="16" class="mx-0">remove_red_eye</v-icon>
+            </v-btn>
+            <span>Xem danh sách giấy tờ cần trả</span>
+          </v-tooltip>
+          <v-tooltip v-model="show6" top v-if="checkAction(trangThaiHoSoList[index].id).includes('delete')">
+            <v-btn slot="activator" icon class="mx-0 my-0">
+              <v-icon size="16" class="mx-0" color="red darken-3">delete</v-icon>
+            </v-btn>
+            <span>Xoá</span>
           </v-tooltip>
         </td>
       </template>
@@ -190,6 +208,16 @@ export default {
       })
     })
   },
-  methods: {}
+  methods: {
+    checkAction (status) {
+      if (status === 'new') {
+        return 'print,send,delete'
+      } else if (status === 'release') {
+        return 'result,ticket'
+      } else if (status === 'done') {
+        return 'view,ticket'
+      }
+    }
+  }
 }
 </script>

@@ -11,7 +11,7 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
+                  <v-subheader v-else class="pl-0"> {{thongTinChuHoSo.userType}} {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -112,6 +112,7 @@
                   item-value="itemCode"
                   v-model="labelSwitch['true'].thongTinUser.ward"
                   autocomplete
+                  @change="onChangeWard"
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -225,7 +226,7 @@
                   </content-placeholders>
                   <v-select
                   v-else
-                  :items="delegateCitys"
+                  :items="citys"
                   item-text="itemName"
                   item-value="itemCode"
                   @change="onChangeDelegateCity"
@@ -332,7 +333,10 @@
 
 export default {
   data: () => ({
+    citys: [],
+    delegateDistricts: [],
     districts: [],
+    delegateWards: [],
     wards: [],
     labelSwitch: {
       'true': {
@@ -356,6 +360,7 @@ export default {
     },
     thongTinNguoiNopHoSo () {
       return this.$store.getters.thongTinNguoiNopHoSo
+/*<<<<<<< HEAD
     },
     citys () {
       return this.$store.getters.citys
@@ -380,17 +385,25 @@ export default {
     },
     sameUser2 () {
       return this.$store.getters.sameUser2
+=======*/
+/*>>>>>>> upstream/dev*/
     }
   },
+  created () {
+    var vm = this
+    vm.$nextTick(function () {
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 0,
+        parent: 0
+      }
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.citys = result.data
+      })
+    })
+  },
   watch: {
-    districtsArr (value) {
-      this.districts = value
-    },
-    wardsArr (value) {
-      this.wards = value
-    },
     thongTinNguoiNopHoSo (value) {
-      console.log(value)
       if (!value.sameUser) {
         this.labelSwitch['false'].thongTinUser = value
       } else {
@@ -399,7 +412,6 @@ export default {
       }
     },
     thongTinChuHoSo (value) {
-      console.log(value)
       if (this.thongTinNguoiNopHoSo.sameUser) {
         this.labelSwitch['true'].thongTinUser = value
         this.labelSwitch['true'].thongTinUser['sameUser'] = true
@@ -410,25 +422,70 @@ export default {
   },
   methods: {
     onChangeCity (data) {
-      this.$store.dispatch('loadDistricts', data)
-      if (this.thongTinNguoiNopHoSo.sameUser) {
-        this.$store.dispatch('loadDelegateDistricts', data)
+      var vm = this
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 1,
+        parent: data
       }
+      vm.$store.commit('setCityVal', data)
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.districts = result.data
+        vm.wards = []
+        if (vm.thongTinNguoiNopHoSo.sameUser) {
+          vm.delegateDistricts = result.data
+          vm.wards = []
+        }
+      })
     },
     onChangeDistrict (data) {
-      this.$store.dispatch('loadWards', data)
-      if (this.thongTinNguoiNopHoSo.sameUser) {
-        this.$store.dispatch('loadDelegateWards', data)
+      var vm = this
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 1,
+        parent: data
       }
+      vm.$store.commit('setDistrictVal', data)
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.wards = result.data
+        if (vm.thongTinNguoiNopHoSo.sameUser) {
+          vm.delegateWards = result.data
+        }
+      })
+    },
+    onChangeWard (data) {
+      this.$store.commit('setWardVal', data)
     },
     onChangeApplicantIdNo (data) {
       this.$store.dispatch('getUserInfoFromApplicantIdNo', data)
     },
     onChangeDelegateCity (data) {
-      this.$store.dispatch('loadDelegateDistricts', data)
+      var vm = this
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 1,
+        parent: data
+      }
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.delegateDistricts = result.data
+        if (vm.thongTinNguoiNopHoSo.sameUser) {
+          vm.districts = result.data
+        }
+      })
     },
     onChangeDelegateDistrict (data) {
-      this.$store.dispatch('loadDelegateWards', data)
+      var vm = this
+      let filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 1,
+        parent: data
+      }
+      vm.$store.getters.getDictItems(filter).then(function (result) {
+        vm.delegateWards = result.data
+        if (vm.thongTinNguoiNopHoSo.sameUser) {
+          vm.wards = result.data
+        }
+      })
     }
   }
 }

@@ -104,48 +104,22 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-flex v-else>
-                    <v-menu style="display: inline-block;width: 69%"
-                    lazy
-                    :close-on-content-click = "true"
-                    transition = "scale-transition"
-                    offset-y
-                    full-width
-                    :nudge-top = "40"
-                    max-width = "290px"
-                    >
-                      <v-text-field
-                        slot="activator"
-                        placeholder="dd/mm/yyyy"
-                        v-model="thongTinChungHoSo.dateEnd"
-                        @blur="thongTinChungHoSo.dateEndMd = parseDate(thongTinChungHoSo.dateEnd)"
-                        :rules="[v => !!v || 'Trường dữ liệu bắt buộc!']"
-                        required
-                      ></v-text-field>
-                      <v-date-picker :min="minDate" ref="datepicker" v-model="thongTinChungHoSo.dateEndMd" :first-day-of-week="1" @change="changeDate" @input="thongTinChungHoSo.dateEnd = formatDate($event)" autosave locale="vi">
-                      </v-date-picker>
-                    </v-menu>
-                  
-                    <v-menu style="display: inline-block; width: 30%"
-                    ref="menuTimeEnd"
-                    lazy
-                    :close-on-content-click="false"
-                    transition="scale-transition"
-                    offset-y
-                    full-width
-                    :nudge-right="40"
-                    max-width="290px"
-                    :return-value.sync="thongTinChungHoSo.timeEndText"
-                    >
-                      <v-text-field
-                        slot="activator"
-                        v-model="thongTinChungHoSo.timeEndText"
-                        placeholder="hh:mm"
-                        readonly
-                      ></v-text-field>
-                      <v-time-picker v-model="thongTinChungHoSo.timeEnd" format="24hr" @change="$refs.menuTimeEnd.save(thongTinChungHoSo.timeEnd)"></v-time-picker>
-                    </v-menu>
-                  </v-flex>
+                  <v-subheader v-else style="float:left;height: 100%">
+                    <datetime v-model="thongTinChungHoSo.dateEnd" v-on:input="changeDate"
+                      type="datetime"
+                      input-format="DD/MM/YYYY | HH:mm"
+                      :i18n="{ok:'Chọn', cancel:'Thoát'}"
+                      moment-locale="vi"
+                      zone="local"
+                      :min-date="minDate"
+                      monday-first
+                      wrapper-class="wrapper-datetime"
+                      auto-continue
+                      auto-close
+                      required
+                      ></datetime>
+                      <v-icon>event</v-icon>
+                  </v-subheader>
                 </v-flex>
               </v-layout>
             </v-card-text>
@@ -172,8 +146,7 @@
       thongTinChungHoSo () {
         let date = new Date()
         this.$store.getters.thongTinChungHoSo.startDateTime = this.getCurentDateTime('datetime')
-        this.$store.getters.thongTinChungHoSo.dateEndMd = this.getCurentDateTime('date')
-        this.$store.getters.thongTinChungHoSo.dateEnd = this.parseCurrentDate(date.getDate() + '/' + (date.getMonth() + 1) + '/' + date.getFullYear())
+        this.$store.getters.thongTinChungHoSo.dateEnd = (new Date()).toString()
         this.$store.getters.thongTinChungHoSo.timeEndText = this.parseCurrentTime(date.getHours() + ':' + date.getMinutes())
         this.$store.getters.thongTinChungHoSo.dueDate = 1
         this.minDate = this.getCurentDateTime('date')
@@ -189,7 +162,6 @@
     methods: {
       changeDate () {
         this.thongTinChungHoSo.dueDate = this.getDuedate()
-        console.log(this.thongTinChungHoSo)
       },
       getCurentDateTime (type) {
         let date = new Date()
@@ -200,7 +172,8 @@
         }
       },
       getDuedate () {
-        let dueDateMs = (new Date(this.thongTinChungHoSo.dateEndMd).getTime() - new Date().getTime())
+        var vm = this
+        let dueDateMs = (new Date(vm.thongTinChungHoSo.dateEnd).getTime() - new Date().getTime())
         if (Math.ceil(dueDateMs / 1000 / 60 / 60 / 24) === 0) {
           return 1
         }
