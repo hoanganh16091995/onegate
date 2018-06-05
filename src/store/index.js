@@ -36,7 +36,6 @@ export const store = new Vuex.Store({
     dossier: {
       applicantIdNo: 'ccc'
     },
-    sameUser2: false,
     thongTinChungHoSo: {
       serviceInfo: '',
       serviceOption: '',
@@ -196,14 +195,14 @@ export const store = new Vuex.Store({
     },
     thongTinNguoiNopHoSo: {
       sameUser: true,
-      applicantName: '',
-      city: '',
-      address: '',
-      district: '',
-      ward: '',
-      contactEmail: '',
-      contactTelNo: '',
-      applicantIdNo: ''
+      delegateApplicantName: '',
+      delegateCity: '',
+      delegateAddress: '',
+      delegateDistrict: '',
+      delegateWard: '',
+      delegateContactEmail: '',
+      delegateContactTelNo: '',
+      delegateApplicantIdNo: ''
     },
     dichVuChuyenPhatKetQua: {
       viaPostal: false,
@@ -458,7 +457,7 @@ export const store = new Vuex.Store({
       }
       if (data.hasForm) {
         // TODO
-        this.dossierFiles.map(item => {
+        state.dossierFiles.map(item => {
           if (item.partNo === data.partNo) {
             axios.put(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + data.referenceUid + '/resetformdata', {}, param).then(function (response) {
               console.log('success')
@@ -545,33 +544,62 @@ export const store = new Vuex.Store({
       })
     },
     postDossier ({commit, state}, data) {
-      commit('setLoading', false)
-      let options = {
-        headers: {
-          groupId: state.api.groupId
+      return new Promise((resolve, reject) => {
+        commit('setLoading', false)
+        let options = {
+          headers: {
+            groupId: state.api.groupId
+          }
         }
-      }
-      let param = {
-        serviceCode: data.serviceCode,
-        govAgencyCode: data.govAgencyCode,
-        dossierTemplateNo: data.dossierTemplateNo
-        // TODO
-      }
-      axios.post(state.api.dossierApi, param, options).then(function (response) {
+        let param = {
+          serviceCode: data.serviceCode,
+          govAgencyCode: data.govAgencyCode,
+          dossierTemplateNo: data.dossierTemplateNo
+        }
+        axios.post(state.api.postDossierApi, param, options).then(function (response) {
+          resolve(response.data)
+          commit('setLoading', false)
+          commit('setDossier', response.data)
+          commit('setThongTinChuHoSo', response.data)
+          commit('setThongTinChungHoSo', response.data)
+          commit('setLePhi', response.data)
+          commit('setDichVuChuyenPhatKetQua', response.data)
+        }).catch(function (xhr) {
+          reject(xhr)
+          commit('setLoading', false)
+          console.log('dossier=========', support.dossier)
+          commit('setDossier', support.dossier)
+          commit('setThongTinChuHoSo', support.dossier)
+          commit('setThongTinChungHoSo', support.dossier)
+          commit('setLePhi', support.dossier)
+          commit('setDichVuChuyenPhatKetQua', support.dossier)
+        })
+      })
+    },
+    putDossier ({commit, state}, data) {
+      return new Promise((resolve, reject) => {
         commit('setLoading', false)
-        commit('setDossier', response.data)
-        commit('setThongTinChuHoSo', response.data)
-        commit('setThongTinChungHoSo', response.data)
-        commit('setLePhi', response.data)
-        commit('setDichVuChuyenPhatKetQua', response.data)
-      }).catch(function (xhr) {
-        commit('setLoading', false)
-        console.log('dossier=========', support.dossier)
-        commit('setDossier', support.dossier)
-        commit('setThongTinChuHoSo', support.dossier)
-        commit('setThongTinChungHoSo', support.dossier)
-        commit('setLePhi', support.dossier)
-        commit('setDichVuChuyenPhatKetQua', support.dossier)
+        let options = {
+          headers: {
+            groupId: state.api.groupId
+          }
+        }
+        let param = {
+          serviceCode: data.serviceCode,
+          govAgencyCode: data.govAgencyCode,
+          dossierTemplateNo: data.dossierTemplateNo
+        }
+        axios.put(state.api.postDossierApi, param, options).then(function (response) {
+          resolve(response.data)
+          commit('setLoading', false)
+          commit('setDossier', response.data)
+          commit('setThongTinChuHoSo', response.data)
+          commit('setThongTinChungHoSo', response.data)
+          commit('setLePhi', response.data)
+          commit('setDichVuChuyenPhatKetQua', response.data)
+        }).catch(function (xhr) {
+          reject(xhr)
+        })
       })
     },
     getUserInfoFromApplicantIdNo ({commit, state}, data) {
@@ -599,10 +627,21 @@ export const store = new Vuex.Store({
           groupId: state.api.groupId
         }
       }
-      axios.get(state.api.dossierTemplatesApi + '/' + state.thanhPhanHoSo.dossierTemplateId + '/parts' + data.partNo + '/formscript', param).then(function (response) {
-        document.getElementById('formAlpaca' + data.partNo).alpaca(response.data)
-      }).catch(function (xhr) {
-        console.log(xhr)
+      console.log('alpaca')
+      state.dossierFiles.map(item => {
+        if (item.partNo === data.partNo) {
+          let urlFormScript = '/o/rest/v2/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formscript'
+          let urlFormDate = '/o/rest/v2/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formdata'
+          axios.all([axios.get(urlFormScript, param), axios.get(urlFormDate, param)])
+          .then(axios.spread(function (resFormScript, resFormData) {
+            let formScript = resFormScript.data
+            let formData = resFormData.data
+            formScript.data = formData
+            document.getElementById('formAlpaca' + data.partNo).alpaca(formScript)
+          })).catch(function (xhr) {
+            console.log(xhr)
+          })
+        }
       })
     }
   },
@@ -651,7 +690,8 @@ export const store = new Vuex.Store({
       state.thongTinChuHoSo = thongTinChuHoSoPayLoad
     },
     setThongTinNguoiNopHoSo (state, payload) {
-      state.thongTinNguoiNopHoSo = payload
+      console.log(payload)
+      state.thongTinNguoiNopHoSo = Object.assign(state.thongTinNguoiNopHoSo, payload)
     },
     setDichVuChuyenPhatKetQua (state, payload) {
       let tempData = {

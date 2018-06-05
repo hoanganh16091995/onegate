@@ -17,15 +17,14 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <!-- <v-select
+                  <v-select
                     v-else
                     :items="serviceInfoItems"
                     item-text="serviceName"
                     item-value="serviceCode"
                     v-model="thongTinChungHoSo.serviceInfo"
                     autocomplete
-                    @change = "changeServiceInfo"
-                  ></v-select> -->
+                  ></v-select>
                   <v-subheader style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceInfo}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -38,14 +37,14 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <!-- <v-select
+                  <v-select
                     v-else
                     :items="serviceConfigItems"
                     item-text="serviceName"
                     item-value="serviceConfigId"
                     v-model="thongTinChungHoSo.serviceConfig"
                     autocomplete
-                  ></v-select> -->
+                  ></v-select>
                   <v-subheader v-else style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceOption}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12></v-flex>
@@ -61,13 +60,13 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <!-- <v-text-field
+                  <v-text-field
                     v-else
                     name="thongTinChungHoSo.dossierNo"
                     rows="2"
                     :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                     required
-                  ></v-text-field> -->
+                  ></v-text-field>
                   <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.dossierNo}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
