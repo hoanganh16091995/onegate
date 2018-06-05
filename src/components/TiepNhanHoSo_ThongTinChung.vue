@@ -19,12 +19,14 @@
                   </content-placeholders>
                   <v-select
                     v-else
-                    :items="serviceInfoItems"
+                    :items="serviceConfigItems"
                     item-text="serviceName"
                     item-value="serviceCode"
-                    v-model="thongTinChungHoSo.serviceInfo"
+                    v-model="thongTinChungHoSo.serviceConfig"
                     autocomplete
-                    @change = "changeServiceInfo"
+                    return-object
+                    hide-selected
+                    @change = "changeServiceConfigs"
                   ></v-select>
                   <!-- <v-subheader style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceInfo}}</i></v-subheader> -->
                 </v-flex>
@@ -40,10 +42,12 @@
                   </content-placeholders>
                   <v-select
                     v-else
-                    :items="thongTinChungHoSo.serviceOptionItems"
-                    item-text="serviceName"
-                    item-value="serviceConfigId"
+                    :items="serviceOptionItems"
+                    item-text="optionName"
+                    item-value="processOptionId"
                     v-model="thongTinChungHoSo.serviceOption"
+                    @change="changeServiceOption"
+                    hide-selected
                     autocomplete
                   ></v-select>
                   <!-- <v-subheader v-else style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceOption}}</i></v-subheader> -->
@@ -61,13 +65,6 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <!-- <v-text-field
-                    v-else
-                    name="thongTinChungHoSo.dossierNo"
-                    rows="2"
-                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
-                    required
-                  ></v-text-field> -->
                   <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.dossierNo}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -137,7 +134,12 @@
 <script>
   export default {
     data: () => ({
-      minDate: null
+      minDate: null,
+      dataPostDossier: {
+        serviceCode: '',
+        govAgencyCode: '',
+        processOptionId: ''
+      }
     }),
     created () {
       var vm = this
@@ -154,12 +156,12 @@
       thongTinChungHoSo () {
         return this.$store.getters.thongTinChungHoSo
       },
-      serviceInfoItems () {
-        return this.$store.getters.serviceInfoItems
+      serviceConfigItems () {
+        return this.$store.getters.serviceConfigItems
+      },
+      serviceOptionItems () {
+        return this.$store.getters.serviceOptionItems
       }
-      // serviceConfigItems () {
-      //   return this.$store.getters.serviceConfigItems
-      // }
     },
     watch: {},
     methods: {
@@ -178,15 +180,39 @@
       },
       getDuedate () {
         var vm = this
-        let dueDateMs = (new Date(vm.thongTinChungHoSo.dueDate).getTime() - new Date().getTime())
+        let dueDateMs = (new Date(vm.thongTinChungHoSo.dueDate).getTime() - new Date(vm.thongTinChungHoSo.receiveDate).getTime())
         if (Math.ceil(dueDateMs / 1000 / 60 / 60 / 24) === 0) {
           return 1
         }
         return Math.ceil(dueDateMs / 1000 / 60 / 60 / 24)
       },
-      changeServiceInfo () {
+      changeServiceConfigs () {
         var vm = this
-        vm.$store.dispatch('loadServiceOptions', vm.thongTinChungHoSo.serviceInfo)
+        setTimeout(function () {
+          let optionItems = vm.thongTinChungHoSo.serviceConfig.options
+          // console.log(optionItems)
+          vm.dataPostDossier.serviceCode = vm.thongTinChungHoSo.serviceConfig.serviceCode
+          vm.dataPostDossier.govAgencyCode = vm.thongTinChungHoSo.serviceConfig.govAgencyCode
+          vm.$store.commit('setServiceConfigObj', vm.thongTinChungHoSo.serviceConfig)
+          if (optionItems.length !== 1) {
+            vm.$store.commit('setServiceOptionItems', optionItems)
+          } else {
+            // console.log('run post')
+            vm.dataPostDossier.processOptionId = optionItems[0].processOptionId
+            vm.$store.commit('setServiceOptionItems', optionItems)
+            vm.$store.commit('setServiceOptionThongTinChungHoSo', optionItems[0].processOptionId)
+            vm.$store.dispatch('postDossier', vm.dataPostDossier)
+          }
+        },
+        300)
+      },
+      changeServiceOption () {
+        var vm = this
+        setTimeout(function () {
+          // console.log('run post')
+          vm.dataPostDossier.processOptionId = vm.thongTinChungHoSo.serviceOption
+          vm.$store.dispatch('postDossier', vm.dataPostDossier)
+        }, 300)
       }
     },
     filters: {

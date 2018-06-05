@@ -16,11 +16,15 @@
           ></v-text-field>
         </div> 
         <div class="flex text-right" style="margin-left: auto;">
-          <v-btn flat class="my-0 mx-0 btn-border-left">
+          <v-btn flat class="my-0 mx-0 btn-border-left" @click="moveProcess" v-if="trangThaiHoSoList[index].id === 'new'">
             <v-icon size="16">send</v-icon>
             Chuyển hồ sơ vào xử lý
           </v-btn>
-          <v-btn flat class="my-0 mx-0">
+          <v-btn flat class="my-0 mx-0 btn-border-left" @click="moveRelease" v-if="trangThaiHoSoList[index].id === 'release'">
+            <v-icon size="16">send</v-icon>
+            Trả kết quả
+          </v-btn>
+          <v-btn flat class="my-0 mx-0" @click="deleteDosier" v-if="showMultiDelete(trangThaiHoSoList[index].id)">
             <v-icon size="16">delete</v-icon>
             Xóa
           </v-btn>
@@ -37,7 +41,7 @@
         :items="danhSachHoSoTables"
         :total-items="total"
         v-model="selected"
-        item-key="name"
+        item-key="dossierId"
         select-all
         class="table-bordered"
         hide-actions
@@ -66,9 +70,9 @@
           <td class="text-xs-left">{{ props.item.dossierIdCTN }}</td>
           <td class="text-xs-left">{{ props.item.applicantName }}</td>
           <td class="text-xs-left">{{ props.item.serviceName }}</td>
-          <td class="text-xs-left">{{ props.item.briefNote }}</td>
+          <td class="text-xs-left">{{ props.item.address}}</td>
           <td class="text-xs-center">{{ props.item.dueDate }}</td>
-          <td class="text-xs-left">{{ props.item.dueDate }}</td>
+          <td class="text-xs-left">{{ props.item.durationText }}</td>
           <td class="text-xs-right px-0">
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('print')">
               <v-btn slot="activator" icon class="mx-0 my-0">
@@ -90,7 +94,7 @@
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('result')">
               <v-btn slot="activator" icon class="mx-0 my-0">
-                <v-icon size="16" class="mx-0">exit_to_app</v-icon>
+                <v-icon size="16" class="mx-0">send</v-icon>
               </v-btn>
               <span>Trả kết quả</span>
             </v-tooltip>
@@ -101,7 +105,7 @@
               <span>Xem danh sách giấy tờ cần trả</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('delete')">
-              <v-btn slot="activator" icon class="mx-0 my-0">
+              <v-btn slot="activator" icon class="mx-0 my-0" @click="deleteDosier">
                 <v-icon size="16" class="mx-0" color="red darken-3">delete</v-icon>
               </v-btn>
               <span>Xoá</span>
@@ -109,7 +113,22 @@
           </td>
         </template>
       </v-data-table>
-      <div class="pt-2 text-xs-right">
+      <div class="mt-3 text-xs-right table-footer">
+        <div class="left">
+          <v-btn outline color="indigo" class="my-0 mx-0 mr-2" @click="moveProcess" v-if="trangThaiHoSoList[index].id === 'new'">
+            <v-icon size="16">send</v-icon>
+            Chuyển hồ sơ vào xử lý
+          </v-btn>
+          <v-btn outline color="indigo" class="my-0 mx-0 mr-2" @click="moveRelease" v-if="trangThaiHoSoList[index].id === 'release'">
+            <v-icon size="16">send</v-icon>
+            Trả kết quả
+          </v-btn>
+          <v-btn outline color="indigo" class="my-0 mx-0 mr-2" @click="deleteDosier" v-if="showMultiDelete(trangThaiHoSoList[index].id)">
+            <v-icon size="16">delete</v-icon>
+            Xóa
+          </v-btn>
+        </div>
+        <span class="mr-2"><i>Tổng số <span class="red--text">{{total}}</span> kết quả được tìm thấy</i></span>
         <v-pagination v-model="page" :length="pages"></v-pagination>
       </div>
     </div>
@@ -167,7 +186,7 @@ export default {
       }
     ],
     danhSachHoSoTables: [],
-    itemperpage: 3,
+    itemperpage: 5,
     pages: 0,
     page: 1,
     total: 0
@@ -184,6 +203,7 @@ export default {
     index (val) {
       var vm = this
       vm.$store.dispatch('setCurrentIndex', vm.index)
+      vm.selected = []
       vm.keywords = ''
       vm.page = 1
       let filter = {
@@ -230,9 +250,14 @@ export default {
         return 'view,ticket'
       }
     },
+    showMultiDelete (status) {
+      if (status === 'new') {
+        return true
+      }
+      return false
+    },
     keywordSearch () {
       var vm = this
-      console.log('keyword change')
       vm.page = 1
       vm.loadDataTable()
     },
@@ -249,6 +274,18 @@ export default {
         vm.total = result.total
         vm.pages = Math.ceil(vm.total / vm.itemperpage)
       })
+    },
+    moveProcess () {
+      var vm = this
+      console.log(vm.selected)
+    },
+    moveRelease () {
+      var vm = this
+      console.log(vm.selected)
+    },
+    deleteDosier () {
+      var vm = this
+      console.log(vm.selected)
     }
   }
 }
