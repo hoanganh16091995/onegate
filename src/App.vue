@@ -5,7 +5,7 @@
       <content-placeholders class="mt-3" v-if="loading">
         <content-placeholders-text :lines="1" />
       </content-placeholders>
-      <v-btn v-else color="primary btn__add__menu" :to="'/danh-sach-ho-so/' + currentIndex + '/tiep-nhan-ho-so/47303'">
+      <v-btn v-else color="primary btn__add__menu" :to="'/danh-sach-ho-so/' + currentIndex + '/tiep-nhan-ho-so'">
         <v-icon>add_circle</v-icon>
         Thêm hồ sơ tiếp nhận
       </v-btn>
