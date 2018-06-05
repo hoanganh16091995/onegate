@@ -17,7 +17,7 @@
     <div style="background-color: white;">
         <div class="receipt-wrapper"><div class="row head">
         <div class="left">
-          <p class="text-uppercase text-bold">Cuc ban quyen tac gia</p>
+          <p class="text-uppercase text-bold">Cục bản quyền tác gỉa</p>
           <span class="text-bold">Bộ phận một cửa và trả kết quả</span>
           <p>==================</p>
         </div>
@@ -35,11 +35,11 @@
       </div>
       <div class="row">
         <p>Bộ phận tiếp nhận và trả kết quả: Cục bản quyền tác giả</p>
-        <p>Tiếp nhận hồ sơ của: Nguyễn Khánh Toán</p>
-        <p>Địa chỉ: 324 Xuân Đỉnh, Từ Liêm, Hà Nội</p>
-        <p>Số điện thoại: 0987654333 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Email: khanhtoan@gmail.com</p>
-        <p>Lệ phí tạm thu: 80.000 đồng</p>
-        <p>Nội dung yêu cầu giải quyết: Cấp giấy phép sản xuất phim ảnh, xuất bản sách, tài liệu văn hóa</p>
+        <p>Tiếp nhận hồ sơ của: {{ thongTinChuHoSo.applicantName }}</p>
+        <p>Địa chỉ: {{ thongTinChuHoSo.address }}</p>
+        <p>Số điện thoại: {{ thongTinChuHoSo.contactTelNo}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Email: {{ thongTinChuHoSo.contactEmail }}</p>
+        <p>Lệ phí tạm thu: {{ lePhi.fee }} đồng</p>
+        <p><!-- Nội dung yêu cầu giải quyết: Cấp giấy phép sản xuất phim ảnh, xuất bản sách, tài liệu văn hóa -->{{thongTinChungHoSo.serviceInfo}}</p>
         <ol>
           <li>Thành phần hồ sơ gồm có:
             <br>
@@ -49,9 +49,9 @@
             <br>
             (3) Số bộ hồ sơ: 01 (bộ)
           </li>
-          <li>Thời gian giải quyết hồ sơ theo quy định là: 7 ngày làm việc</li>
-          <li>Thời gian nhận hồ sơ: 14 giờ 23 phút, ngày 15 tháng 05 năm 2018</li>
-          <li>Thời gian trả kết quả giải quyết hồ sơ: Từ 13:30 Đến 17:00, ngày 24 tháng 05 năm 2018</li>
+          <li>Thời gian giải quyết hồ sơ theo quy định là: {{ thongTinChungHoSo.dueDate }} ngày làm việc</li>
+          <li>Thời gian nhận hồ sơ: {{ thongTinChungHoSo.startDateTime }}</li>
+          <li>Thời gian trả kết quả giải quyết hồ sơ: {{ thongTinChungHoSo.dateEnd }}</li>
           <li>Đăng ký nhận kết quả tại: [Dịch vụ chuyển phát kết quả]</li>
         </ol>
         <p class="note">Chú ý: Công dân đến nhận kết quả mang theo phiếu hẹn, CMTND, lệ phí và giấy ủy quyền (Trong trường hợp không phải chính chủ tới nhận)</p>
@@ -113,6 +113,16 @@ export default {
     },
     trangThaiHoSoList () {
       return this.$store.getters.loadtrangThaiHoSoList
+    },
+    lePhi () {
+      return this.$store.getters.lePhi
+    },
+    thongTinChungHoSo () {
+      return this.$store.getters.thongTinChungHoSo
+    },
+    thongTinChuHoSo () {
+      console.log('thongTinChuHoSo=============', ThongTinChuHoSo)
+      return this.$store.getters.thongTinChuHoSo
     }
   },
   methods: {

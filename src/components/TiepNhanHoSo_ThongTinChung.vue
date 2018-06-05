@@ -11,7 +11,7 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-subheader v-else class="pl-0">Thủ tục: </v-subheader>
+                  <v-subheader v-else class="pl-0" @click="postDossier">Thủ tục: </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm10>
                   <content-placeholders class="mt-1" v-if="loading">

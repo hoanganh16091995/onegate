@@ -8,13 +8,15 @@
           <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
-                <div slot="header"> {{ (index + 1) + ' . ' + item.partName }} </div>
+                <div slot="header" @click="loadAlpcaForm(item)"> {{ (index + 1) + ' . ' + item.partName }} </div>
                 <v-card>
                   <v-card-text>
                     <v-layout wrap>
                       
-                      <v-flex xs12>
-                        
+                      <v-flex xs12 class="text-xs-right">
+                        <div :id="'formAlpaca'+item.partNo">
+                          
+                        </div>
                       </v-flex>
 
                     </v-layout>
@@ -98,6 +100,9 @@ export default {
     },
     dossierTemplates () {
       return this.$store.getters.dossierTemplates
+    },
+    dossierFiles () {
+      return this.$store.getters.dossierFiles
     }
   },
   methods: {
@@ -110,6 +115,9 @@ export default {
     onUploadSingleFile (e, data) {
       e.dataItem = data
       this.$store.dispatch('uploadSingleFile', e)
+    },
+    loadAlpcaForm (data) {
+      this.$store.dispatch('loadAlpcaForm', data)
     }
   }
 }
