@@ -11,7 +11,7 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-subheader v-else class="pl-0"> {{thongTinChuHoSo.userType}} {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
+                  <v-subheader v-else class="pl-0"> <!-- {{thongTinChuHoSo.userType}} --> {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -20,7 +20,7 @@
                   <v-text-field
                   v-else
                   @change="onChangeApplicantIdNo"
-                  v-model="labelSwitch['true'].thongTinUser.applicantIdNo"
+                  v-model="thongTinChuHoSo.applicantIdNo"
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -35,7 +35,7 @@
                   </content-placeholders>
                   <v-text-field
                   v-else
-                  v-model="labelSwitch['true'].thongTinUser.applicantName"
+                  v-model="thongTinChuHoSo.applicantName"
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -50,7 +50,7 @@
                   </content-placeholders>
                   <v-text-field
                   v-else
-                  v-model="labelSwitch['true'].thongTinUser.address"
+                  v-model="thongTinChuHoSo.address"
                   multi-line
                   rows="2"
                   ></v-text-field>
@@ -70,7 +70,7 @@
                   :items="citys"
                   item-text="itemName"
                   item-value="itemCode"
-                  v-model="labelSwitch['true'].thongTinUser.city"
+                  v-model="thongTinChuHoSo.city"
                   @change="onChangeCity"
                   autocomplete
                   ></v-select>
@@ -90,7 +90,7 @@
                   :items="districts"
                   item-text="itemName"
                   item-value="itemCode"
-                  v-model="labelSwitch[thongTinNguoiNopHoSo.sameUser].thongTinUser.district"
+                  v-model="thongTinChuHoSo.district"
                   @change="onChangeDistrict"
                   autocomplete
                   ></v-select>
@@ -110,7 +110,7 @@
                   :items="wards"
                   item-text="itemName"
                   item-value="itemCode"
-                  v-model="labelSwitch['true'].thongTinUser.ward"
+                  v-model="thongTinChuHoSo.ward"
                   autocomplete
                   @change="onChangeWard"
                   ></v-select>
@@ -127,7 +127,7 @@
                   </content-placeholders>
                   <v-text-field
                   v-else
-                  v-model="labelSwitch['true'].thongTinUser.contactTelNo"
+                  v-model="thongTinChuHoSo.contactTelNo"
                   append-icon="phone"
                   ></v-text-field>
                 </v-flex>
@@ -143,7 +143,7 @@
                   </content-placeholders>
                   <v-text-field
                   v-else
-                  v-model="labelSwitch['true'].thongTinUser.contactEmail"
+                  v-model="thongTinChuHoSo.contactEmail"
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -179,7 +179,7 @@
                   </content-placeholders>
                   <v-text-field
                   v-else
-                  v-model="labelSwitch[thongTinNguoiNopHoSo.sameUser].thongTinUser.applicantIdNo"
+                  v-model="thongTinNguoiNopHoSo.delegateApplicantIdNo"
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -194,7 +194,7 @@
                   </content-placeholders>
                   <v-text-field
                   v-else
-                  v-model="labelSwitch[thongTinNguoiNopHoSo.sameUser].thongTinUser.applicantName"
+                  v-model="thongTinNguoiNopHoSo.delegateApplicantName"
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -209,7 +209,7 @@
                   </content-placeholders>
                   <v-text-field
                   v-else
-                  v-model="labelSwitch[thongTinNguoiNopHoSo.sameUser].thongTinUser.address"
+                  v-model="thongTinNguoiNopHoSo.delegateAddress"
                   multi-line
                   rows="2"
                   ></v-text-field>
@@ -230,7 +230,7 @@
                   item-text="itemName"
                   item-value="itemCode"
                   @change="onChangeDelegateCity"
-                  v-model="labelSwitch[thongTinNguoiNopHoSo.sameUser].thongTinUser.city"
+                  v-model="thongTinNguoiNopHoSo.delegateCity"
                   autocomplete
                   ></v-select>
                 </v-flex>
@@ -250,7 +250,7 @@
                   item-text="itemName"
                   item-value="itemCode"
                   @change="onChangeDelegateDistrict"
-                  v-model="labelSwitch[thongTinNguoiNopHoSo.sameUser].thongTinUser.district"
+                  v-model="thongTinNguoiNopHoSo.delegateDistrict"
                   autocomplete
                   ></v-select>
                 </v-flex>
@@ -269,7 +269,7 @@
                   :items="delegateWards"
                   item-text="itemName"
                   item-value="itemCode"
-                  v-model="labelSwitch[thongTinNguoiNopHoSo.sameUser].thongTinUser.ward"
+                  v-model="thongTinNguoiNopHoSo.delegateWard"
                   autocomplete
                   ></v-select>
                 </v-flex>
@@ -285,7 +285,7 @@
                   </content-placeholders>
                   <v-text-field
                   v-else
-                  v-model="labelSwitch[thongTinNguoiNopHoSo.sameUser].thongTinUser.contactTelNo"
+                  v-model="thongTinNguoiNopHoSo.delegateContactTelNo"
                   append-icon="phone"
                   ></v-text-field>
                 </v-flex>
@@ -301,7 +301,7 @@
                   </content-placeholders>
                   <v-text-field
                   v-else
-                  v-model="labelSwitch[thongTinNguoiNopHoSo.sameUser].thongTinUser.contactEmail"
+                  v-model="thongTinNguoiNopHoSo.delegateContactEmail"
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -313,15 +313,10 @@
         <content-placeholders class="mt-1" v-if="loading">
           <content-placeholders-text :lines="1" />
         </content-placeholders>
-        <!-- <v-checkbox
+        <v-checkbox
         v-else
         label="Giống chủ hồ sơ"
         v-model="thongTinNguoiNopHoSo.sameUser"
-        ></v-checkbox> -->
-        <v-checkbox
-        v-else
-        label="Giống chủ hồ sơ 2"
-        v-model="sameUser2"
         ></v-checkbox>
       </div>
     </div>
@@ -341,13 +336,11 @@ export default {
     labelSwitch: {
       'true': {
         cmtnd: 'CMND/ Hộ chiếu',
-        nguoi_nop: 'Họ và tên',
-        thongTinUser: {}
+        nguoi_nop: 'Họ và tên'
       },
       'false': {
         cmtnd: 'Mã số thuế',
-        nguoi_nop: 'Tên tổ chức/ cá nhân',
-        thongTinUser: {}
+        nguoi_nop: 'Tên tổ chức/ cá nhân'
       }
     }
   }),
@@ -360,33 +353,6 @@ export default {
     },
     thongTinNguoiNopHoSo () {
       return this.$store.getters.thongTinNguoiNopHoSo
-/*<<<<<<< HEAD
-    },
-    citys () {
-      return this.$store.getters.citys
-    },
-    districtsArr () {
-      return this.$store.getters.districts
-    },
-    wardsArr () {
-      return this.$store.getters.wards
-    },
-    dossier () {
-      return this.$store.getters.dossier
-    },
-    delegateCitys () {
-      return this.$store.getters.delegateCitys
-    },
-    delegateDistricts () {
-      return this.$store.getters.delegateDistricts
-    },
-    delegateWards () {
-      return this.$store.getters.delegateWards
-    },
-    sameUser2 () {
-      return this.$store.getters.sameUser2
-=======*/
-/*>>>>>>> upstream/dev*/
     }
   },
   created () {
@@ -403,21 +369,19 @@ export default {
     })
   },
   watch: {
-    thongTinNguoiNopHoSo (value) {
-      if (!value.sameUser) {
-        this.labelSwitch['false'].thongTinUser = value
-      } else {
-        this.labelSwitch['true'].thongTinUser = this.thongTinChuHoSo
-        this.labelSwitch['true'].thongTinUser['sameUser'] = true
-      }
-    },
     thongTinChuHoSo (value) {
-      if (this.thongTinNguoiNopHoSo.sameUser) {
-        this.labelSwitch['true'].thongTinUser = value
-        this.labelSwitch['true'].thongTinUser['sameUser'] = true
-      } else {
-        this.labelSwitch['false'].thongTinUser = this.thongTinChuHoSo
+      console.log('true----------', value)
+      let tempData = {
+        delegateApplicantName: value.applicantName,
+        delegateCity: value.city,
+        delegateAddress: value.address,
+        delegateDistrict: value.district,
+        delegateWard: value.ward,
+        delegateContactEmail: value.contactEmail,
+        delegateContactTelNo: value.contactTelNo,
+        delegateApplicantIdNo: value.applicantIdNo
       }
+      this.$store.dispatch('setThongTinNguoiNopHoSo', tempData)
     }
   },
   methods: {

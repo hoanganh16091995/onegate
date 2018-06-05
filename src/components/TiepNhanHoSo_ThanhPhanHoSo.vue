@@ -13,7 +13,7 @@
                   <v-card-text>
                     <v-layout wrap>
                       
-                      <v-flex xs12>
+                      <v-flex xs12 class="text-xs-right">
                         <div :id="'formAlpaca'+item.partNo">
                           
                         </div>
