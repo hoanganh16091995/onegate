@@ -12,10 +12,10 @@ export const store = new Vuex.Store({
   state: {
     api: {
       serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
-      serviceConfigApi: '/o/api/onegate/serviceopts',
+      serviceConfigApi: 'http://127.0.0.1:8081/api/onegate/serviceopts',
       regionApi: 'http://127.0.0.1:8081/api/dictcollections',
       serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
-      dossierApi: '/o/api/onegate',
+      dossierApi: 'http://127.0.0.1:8081/api/onegate',
       dossierTemplatesApi: 'http://hanoi.fds.vn:2281/api/dossiertemplates',
       applicantApi: '/o/rest/v2/applicant',
       govAgency: 'abc',
