@@ -19,13 +19,16 @@
                   </content-placeholders>
                   <v-select
                     v-else
-                    :items="serviceInfoItems"
+                    :items="serviceConfigItems"
                     item-text="serviceName"
                     item-value="serviceCode"
-                    v-model="thongTinChungHoSo.serviceInfo"
+                    v-model="thongTinChungHoSo.serviceConfig"
                     autocomplete
+                    return-object
+                    hide-selected
+                    @change = "changeServiceConfigs"
                   ></v-select>
-                  <v-subheader style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceInfo}}</i></v-subheader>
+                  <!-- <v-subheader style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceInfo}}</i></v-subheader> -->
                 </v-flex>
                 <v-flex xs12 sm2>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -39,13 +42,15 @@
                   </content-placeholders>
                   <v-select
                     v-else
-                    :items="serviceConfigItems"
-                    item-text="serviceName"
-                    item-value="serviceConfigId"
-                    v-model="thongTinChungHoSo.serviceConfig"
+                    :items="serviceOptionItems"
+                    item-text="optionName"
+                    item-value="processOptionId"
+                    v-model="thongTinChungHoSo.serviceOption"
+                    @change="changeServiceOption"
+                    hide-selected
                     autocomplete
                   ></v-select>
-                  <v-subheader v-else style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceOption}}</i></v-subheader>
+                  <!-- <v-subheader v-else style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceOption}}</i></v-subheader> -->
                 </v-flex>
                 <v-flex xs12></v-flex>
                 <v-flex xs12 sm2>
@@ -60,13 +65,6 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-text-field
-                    v-else
-                    name="thongTinChungHoSo.dossierNo"
-                    rows="2"
-                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
-                    required
-                  ></v-text-field>
                   <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.dossierNo}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -79,7 +77,7 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.dueDate}} ngày làm việc</i></v-subheader>
+                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.durationDate}} ngày làm việc</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -91,7 +89,7 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.startDateTime}}</i></v-subheader>
+                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.receiveDate|dateTimeView}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -104,7 +102,7 @@
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else style="float:left;height: 100%">
-                    <datetime v-model="thongTinChungHoSo.dateEnd" v-on:input="changeDate"
+                    <datetime v-model="thongTinChungHoSo.dueDate" @input="changeDate"
                       type="datetime"
                       input-format="DD/MM/YYYY | HH:mm"
                       :i18n="{ok:'Chọn', cancel:'Thoát'}"
@@ -136,31 +134,41 @@
 <script>
   export default {
     data: () => ({
-      minDate: null
+      minDate: null,
+      dataPostDossier: {
+        serviceCode: '',
+        govAgencyCode: '',
+        processOptionId: ''
+      }
     }),
+    created () {
+      var vm = this
+      vm.$nextTick(function () {
+        vm.minDate = vm.getCurentDateTime('date')
+        // vm.$store.commit('setThongTinChungHoSoDueDate', (new Date()).toString())
+        // vm.$store.commit('setThongTinChungHoSoReceiveDate', vm.getCurentDateTime('datetime'))
+      })
+    },
     computed: {
       loading () {
         return this.$store.getters.loading
       },
       thongTinChungHoSo () {
-        let date = new Date()
-        this.$store.getters.thongTinChungHoSo.startDateTime = this.getCurentDateTime('datetime')
-        this.$store.getters.thongTinChungHoSo.dateEnd = (new Date()).toString()
-        this.$store.getters.thongTinChungHoSo.timeEndText = this.parseCurrentTime(date.getHours() + ':' + date.getMinutes())
-        this.$store.getters.thongTinChungHoSo.dueDate = 1
-        this.minDate = this.getCurentDateTime('date')
         return this.$store.getters.thongTinChungHoSo
-      },
-      serviceInfoItems () {
-        return this.$store.getters.serviceInfoItems
       },
       serviceConfigItems () {
         return this.$store.getters.serviceConfigItems
+      },
+      serviceOptionItems () {
+        return this.$store.getters.serviceOptionItems
       }
     },
+    watch: {},
     methods: {
       changeDate () {
-        this.thongTinChungHoSo.dueDate = this.getDuedate()
+        var vm = this
+        let durationDate = vm.getDuedate()
+        vm.$store.commit('setThongTinChungHoSoDurationDate', durationDate)
       },
       getCurentDateTime (type) {
         let date = new Date()
@@ -172,50 +180,45 @@
       },
       getDuedate () {
         var vm = this
-        let dueDateMs = (new Date(vm.thongTinChungHoSo.dateEnd).getTime() - new Date().getTime())
+        let dueDateMs = (new Date(vm.thongTinChungHoSo.dueDate).getTime() - new Date(vm.thongTinChungHoSo.receiveDate).getTime())
         if (Math.ceil(dueDateMs / 1000 / 60 / 60 / 24) === 0) {
           return 1
         }
         return Math.ceil(dueDateMs / 1000 / 60 / 60 / 24)
       },
-      parseDate (date) {
-        if (!date) {
-          return null
-        }
-        const [day, month, year] = date.split('/')
-        return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
+      changeServiceConfigs () {
+        var vm = this
+        setTimeout(function () {
+          let optionItems = vm.thongTinChungHoSo.serviceConfig.options
+          // console.log(optionItems)
+          vm.dataPostDossier.serviceCode = vm.thongTinChungHoSo.serviceConfig.serviceCode
+          vm.dataPostDossier.govAgencyCode = vm.thongTinChungHoSo.serviceConfig.govAgencyCode
+          vm.$store.commit('setServiceConfigObj', vm.thongTinChungHoSo.serviceConfig)
+          if (optionItems.length !== 1) {
+            vm.$store.commit('setServiceOptionItems', optionItems)
+          } else {
+            // console.log('run post')
+            vm.dataPostDossier.processOptionId = optionItems[0].processOptionId
+            vm.$store.commit('setServiceOptionItems', optionItems)
+            vm.$store.commit('setServiceOptionThongTinChungHoSo', optionItems[0].processOptionId)
+            vm.$store.dispatch('postDossier', vm.dataPostDossier)
+          }
+        },
+        300)
       },
-      parseCurrentDate (date) {
-        if (!date) {
-          return null
-        }
-        const [day, month, year] = date.split('/')
-        return `${day.padStart(2, '0')}/${month.padStart(2, '0')}/${year}`
-      },
-      parseCurrentTime (time) {
-        if (!time) {
-          return null
-        }
-        const [hh, mm] = time.split(':')
-        return `${hh.padStart(2, '0')}:${mm.padStart(2, '0')}`
-      },
-      formatDate (date) {
-        if (!date) {
-          return null
-        }
-        const [year, month, day] = date.split('-')
-        return `${day}/${month}/${year}`
-      },
-      validateThongtinchung () {
-        this.thongTinChungHoSo.valid = this.$refs.formThongtinchung.validate()
-        return this.thongTinChungHoSo.valid
-      },
-      postDossier () {
-        this.$store.dispatch('postDossier', {
-          'serviceCode': 'serviceCode',
-          'govAgencyCode': 'govAgencyCode',
-          'dossierTemplateNo': 'dossierTemplateNo'
-        })
+      changeServiceOption () {
+        var vm = this
+        setTimeout(function () {
+          // console.log('run post')
+          vm.dataPostDossier.processOptionId = vm.thongTinChungHoSo.serviceOption
+          vm.$store.dispatch('postDossier', vm.dataPostDossier)
+        }, 300)
+      }
+    },
+    filters: {
+      dateTimeView (arg) {
+        let value = new Date(arg)
+        return `${value.getDate().toString().padStart(2, '0')}/${(value.getMonth() + 1).toString().padStart(2, '0')}/${value.getFullYear()} | ${value.getHours().toString().padStart(2, '0')}:${value.getMinutes().toString().padStart(2, '0')}`
       }
     }
   }
