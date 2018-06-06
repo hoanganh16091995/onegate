@@ -186,7 +186,7 @@ export default {
       }
     ],
     danhSachHoSoTables: [],
-    itemperpage: 5,
+    itemperpage: 15,
     pages: 0,
     page: 1,
     total: 0
