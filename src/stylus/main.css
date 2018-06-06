@@ -72,6 +72,7 @@ padding-bottom: 10px;
 
 .theme--light .navigation-drawer {
     background-color: transparent;
+    padding: 6px 8px;
 }
 .nav_trang_thai_ho_so .list__tile__action {
     min-width: 32px;
@@ -181,6 +182,8 @@ body .navigation-drawer .btn__add__menu {
     background: #0b72ba !important;
     border-color: #0b72ba !important;
     font-weight: normal;
+    width: 100%;
+    margin: 0px 0px 6px 0px;
 }
 
 body .navigation-drawer .btn__add__menu .btn__content:before {
