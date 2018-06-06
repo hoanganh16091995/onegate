@@ -49,7 +49,7 @@
             <br>
             (3) Số bộ hồ sơ: 01 (bộ)
           </li>
-          <li>Thời gian giải quyết hồ sơ theo quy định là: {{ thongTinChungHoSo.dueDate }} ngày làm việc</li>
+          <li>Thời gian giải quyết hồ sơ theo quy định là: {{ thongTinChungHoSo.durationDate }} ngày làm việc</li>
           <li>Thời gian nhận hồ sơ: {{ thongTinChungHoSo.startDateTime }}</li>
           <li>Thời gian trả kết quả giải quyết hồ sơ: {{ thongTinChungHoSo.dateEnd }}</li>
           <li>Đăng ký nhận kết quả tại: [Dịch vụ chuyển phát kết quả]</li>

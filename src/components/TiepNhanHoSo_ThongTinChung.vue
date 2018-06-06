@@ -201,7 +201,12 @@
             vm.dataPostDossier.templateNo = optionItems[0].templateNo
             vm.$store.commit('setServiceOptionItems', optionItems)
             vm.$store.commit('setServiceOptionThongTinChungHoSo', optionItems[0].templateNo)
-            vm.$store.dispatch('postDossier', vm.dataPostDossier)
+            let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
+            promise.then(function (result) {
+              console.log('result========', result)
+              vm.$store.dispatch('loadDossierFiles')
+              vm.$store.dispatch('loadDossierTemplates', result)
+            })
           }
         },
         300)
@@ -211,7 +216,11 @@
         setTimeout(function () {
           // console.log('run post')
           vm.dataPostDossier.templateNo = vm.thongTinChungHoSo.serviceOption
-          vm.$store.dispatch('postDossier', vm.dataPostDossier)
+          let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
+          promise.then(function (result) {
+            vm.$store.dispatch('loadDossierFiles')
+            vm.$store.dispatch('loadDossierTemplates', result)
+          })
         }, 300)
       }
     },
