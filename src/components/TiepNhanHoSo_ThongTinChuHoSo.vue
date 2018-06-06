@@ -369,19 +369,36 @@ export default {
     })
   },
   watch: {
-    thongTinChuHoSo (value) {
-      console.log('true----------', value)
-      let tempData = {
-        delegateApplicantName: value.applicantName,
-        delegateCity: value.city,
-        delegateAddress: value.address,
-        delegateDistrict: value.district,
-        delegateWard: value.ward,
-        delegateContactEmail: value.contactEmail,
-        delegateContactTelNo: value.contactTelNo,
-        delegateApplicantIdNo: value.applicantIdNo
-      }
-      this.$store.dispatch('setThongTinNguoiNopHoSo', tempData)
+    thongTinChuHoSo: {
+      handler: function () {
+        var vm = this
+        let value = vm.thongTinChuHoSo
+        let tempData = {
+          delegateApplicantName: value.applicantName,
+          delegateCity: value.city,
+          delegateAddress: value.address,
+          delegateDistrict: value.district,
+          delegateWard: value.ward,
+          delegateContactEmail: value.contactEmail,
+          delegateContactTelNo: value.contactTelNo,
+          delegateApplicantIdNo: value.applicantIdNo
+        }
+        this.$store.dispatch('setThongTinNguoiNopHoSo', tempData)
+      },
+      deep: true
+    },
+    thongTinNguoiNopHoSo: {
+      handler: function () {
+        var vm = this
+        let value = vm.thongTinNguoiNopHoSo
+        console.log('changeTTNNHS', value.sameUser)
+        if (value.sameUser) {
+          this.$store.dispatch('setThongTinNguoiNopHoSo', vm.thongTinChuHoSo)
+        } else {
+          this.$store.dispatch('resetThongTinNguoiNopHoSo')
+        }
+      },
+      deep: true
     }
   },
   methods: {
@@ -454,4 +471,3 @@ export default {
   }
 }
 </script>
-

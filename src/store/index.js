@@ -323,7 +323,9 @@ export const store = new Vuex.Store({
     },
     loadServiceConfigs ({commit, state}, data) {
       let param = {
-        groupId: state.api.groupId
+        headers: {
+          groupId: state.api.groupId
+        }
       }
       axios.get(state.api.serviceConfigApi, param).then(function (response) {
         commit('setserviceConfigItems', response.data.data)
@@ -415,7 +417,7 @@ export const store = new Vuex.Store({
           type: 1
         }
       }
-      axios.all([axios.get(state.api.dossierTemplatesApi + '/' + data.dossierTemplateNo, param), axios.get(state.api.dossierApi + '/' + data.dossierId + '/marks', paramDossierMark)])
+      axios.all([axios.get(state.api.dossierTemplatesApi + '/' + data.dossierTemplateNo, param), axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/marks', paramDossierMark)])
       .then(axios.spread(function (resDossierTemplates, resDossierMarks) {
         let dossierTemplateItems = resDossierTemplates.data.dossierParts.filter((item, index) => {
           return item.partType === 1
@@ -536,57 +538,30 @@ export const store = new Vuex.Store({
       })
     },
     postDossier ({commit, state}, data) {
-      commit('setLoading', true)
-      let options = {
-        headers: {
-          groupId: state.api.groupId
+      return new Promise((resolve, reject) => {
+        commit('setLoading', true)
+        let options = {
+          headers: {
+            'groupId': state.api.groupId,
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
         }
-      }
-      let param = {
-        serviceCode: data.serviceCode,
-        govAgencyCode: data.govAgencyCode,
-        processOptionId: data.processOptionId,
-        // TODO
-        applicantName: '',
-        applicantIdType: '',
-        applicantIdNo: '',
-        applicantIdDate: '',
-        address: '',
-        cityCode: '',
-        districtCode: '',
-        wardCode: '',
-        contactName: '',
-        contactTelNo: '',
-        contactEmail: '',
-        isSameAsApplicant: '',
-        delegateName: '',
-        delegateIdNo: '',
-        delegateTelNo: '',
-        delegateEmail: '',
-        delegateAddress: '',
-        delegateCityCode: '',
-        delegateDistrictCode: '',
-        delegateWardCode: '',
-        applicantNote: '',
-        briefNote: '',
-        dossierNo: '',
-        viaPostal: '',
-        postalServiceCode: '',
-        postalServiceName: '',
-        postalAddress: '',
-        postalCityCode: '',
-        postalDistrictCode: '',
-        postalWardCode: '',
-        postalTelNo: ''
-      }
-      axios.post(state.api.dossierApi, param, options).then(function (response) {
-        response.data.serviceConfig = state.serviceConfigObj
-        commit('setLoading', false)
-        commit('setDossier', response.data)
-        commit('setThongTinChuHoSo', response.data)
-        commit('setThongTinChungHoSo', response.data)
-      }).catch(function (xhr) {
-        commit('setLoading', false)
+        var dataPostdossier = new URLSearchParams()
+        dataPostdossier.append('serviceCode', data.serviceCode)
+        dataPostdossier.append('govAgencyCode', data.govAgencyCode)
+        dataPostdossier.append('dossierTemplateNo', data.templateNo)
+        axios.post(state.api.postDossierApi, dataPostdossier, options).then(function (response) {
+          response.data.serviceConfig = state.serviceConfigObj
+          commit('setLoading', false)
+          commit('setDossier', response.data)
+          commit('setThongTinChuHoSo', response.data)
+          commit('setThongTinChungHoSo', response.data)
+          resolve(response.data)
+        }).catch(function (xhr) {
+          reject(xhr)
+          commit('setLoading', false)
+        })
       })
     },
     putDossier ({commit, state}, data) {
@@ -594,15 +569,43 @@ export const store = new Vuex.Store({
         commit('setLoading', false)
         let options = {
           headers: {
-            groupId: state.api.groupId
+            groupId: state.api.groupId,
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
           }
         }
-        let param = {
-          serviceCode: data.serviceCode,
-          govAgencyCode: data.govAgencyCode,
-          dossierTemplateNo: data.dossierTemplateNo
+        var dataPutdossier = new URLSearchParams()
+        dataPutdossier.append('applicantName', data.applicantName)
+        dataPutdossier.append('applicantIdType', data.applicantIdType)
+        dataPutdossier.append('applicantIdNo', data.applicantIdNo)
+        dataPutdossier.append('address', data.address)
+        dataPutdossier.append('cityCode', data.city)
+        dataPutdossier.append('districtCode', data.district)
+        dataPutdossier.append('wardCode', data.ward)
+        dataPutdossier.append('contactName', data.contactName)
+        dataPutdossier.append('contactTelNo', data.contactTelNo)
+        dataPutdossier.append('contactEmail', data.contactEmail)
+        dataPutdossier.append('delegateName', data.delegateApplicantName)
+        dataPutdossier.append('delegateIdNo', data.delegateApplicantIdNo)
+        dataPutdossier.append('delegateTelNo', data.delegateContactTelNo)
+        dataPutdossier.append('delegateEmail', data.delegateContactEmail)
+        dataPutdossier.append('delegateAddress', data.delegateAddress)
+        dataPutdossier.append('delegateCityCode', data.delegateCity)
+        dataPutdossier.append('delegateDistrictCode', data.delegateDistrict)
+        dataPutdossier.append('delegateWardCode', data.delegateWard)
+        dataPutdossier.append('applicantNote', data.applicantNote)
+        dataPutdossier.append('briefNote', data.briefNote)
+        if (data.viaPostal) {
+          dataPutdossier.append('viaPostal', data.viaPostal)
+          dataPutdossier.append('postalServiceCode', data.postalServiceCode)
+          dataPutdossier.append('postalServiceName', data.postalServiceName)
+          dataPutdossier.append('postalAddress', data.postalAddress)
+          dataPutdossier.append('postalCityCode', data.postalCityCode)
+          dataPutdossier.append('postalDistrictCode', data.postalDistrictCode)
+          dataPutdossier.append('postalWardCode', data.postalWardCode)
+          dataPutdossier.append('postalTelNo', data.postalTelNo)
         }
-        axios.put(state.api.postDossierApi, param, options).then(function (response) {
+        axios.put(state.api.postDossierApi + '/' + state.thongTinChungHoSo.dossierId, dataPutdossier, options).then(function (response) {
           resolve(response.data)
           commit('setLoading', false)
           commit('setDossier', response.data)
@@ -613,6 +616,17 @@ export const store = new Vuex.Store({
         }).catch(function (xhr) {
           reject(xhr)
         })
+      })
+    },
+    submitDossier ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        }
+      }
+      axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/submitting', param).then(function (response) {
+      }).catch(function (xhr) {
+        console.log(xhr)
       })
     },
     getUserInfoFromApplicantIdNo ({commit, state}, data) {
@@ -873,11 +887,7 @@ export const store = new Vuex.Store({
       return state.wardVal
     },
     dossierFiles (state) {
-      if (state.dossierFiles.length === 0) {
-        store.dispatch('loadDossierFiles')
-      } else {
-        return state.dossierFiles
-      }
+      return state.dossierFiles
     },
     sameUser2 (state) {
       return state.sameUser2

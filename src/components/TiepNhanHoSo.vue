@@ -66,18 +66,17 @@ export default {
   },
   methods: {
     tiepNhanHoSo () {
-      let thongtinchung = this.$refs.thongtinchung
-      let thongtinchuhoso = this.$refs.thongtinchuhoso
-      let thongtinnguoinophoso = this.$refs.thongtinnguoinophoso
-      let thanhphanhoso = this.$refs.thanhphanhoso
-      let lephi = this.$refs.lephi
-      let dichvuchuyenphatketqua = this.$refs.dichvuchuyenphatketqua
-      console.log(thongtinchung)
-      console.log(thongtinchuhoso)
-      console.log(thongtinnguoinophoso)
-      console.log(thanhphanhoso)
-      console.log(lephi)
-      console.log(dichvuchuyenphatketqua)
+      var vm = this
+      let thongtinchung = this.$store.getters.thongTinChungHoSo
+      let thongtinchuhoso = this.$store.getters.thongTinChuHoSo
+      let thongtinnguoinophoso = this.$store.getters.thongTinNguoiNopHoSo
+      let thanhphanhoso = this.$store.getters.thanhPhanHoSo
+      let lephi = this.$store.getters.thongTinChungHoSo
+      let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
+      let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
+      vm.$store.dispatch('putDossier', tempData).then(function (result) {
+        vm.$store.dispatch('submitDossier')
+      })
       router.push('/danh-sach-ho-so/' + this.index + '/tiep-nhan-ho-so/' + this.id + '/phieu-hen')
     }
   }

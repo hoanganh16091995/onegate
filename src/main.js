@@ -27,6 +27,7 @@ new Vue({ // eslint-disable-line no-new
     var vm = this
     vm.$nextTick(function () {
       vm.$store.dispatch('loadInitResource')
+      window.location.href = window.location.href + 'danh-sach-ho-so/0'
     })
   }
 })

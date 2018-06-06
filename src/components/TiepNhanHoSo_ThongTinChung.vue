@@ -11,7 +11,7 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-subheader v-else class="pl-0" @click="postDossier">Thủ tục: </v-subheader>
+                  <v-subheader v-else class="pl-0">Thủ tục: </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm10>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -44,7 +44,7 @@
                     v-else
                     :items="serviceOptionItems"
                     item-text="optionName"
-                    item-value="processOptionId"
+                    item-value="templateNo"
                     v-model="thongTinChungHoSo.serviceOption"
                     @change="changeServiceOption"
                     hide-selected
@@ -198,10 +198,15 @@
             vm.$store.commit('setServiceOptionItems', optionItems)
           } else {
             // console.log('run post')
-            vm.dataPostDossier.processOptionId = optionItems[0].processOptionId
+            vm.dataPostDossier.templateNo = optionItems[0].templateNo
             vm.$store.commit('setServiceOptionItems', optionItems)
-            vm.$store.commit('setServiceOptionThongTinChungHoSo', optionItems[0].processOptionId)
-            vm.$store.dispatch('postDossier', vm.dataPostDossier)
+            vm.$store.commit('setServiceOptionThongTinChungHoSo', optionItems[0].templateNo)
+            let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
+            promise.then(function (result) {
+              console.log('result========', result)
+              vm.$store.dispatch('loadDossierFiles')
+              vm.$store.dispatch('loadDossierTemplates', result)
+            })
           }
         },
         300)
@@ -210,8 +215,12 @@
         var vm = this
         setTimeout(function () {
           // console.log('run post')
-          vm.dataPostDossier.processOptionId = vm.thongTinChungHoSo.serviceOption
-          vm.$store.dispatch('postDossier', vm.dataPostDossier)
+          vm.dataPostDossier.templateNo = vm.thongTinChungHoSo.serviceOption
+          let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
+          promise.then(function (result) {
+            vm.$store.dispatch('loadDossierFiles')
+            vm.$store.dispatch('loadDossierTemplates', result)
+          })
         }, 300)
       }
     },
