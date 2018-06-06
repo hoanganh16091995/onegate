@@ -12,10 +12,11 @@ export const store = new Vuex.Store({
   state: {
     api: {
       serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
-      serviceConfigApi: 'http://127.0.0.1:8081/api/onegate/serviceopts',
+      serviceConfigApi: 'http://127.0.0.1:8081/api/onegate/serviceconfigs/processes',
       regionApi: 'http://127.0.0.1:8081/api/dictcollections',
       serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
-      dossierApi: 'http://127.0.0.1:8081/api/onegate',
+      postDossierApi: 'http://127.0.0.1:8081/api/onegate',
+      dossierApi: 'http://127.0.0.1:8081/api/dossiers',
       dossierTemplatesApi: 'http://hanoi.fds.vn:2281/api/dossiertemplates',
       applicantApi: '/o/rest/v2/applicant',
       govAgency: 'abc',
@@ -251,6 +252,21 @@ export const store = new Vuex.Store({
         })
       })
     },
+    deleteDossier ({commit, state}, arg) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            groupId: state.api.groupId
+          }
+        }
+        axios.delete(state.api.dossierApi + '/' + arg, param).then(function (response) {
+          resolve(response)
+          // commit('setLoadingTable', false)
+        }, error => {
+          reject(error)
+        })
+      })
+    },
     loadtrangThaiHoSoList ({commit}) {
       commit('setLoading', true)
 
@@ -323,7 +339,9 @@ export const store = new Vuex.Store({
     },
     loadServiceConfigs ({commit, state}, data) {
       let param = {
-        groupId: state.api.groupId
+        headers: {
+          groupId: state.api.groupId
+        }
       }
       axios.get(state.api.serviceConfigApi, param).then(function (response) {
         commit('setserviceConfigItems', response.data.data)
@@ -539,47 +557,16 @@ export const store = new Vuex.Store({
       commit('setLoading', true)
       let options = {
         headers: {
-          groupId: state.api.groupId
+          'groupId': state.api.groupId,
+          'Accept': 'application/json',
+          'Content-Type': 'application/x-www-form-urlencoded'
         }
       }
-      let param = {
-        serviceCode: data.serviceCode,
-        govAgencyCode: data.govAgencyCode,
-        processOptionId: data.processOptionId,
-        // TODO
-        applicantName: '',
-        applicantIdType: '',
-        applicantIdNo: '',
-        applicantIdDate: '',
-        address: '',
-        cityCode: '',
-        districtCode: '',
-        wardCode: '',
-        contactName: '',
-        contactTelNo: '',
-        contactEmail: '',
-        isSameAsApplicant: '',
-        delegateName: '',
-        delegateIdNo: '',
-        delegateTelNo: '',
-        delegateEmail: '',
-        delegateAddress: '',
-        delegateCityCode: '',
-        delegateDistrictCode: '',
-        delegateWardCode: '',
-        applicantNote: '',
-        briefNote: '',
-        dossierNo: '',
-        viaPostal: '',
-        postalServiceCode: '',
-        postalServiceName: '',
-        postalAddress: '',
-        postalCityCode: '',
-        postalDistrictCode: '',
-        postalWardCode: '',
-        postalTelNo: ''
-      }
-      axios.post(state.api.dossierApi, param, options).then(function (response) {
+      var dataPostdossier = new URLSearchParams()
+      dataPostdossier.append('serviceCode', data.serviceCode)
+      dataPostdossier.append('govAgencyCode', data.govAgencyCode)
+      dataPostdossier.append('dossierTemplateNo', data.templateNo)
+      axios.post(state.api.postDossierApi, dataPostdossier, options).then(function (response) {
         response.data.serviceConfig = state.serviceConfigObj
         commit('setLoading', false)
         commit('setDossier', response.data)
@@ -600,9 +587,38 @@ export const store = new Vuex.Store({
         let param = {
           serviceCode: data.serviceCode,
           govAgencyCode: data.govAgencyCode,
-          dossierTemplateNo: data.dossierTemplateNo
+          processOptionId: data.processOptionId,
+          applicantName: data.applicantName,
+          applicantIdType: data.applicantIdType,
+          applicantIdNo: data.applicantIdNo,
+          address: data.address,
+          cityCode: data.cityCode,
+          districtCode: data.districtCode,
+          wardCode: data.wardCode,
+          contactName: data.contactName,
+          contactTelNo: data.contactTelNo,
+          contactEmail: data.contactEmail,
+          delegateName: data.delegateName,
+          delegateIdNo: data.delegateIdNo,
+          delegateTelNo: data.delegateTelNo,
+          delegateEmail: data.delegateEmail,
+          delegateAddress: data.delegateAddress,
+          delegateCityCode: data.delegateCityCode,
+          delegateDistrictCode: data.delegateDistrictCode,
+          delegateWardCode: data.delegateWardCode,
+          applicantNote: data.applicantNote,
+          briefNote: data.briefNote,
+          dossierNo: data.dossierNo,
+          viaPostal: data.viaPostal,
+          postalServiceCode: data.postalServiceCode,
+          postalServiceName: data.postalServiceName,
+          postalAddress: data.postalAddress,
+          postalCityCode: data.postalCityCode,
+          postalDistrictCode: data.postalDistrictCode,
+          postalWardCode: data.postalWardCode,
+          postalTelNo: data.postalTelNo
         }
-        axios.put(state.api.postDossierApi, param, options).then(function (response) {
+        axios.put(state.api.postDossierApi + '/' + state.thongTinChungHoSo.dossierId, param, options).then(function (response) {
           resolve(response.data)
           commit('setLoading', false)
           commit('setDossier', response.data)
@@ -728,7 +744,7 @@ export const store = new Vuex.Store({
     setThongTinChungHoSo (state, payload) {
       let thongTinChungHoSoPayLoad = {
         serviceConfig: payload.serviceConfig,
-        serviceOption: payload.processOptionId,
+        serviceOption: payload.dossierTemplateNo,
         receiveDate: new Date(payload.receiveDate),
         dueDate: (new Date(payload.dueDate)).toString(),
         durationDate: 1,
