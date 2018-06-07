@@ -468,6 +468,7 @@ export const store = new Vuex.Store({
           })
         } else {
           dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
+            itemTemplate.count = 0
             itemTemplate.fileType = ''
             itemTemplate.fileCheck = false
             return itemTemplate
@@ -526,14 +527,16 @@ export const store = new Vuex.Store({
         formData.append('displayName', file.name)
         formData.append('fileType', file.type)
         formData.append('fileSize', file.size)
-        formData.append('isSign', 'true')
+        formData.append('isSync', 'false')
         formData.append('file', file)
         formData.append('dossierPartNo', data.partNo)
         formData.append('dossierTemplateNo', state.thongTinChungHoSo.dossierTemplateNo)
         formData.append('fileTemplateNo', data.partNo)
         formData.append('formData', '')
+        formData.append('referenceUid', '')
         axios.post(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files', formData, {
           headers: {
+            'groupId': state.api.groupId,
             'Content-Type': 'multipart/form-data'
           }
         }).then(function (response) {
