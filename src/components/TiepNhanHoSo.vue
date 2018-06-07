@@ -89,10 +89,7 @@ export default {
         vm.$store.dispatch('putDossier', tempData).then(function (result) {
           let index = vm.$store.getters.index
           let id = result.dossierId
-          let promise = vm.$store.dispatch('submitDossier')
-          promise.then(function (result) {
-            router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
-          })
+          router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
         })
       })
     }
