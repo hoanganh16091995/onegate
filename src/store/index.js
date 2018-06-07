@@ -24,6 +24,7 @@ export const store = new Vuex.Store({
       user: {},
       groupId: 0
     },
+    isDetail: false,
     loading: false,
     loadingTable: false,
     error: null,
@@ -39,7 +40,10 @@ export const store = new Vuex.Store({
       applicantIdNo: 'ccc'
     },
     serviceConfigObj: {},
+    dossierTemplateName: '',
     thongTinChungHoSo: {
+      serviceName: '',
+      dossierTemplateName: '',
       serviceConfig: '',
       serviceOption: '',
       dossierNo: '',
@@ -561,7 +565,7 @@ export const store = new Vuex.Store({
           }
         }
         if (data > 0) {
-          axios.get(state.api.dossierApi + '/' + data, param).then(function (response) {
+          axios.get(state.api.postDossierApi + '/' + data, param).then(function (response) {
             commit('setDossier', response.data)
             commit('setThongTinChuHoSo', response.data)
             commit('setThongTinChungHoSo', response.data)
@@ -717,11 +721,12 @@ export const store = new Vuex.Store({
           let urlFormDate = '/o/rest/v2/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formdata'
           axios.all([axios.get(urlFormScript, param), axios.get(urlFormDate, param)])
           .then(axios.spread(function (resFormScript, resFormData) {
-            let formScript = resFormScript.data
-            let formData = resFormData.data
+            /* eslint-disable */
+            let formScript = eval(resFormScript.data)
+            let formData = eval(resFormData.data)
+            /* eslint-disable */
             console.log(typeof (formScript))
             console.log(typeof (formData))
-            eval('(' + formScript + ')')
             formScript.data = formData
             $('#formAlpaca' + data.partNo).alpaca(formScript)
           })).catch(function (xhr) {
@@ -749,6 +754,12 @@ export const store = new Vuex.Store({
     },
     setIndex (state, payload) {
       state.index = payload
+    },
+    setDossierTemplateName (state, payload) {
+      state.dossierTemplateName = payload
+    },
+    setIsDetail (state, payload) {
+      state.isDetail = payload
     },
     setLePhi (state, payload) {
       state.lePhi.fee = payload.fee
@@ -803,11 +814,13 @@ export const store = new Vuex.Store({
     },
     setThongTinChungHoSo (state, payload) {
       let thongTinChungHoSoPayLoad = {
+        dossierTemplateName: payload.dossierTemplateName,
+        serviceName: payload.serviceName,
         serviceConfig: payload.serviceConfig,
         serviceOption: payload.dossierTemplateNo,
         receiveDate: new Date(payload.receiveDate),
         dueDate: (new Date(payload.dueDate)).toString(),
-        durationDate: 1,
+        durationDate: '',
         dossierId: payload.dossierId,
         dossierNo: payload.dossierNo
       }
@@ -883,6 +896,12 @@ export const store = new Vuex.Store({
     },
     lePhi (state) {
       return state.lePhi
+    },
+    isDetail (state) {
+      return state.isDetail
+    },
+    dossierTemplateName (state) {
+      return state.dossierTemplateName
     },
     thongTinChungHoSo (state, config) {
       return state.thongTinChungHoSo

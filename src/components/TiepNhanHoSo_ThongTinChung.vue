@@ -18,7 +18,7 @@
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-select
-                    v-else
+                    v-if="loading === false&&isDetail === false"
                     :items="serviceConfigItems"
                     item-text="serviceName"
                     item-value="serviceCode"
@@ -28,7 +28,9 @@
                     hide-selected
                     @change = "changeServiceConfigs"
                   ></v-select>
-                  <!-- <v-subheader style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceInfo}}</i></v-subheader> -->
+                  <v-subheader v-if="loading === false&&isDetail" style="float:left;height: 100%">
+                    <i>{{thongTinChungHoSo.serviceName}}</i>
+                  </v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -41,7 +43,7 @@
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-select
-                    v-else
+                    v-if="loading === false&&isDetail === false"
                     :items="serviceOptionItems"
                     item-text="optionName"
                     item-value="templateNo"
@@ -50,7 +52,9 @@
                     hide-selected
                     autocomplete
                   ></v-select>
-                  <!-- <v-subheader v-else style="float:left;height: 100%"><i>{{thongTinChungHoSo.serviceOption}}</i></v-subheader> -->
+                  <v-subheader v-if="loading === false&&isDetail" style="float:left;height: 100%">
+                    <i>{{thongTinChungHoSo.dossierTemplateName}}</i>
+                  </v-subheader>
                 </v-flex>
                 <v-flex xs12></v-flex>
                 <v-flex xs12 sm2>
@@ -77,7 +81,8 @@
                   <content-placeholders class="mt-1" v-if="loading">
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
-                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.durationDate}} ngày làm việc</i></v-subheader>
+                  <!-- <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.durationDate}} ngày làm việc</i></v-subheader> -->
+                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.durationDate}}</i></v-subheader>
                 </v-flex>
                 <v-flex xs12 sm2>
                   <content-placeholders class="mt-1" v-if="loading">
@@ -102,7 +107,7 @@
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else style="float:left;height: 100%">
-                    <datetime v-model="thongTinChungHoSo.dueDate" @input="changeDate"
+                    <datetime v-model="thongTinChungHoSo.dueDate" 
                       type="datetime"
                       input-format="DD/MM/YYYY | HH:mm"
                       :i18n="{ok:'Chọn', cancel:'Thoát'}"
@@ -154,6 +159,9 @@
       loading () {
         return this.$store.getters.loading
       },
+      isDetail () {
+        return this.$store.getters.isDetail
+      },
       thongTinChungHoSo () {
         return this.$store.getters.thongTinChungHoSo
       },
@@ -166,11 +174,11 @@
     },
     watch: {},
     methods: {
-      changeDate () {
-        var vm = this
-        let durationDate = vm.getDuedate()
-        vm.$store.commit('setThongTinChungHoSoDurationDate', durationDate)
-      },
+      // changeDate () {
+      //   var vm = this
+      //   let durationDate = vm.getDuedate()
+      //   vm.$store.commit('setThongTinChungHoSoDurationDate', durationDate)
+      // },
       getCurentDateTime (type) {
         let date = new Date()
         if (type === 'datetime') {
@@ -212,15 +220,16 @@
         },
         300)
       },
-      changeServiceOption () {
+      changeServiceOption (event) {
         var vm = this
         setTimeout(function () {
-          // console.log('run post')
+          console.log(event)
           vm.dataPostDossier.templateNo = vm.thongTinChungHoSo.serviceOption
           let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
           promise.then(function (result) {
             console.log('log', vm.$store.getters.index, result.dossierId)
             router.push('/danh-sach-ho-so/' + vm.$store.getters.index + '/tiep-nhan-ho-so/' + result.dossierId)
+            vm.$store.commit('setIsDetail', true)
             vm.$store.dispatch('loadDossierFiles')
             vm.$store.dispatch('loadDossierTemplates', result)
           })
