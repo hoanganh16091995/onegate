@@ -24,7 +24,11 @@ const routerOptions = [
     beforeEnter: function (to, from, next) {
       console.log('run active component chi tiết hồ sơ tiếp nhận')
       store.commit('setIsDetail', true)
-      store.dispatch('getDetailDossier', to.params.id)
+      let promise = store.dispatch('getDetailDossier', to.params.id)
+      promise.then(function (result) {
+        store.dispatch('loadDossierFiles')
+        store.dispatch('loadDossierTemplates', result)
+      })
       next()
     }
   },

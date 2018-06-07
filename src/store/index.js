@@ -24,6 +24,7 @@ export const store = new Vuex.Store({
       user: {},
       groupId: 0
     },
+    dataDetailDossier: {},
     isDetail: false,
     loading: false,
     loadingTable: false,
@@ -335,6 +336,9 @@ export const store = new Vuex.Store({
     },
     setLePhi ({commit}, data) {
       commit('setLePhi', data)
+    },
+    setDataDetailDossier ({commit}, data) {
+      commit('dataDetailDossier', data)
     },
     setThongTinChuHoSo ({commit}, data) {
       commit('setThongTinChuHoSo', data)
@@ -951,6 +955,9 @@ export const store = new Vuex.Store({
     },
     dossierTemplates (state) {
       return state.dossierTemplates
+    },
+    dataDetailDossier (state) {
+      return state.dossier
     },
     dossier (state) {
       return state.dossier

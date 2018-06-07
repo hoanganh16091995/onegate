@@ -220,18 +220,14 @@
         },
         300)
       },
-      changeServiceOption (event) {
+      changeServiceOption () {
         var vm = this
         setTimeout(function () {
-          console.log(event)
           vm.dataPostDossier.templateNo = vm.thongTinChungHoSo.serviceOption
           let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
           promise.then(function (result) {
             console.log('log', vm.$store.getters.index, result.dossierId)
             router.push('/danh-sach-ho-so/' + vm.$store.getters.index + '/tiep-nhan-ho-so/' + result.dossierId)
-            vm.$store.commit('setIsDetail', true)
-            vm.$store.dispatch('loadDossierFiles')
-            vm.$store.dispatch('loadDossierTemplates', result)
           })
         }, 300)
       }
