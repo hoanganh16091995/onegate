@@ -60,9 +60,7 @@ export default {
   },
   created () {
     var vm = this
-    vm.$nextTick(function () {
-      vm.$store.dispatch('getDetailDossier', vm.id)
-    })
+    vm.$nextTick(function () {})
   },
   methods: {
     tiepNhanHoSo () {
@@ -74,10 +72,15 @@ export default {
       let lephi = this.$store.getters.thongTinChungHoSo
       let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
       let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
+      console.log('data put dossier -->', tempData)
       vm.$store.dispatch('putDossier', tempData).then(function (result) {
-        vm.$store.dispatch('submitDossier')
+        let index = vm.$store.getters.index
+        let id = result.dossierId
+        let promise = vm.$store.dispatch('submitDossier')
+        promise.then(function (result) {
+          router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
+        })
       })
-      router.push('/danh-sach-ho-so/' + this.index + '/tiep-nhan-ho-so/' + this.id + '/phieu-hen')
     }
   }
 }

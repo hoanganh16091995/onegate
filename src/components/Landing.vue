@@ -105,7 +105,7 @@
               <span>Xem danh sách giấy tờ cần trả</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('delete')">
-              <v-btn slot="activator" icon class="mx-0 my-0" @click="deleteDosier">
+              <v-btn slot="activator" icon class="mx-0 my-0" @click="deleteDosier(props.item.dossierId, props.index)">
                 <v-icon size="16" class="mx-0" color="red darken-3">delete</v-icon>
               </v-btn>
               <span>Xoá</span>
@@ -283,8 +283,14 @@ export default {
       var vm = this
       console.log(vm.selected)
     },
-    deleteDosier () {
+    deleteDosier (dossierId, index) {
       var vm = this
+      if (dossierId) {
+        let promise = vm.$store.dispatch('deleteDossier', dossierId)
+        promise.then(function (ressult) {
+          vm.danhSachHoSoTables.splice(index, 1)
+        })
+      }
       console.log(vm.selected)
     }
   }
