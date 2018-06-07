@@ -760,6 +760,29 @@ export const store = new Vuex.Store({
         })
       })
     },
+    postAction ({commit, state}, data) {
+      return new Promise((resolve, reject) => {
+        commit('setLoading', true)
+        let options = {
+          headers: {
+            'groupId': state.api.groupId,
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }
+        var dataPostActionDossier = new URLSearchParams()
+        dataPostActionDossier.append('actionCode', '1000')
+        dataPostActionDossier.append('actionNote', '')
+        let url = state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/actions'
+        axios.post(url, dataPostActionDossier, options).then(function (response) {
+          resolve(response.data)
+          commit('setLoading', false)
+        }).catch(function (xhr) {
+          reject(xhr)
+          commit('setLoading', false)
+        })
+      })
+    },
     getUserInfoFromApplicantIdNo ({ commit, state }, data) {
       let param = {
         headers: {
