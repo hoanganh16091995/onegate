@@ -611,7 +611,7 @@ export const store = new Vuex.Store({
           }
         }
         var applicantType = ''
-        if(data.userType) {
+        if (data.userType) {
           applicantType = 'business'
         } else {
           applicantType = 'citizen'
@@ -653,6 +653,31 @@ export const store = new Vuex.Store({
           commit('setThongTinChungHoSo', response.data)
           commit('setLePhi', response.data)
           commit('setDichVuChuyenPhatKetQua', response.data)
+        }).catch(function (xhr) {
+          reject(xhr)
+        })
+      })
+    },
+    putDuedateDossier ({ commit, state }, data) {
+      return new Promise((resolve, reject) => {
+        commit('setLoading', false)
+        let options = {
+          headers: {
+            groupId: state.api.groupId,
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }
+        var dataPutdossier = new URLSearchParams()
+        dataPutdossier.append('dueDate', data)
+        axios.put(state.api.postDossierApi + '/' + state.thongTinChungHoSo.dossierId, dataPutdossier, options).then(function (response) {
+          resolve(response.data)
+          // commit('setLoading', false)
+          // commit('setDossier', response.data)
+          // commit('setThongTinChuHoSo', response.data)
+          // commit('setThongTinChungHoSo', response.data)
+          // commit('setLePhi', response.data)
+          // commit('setDichVuChuyenPhatKetQua', response.data)
         }).catch(function (xhr) {
           reject(xhr)
         })
