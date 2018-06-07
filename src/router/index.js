@@ -1,4 +1,5 @@
 import Vue from 'vue'
+import { store } from '../store'
 import Router from 'vue-router'
 
 const routerOptions = [
@@ -8,10 +9,11 @@ const routerOptions = [
     props: true,
     beforeEnter: function (to, from, next) {
       console.log('run active component')
-      this.$store.dispatch('resetThongTinChungHoSo')
-      this.$store.dispatch('resetThongTinChuHoSo')
-      this.$store.dispatch('resetThongTinNguoiNopHoSo')
-      this.$store.dispatch('resetThanhPhanHoSo')
+      store.dispatch('resetThongTinChungHoSo')
+      store.dispatch('resetThongTinChuHoSo')
+      store.dispatch('resetThongTinNguoiNopHoSo')
+      store.dispatch('resetThanhPhanHoSo')
+      store.commit('setSameUser', true)
       next()
     }
   },

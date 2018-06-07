@@ -72,6 +72,7 @@ export default {
       let lephi = this.$store.getters.thongTinChungHoSo
       let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
       let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
+      console.log('data put dossier -->', tempData)
       vm.$store.dispatch('putDossier', tempData).then(function (result) {
         let index = vm.$store.getters.index
         let id = result.dossierId

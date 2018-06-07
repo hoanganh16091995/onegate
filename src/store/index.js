@@ -406,7 +406,7 @@ export const store = new Vuex.Store({
       })
     },
     resetThongTinChungHoSo ({commit}) {
-      console.log('reset')
+      // console.log('reset')
       let data = {
         serviceConfig: {},
         serviceOption: '',
@@ -419,7 +419,7 @@ export const store = new Vuex.Store({
       commit('setThongTinChungHoSo', data)
     },
     resetThongTinChuHoSo ({commit}) {
-      console.log('reset')
+      // console.log('reset')
       let data = {
         userType: true,
         city: '',
@@ -435,7 +435,7 @@ export const store = new Vuex.Store({
       commit('setThongTinChuHoSo', data)
     },
     resetThongTinNguoiNopHoSo ({commit}) {
-      console.log('reset')
+      // console.log('reset')
       let data = {
         sameUser: '',
         delegateApplicantName: '',
@@ -450,7 +450,7 @@ export const store = new Vuex.Store({
       commit('setThongTinNguoiNopHoSo', data)
     },
     resetThanhPhanHoSo ({commit}) {
-      console.log('reset')
+      // console.log('reset')
       commit('setDossierTemplates', [])
     },
     loadDossierTemplates ({commit, state}, data) {
@@ -719,6 +719,9 @@ export const store = new Vuex.Store({
           .then(axios.spread(function (resFormScript, resFormData) {
             let formScript = resFormScript.data
             let formData = resFormData.data
+            console.log(typeof (formScript))
+            console.log(typeof (formData))
+            eval('(' + formScript + ')')
             formScript.data = formData
             $('#formAlpaca' + data.partNo).alpaca(formScript)
           })).catch(function (xhr) {
@@ -854,6 +857,9 @@ export const store = new Vuex.Store({
     },
     setDossierFiles (state, payload) {
       state.dossierFiles = payload
+    },
+    setSameUser (state, payload) {
+      state.thongTinNguoiNopHoSo.sameUser = payload
     },
     setSameUser2 (state, payload) {
       state.sameUser2 = payload

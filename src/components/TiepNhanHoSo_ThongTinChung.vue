@@ -204,7 +204,7 @@
             let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
             promise.then(function (result) {
               console.log('result', result)
-              router.push('/danh-sach-ho-so/' + vm.$store.getters.index + '/tiep-nhan-ho-so/' + result.data.data.dossierId)
+              router.push('/danh-sach-ho-so/' + vm.$store.getters.index + '/tiep-nhan-ho-so/' + result.dossierId)
               vm.$store.dispatch('loadDossierFiles')
               vm.$store.dispatch('loadDossierTemplates', result)
             })
