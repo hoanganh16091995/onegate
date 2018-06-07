@@ -90,7 +90,7 @@
 </template>
 
 <script>
-// import router from '@/router'
+import router from '@/router'
 import ThongTinChung from './TiepNhanHoSo_ThongTinChung.vue'
 import ThongTinChuHoSo from './TiepNhanHoSo_ThongTinChuHoSo.vue'
 import ThanhPhanHoSo from './TiepNhanHoSo_ThanhPhanHoSo.vue'
@@ -127,10 +127,19 @@ export default {
   },
   methods: {
     guiHoSo () {
+      var vm = this
+      let promise = vm.$store.dispatch('submitDossier')
+      promise.then(function (result) {
+
+      })
     },
     hoanThanhVaThemMoi () {
+      var vm = this
+      let index = vm.$store.getters.index
+      router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so')
     },
     hoanThanh () {
+      router.push('/danh-sach-ho-so/1')
     }
   }
 }

@@ -453,6 +453,7 @@ export const store = new Vuex.Store({
         let dossierMarkItems = resDossierMarks.data.data
         if (dossierMarkItems) {
           dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
+            itemTemplate.count = 0
             let itemMarkFinded = dossierMarkItems.find(itemMark => {
               return itemMark && itemMark.partNo === itemTemplate.partNo
             })
@@ -487,7 +488,7 @@ export const store = new Vuex.Store({
         }
       }
       if (data.hasForm) {
-        state.dossierFiles.map(item => {
+        state.dossierFiles.forEach(item => {
           if (item.partNo === data.partNo) {
             axios.put(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + data.referenceUid + '/resetformdata', {}, param).then(function (response) {
               console.log('success')
@@ -517,24 +518,31 @@ export const store = new Vuex.Store({
       })
     },
     uploadSingleFile ({ commit, state }, e) {
-      let files = e.target.files || e.dataTransfer.files
-      let file = files[0]
-      let data = e.dataItem
-      let formData = new FormData()
-      formData.append('fileName', file.name)
-      formData.append('fileType', file.type)
-      formData.append('fileSize', file.size)
-      formData.append('isSign', 'true')
-      formData.append('file', file)
-      formData.append('dossierPartNo', data.partNo)
-      axios.post(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      }).then(function (reponse) {
-        console.log('upload file success!')
-      }).catch(function (xhr) {
-        console.log(xhr)
+      return new Promise((resolve, reject) => {
+        let files = e.target.files || e.dataTransfer.files
+        let file = files[0]
+        let data = e.dataItem
+        let formData = new FormData()
+        formData.append('displayName', file.name)
+        formData.append('fileType', file.type)
+        formData.append('fileSize', file.size)
+        formData.append('isSign', 'true')
+        formData.append('file', file)
+        formData.append('dossierPartNo', data.partNo)
+        formData.append('dossierTemplateNo', state.thongTinChungHoSo.dossierTemplateNo)
+        formData.append('fileTemplateNo', data.partNo)
+        formData.append('formData', '')
+        axios.post(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files', formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }).then(function (response) {
+          resolve(response.data)
+          console.log('upload file success!')
+        }).catch(function (xhr) {
+          console.log(xhr)
+          reject(xhr)
+        })
       })
     },
     getDetailDossier ({ commit, state }, data) {
@@ -569,8 +577,36 @@ export const store = new Vuex.Store({
       }
       axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files', param).then(function (response) {
         commit('setDossierFiles', response.data.data)
+        if (response.data.data) {
+          let dossierFiles = response.data.data
+          state.dossierTemplates.forEach(itemTemplate => {
+            dossierFiles.forEach(itemFile => {
+              if (itemTemplate.partNo === itemFile.dossierPartNo) {
+                itemTemplate.count ++
+              }
+            })
+          })
+        }
       }).catch(function (xhr) {
         console.log(xhr)
+      })
+    },
+    viewFile ({commit, state}, data) {
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        responseType: 'blob'
+      }
+      state.dossierFiles.forEach(val => {
+        if (val.dossierPartNo === data.partNo) {
+          axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + data.referenceUid, param).then(function (response) {
+            var url = window.URL.createObjectURL(response.data)
+            window.open(url, '_blank')
+          }).catch(function (xhr) {
+            console.log(xhr)
+          })
+        }
       })
     },
     postDossier ({ commit, state }, data) {
@@ -748,7 +784,7 @@ export const store = new Vuex.Store({
       //   responseType: 'text'
       // }
       console.log('alpaca')
-      state.dossierFiles.map(item => {
+      state.dossierFiles.forEach(item => {
         if (item.dossierPartNo === data.partNo) {
           // let urlFormScript = '/o/rest/v2/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formscript'
           // let urlFormDate = '/o/rest/v2/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formdata'
@@ -776,24 +812,28 @@ export const store = new Vuex.Store({
             groupId: state.api.groupId
           }
         }
-        var control = $('#formAlpaca' + data.partNo).alpaca('get')
-        var formData = control.getValue()
-        console.log('Data Form ------', data)
-        console.log('formData-------', formData)
-        var dataPutAlpacaForm = new URLSearchParams()
-        dataPutAlpacaForm.append('formdata', JSON.stringify(formData))
-        state.dossierFiles.map(item => {
-          if (item.dossierPartNo === data.partNo) {
-            let url = state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formdata'
-            axios.put(url, dataPutAlpacaForm, options).then(function (response) {
-              resolve(response.data)
-              commit('setLoading', false)
-            }).catch(function (xhr) {
-              reject(xhr)
-              commit('setLoading', false)
-            })
-          }
-        })
+        try {
+          var control = $('#formAlpaca' + data.partNo).alpaca('get')
+          var formData = control.getValue()
+          console.log('Data Form ------', data)
+          console.log('formData-------', formData)
+          var dataPutAlpacaForm = new URLSearchParams()
+          dataPutAlpacaForm.append('formdata', JSON.stringify(formData))
+          state.dossierFiles.forEach(item => {
+            if (item.dossierPartNo === data.partNo) {
+              let url = state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formdata'
+              axios.put(url, dataPutAlpacaForm, options).then(function (response) {
+                resolve(response.data)
+                commit('setLoading', false)
+              }).catch(function (xhr) {
+                reject(xhr)
+                commit('setLoading', false)
+              })
+            }
+          })
+        } catch (e) {
+          console.log(e)
+        }
       })
     }
   },
@@ -875,6 +915,7 @@ export const store = new Vuex.Store({
     },
     setThongTinChungHoSo (state, payload) {
       let thongTinChungHoSoPayLoad = {
+        dossierTemplateNo: payload.dossierTemplateNo,
         dossierTemplateName: payload.dossierTemplateName,
         serviceName: payload.serviceName,
         serviceConfig: payload.serviceConfig,

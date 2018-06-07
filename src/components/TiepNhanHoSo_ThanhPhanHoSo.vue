@@ -28,7 +28,7 @@
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox">
                 <v-flex style="width: 300px;" class="layout wrap">
-                  <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-checkbox>
+                  <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-checkbox @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])">
                   <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])">
                     <v-radio value="2"></v-radio>
                     <v-radio value="0"></v-radio>
@@ -38,7 +38,7 @@
                 <v-flex style="width: 150px;" class="text-right">
                   <v-btn icon class="mt-0 ml-0 mr-2">
                     <v-badge left>
-                      <span slot="badge">6</span>
+                      <span slot="badge" @click="viewFile(item)">{{item.count}}</span>
                       <input
                       type="file"
                       style="display: none"
@@ -114,14 +114,20 @@ export default {
       document.getElementById('file' + item.partNo).click()
     },
     onUploadSingleFile (e, data) {
+      var vm = this
       e.dataItem = data
-      this.$store.dispatch('uploadSingleFile', e)
+      vm.$store.dispatch('uploadSingleFile', e).then(function (result) {
+        vm.$store.dispatch('loadDossierFiles', data)
+      })
     },
     loadAlpcaForm (data) {
       this.$store.dispatch('loadAlpcaForm', data)
     },
     postDossierMark (data) {
       this.$store.dispatch('postDossierMark', data)
+    },
+    viewFile (data) {
+      this.$store.dispatch('viewFile', data)
     }
   }
 }
