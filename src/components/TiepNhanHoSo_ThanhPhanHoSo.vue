@@ -29,14 +29,12 @@
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox">
                 <v-flex style="width: 300px;" class="layout wrap">
-                  <!-- <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row>
-                    <v-radio label="" value="2"></v-radio>
-                    <v-radio label="" value="0"></v-radio>
-                    <v-radio label="" value="1"></v-radio>
-                  </v-radio-group> -->
-                 <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileType" value="2"></v-checkbox>
-                 <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileType" value="0"></v-checkbox>
-                 <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileType" value="1"></v-checkbox>
+                  <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-checkbox>
+                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox" @change="">
+                    <v-radio value="2"></v-radio>
+                    <v-radio value="0"></v-radio>
+                    <v-radio value="1"></v-radio>
+                  </v-radio-group>
                 </v-flex>
                 <v-flex style="width: 150px;" class="text-right">
                   <v-btn icon class="mt-0 ml-0 mr-2">
