@@ -2,12 +2,12 @@
   <div style="position: relative;">
     <v-expansion-panel>
       <v-expansion-panel-content hide-actions value="1">
-        <div slot="header">IV. THÀNH PHẦN HỒ SƠ</div>
+        <div slot="header">IV. THÀNH PHẦN HỒ SƠ &nbsp;&nbsp;&nbsp;&nbsp; <i><span style="color: red">(*)</span> Những thành phần bắt buộc</i></div>
         <v-card v-if="dossierTemplates.length !== 0">
           <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
-                <div slot="header" @click="loadAlpcaForm(item)"> {{ (index + 1) + ' . ' + item.partName }} </div>
+                <div slot="header" @click="loadAlpcaForm(item)"> {{ (index + 1) + ' . ' + item.partName }} <span v-if="item.required" style="color: red">(*)</span></div>
                 <v-card>
                   <v-card-text>
                     <v-layout wrap>
@@ -26,14 +26,12 @@
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox">
                 <v-flex style="width: 300px;" class="layout wrap">
-                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row>
-                    <v-radio label="" value="2"></v-radio>
-                    <v-radio label="" value="0"></v-radio>
-                    <v-radio label="" value="1"></v-radio>
+                  <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-checkbox>
+                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])">
+                    <v-radio value="2"></v-radio>
+                    <v-radio value="0"></v-radio>
+                    <v-radio value="1"></v-radio>
                   </v-radio-group>
-                 <!-- <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileType" value="2"></v-checkbox>
-                 <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileType" value="0"></v-checkbox>
-                 <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileType" value="1"></v-checkbox> -->
                 </v-flex>
                 <v-flex style="width: 150px;" class="text-right">
                   <v-btn icon class="mt-0 ml-0 mr-2">
@@ -119,6 +117,9 @@ export default {
     },
     loadAlpcaForm (data) {
       this.$store.dispatch('loadAlpcaForm', data)
+    },
+    postDossierMark (data) {
+      this.$store.dispatch('postDossierMark', data)
     }
   }
 }
