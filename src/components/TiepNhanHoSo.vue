@@ -71,14 +71,28 @@ export default {
       let thanhphanhoso = this.$store.getters.thanhPhanHoSo
       let lephi = this.$store.getters.thongTinChungHoSo
       let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
-      let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
-      console.log('data put dossier -->', tempData)
-      vm.$store.dispatch('putDossier', tempData).then(function (result) {
-        let index = vm.$store.getters.index
-        let id = result.dossierId
-        let promise = vm.$store.dispatch('submitDossier')
-        promise.then(function (result) {
-          router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
+      // Save dossier mark and save Alpaca
+      let dossierTemplates = thanhphanhoso.dossierTemplates
+      let listAction = []
+      if (dossierTemplates) {
+        dossierTemplates.forEach(function (val, index) {
+          listAction.push(vm.store.dispatch('postDossierMark', val))
+          if (val.hasForm) {
+            listAction.push(vm.store.dispatch('putAlpacaForm', val))
+          }
+        })
+      }
+      Promise.all(listAction).then(values => {
+        console.log(values)
+        let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
+        console.log('data put dossier -->', tempData)
+        vm.$store.dispatch('putDossier', tempData).then(function (result) {
+          let index = vm.$store.getters.index
+          let id = result.dossierId
+          let promise = vm.$store.dispatch('submitDossier')
+          promise.then(function (result) {
+            router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
+          })
         })
       })
     }
