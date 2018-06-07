@@ -7,7 +7,9 @@
           <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
-                <div slot="header" @click="loadAlpcaForm(item)"> {{ (index + 1) + ' . ' + item.partName }} <span v-if="item.required" style="color: red">(*)</span></div>
+                <div slot="header" @click="loadAlpcaForm(item)">
+                  {{ (index + 1) + ' . ' + item.partName }} <span v-if="item.required" style="color: red">(*)</span>
+                </div>
                 <v-card>
                   <v-card-text>
                     <v-layout wrap>
