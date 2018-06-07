@@ -77,7 +77,6 @@ export default {
       let listAction = []
       if (dossierTemplates) {
         dossierTemplates.forEach(function (val, index) {
-          listAction.push(vm.$store.dispatch('postDossierMark', val))
           if (val.hasForm) {
             listAction.push(vm.$store.dispatch('putAlpacaForm', val))
           }

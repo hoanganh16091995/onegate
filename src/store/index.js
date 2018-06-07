@@ -684,7 +684,7 @@ export const store = new Vuex.Store({
           }
         }
         var dataPostdossierMark = new URLSearchParams()
-        dataPostdossierMark.append('fileCheck', 'true')
+        dataPostdossierMark.append('fileCheck', data.fileCheck)
         dataPostdossierMark.append('fileType', data.fileType)
         let url = state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/marks/' + data.partNo
         axios.post(url, dataPostdossierMark, options).then(function (response) {
