@@ -132,6 +132,7 @@
 </template>
 
 <script>
+  import router from '@/router'
   export default {
     data: () => ({
       minDate: null,
@@ -181,7 +182,7 @@
       getDuedate () {
         var vm = this
         let dueDateMs = (new Date(vm.thongTinChungHoSo.dueDate).getTime() - new Date(vm.thongTinChungHoSo.receiveDate).getTime())
-        if (Math.ceil(dueDateMs / 1000 / 60 / 60 / 24) === 0) {
+        if (Math.ceil(dueDateMs / 1000 / 60 / 60 / 24) <= 0) {
           return 1
         }
         return Math.ceil(dueDateMs / 1000 / 60 / 60 / 24)
@@ -197,13 +198,13 @@
           if (optionItems.length !== 1) {
             vm.$store.commit('setServiceOptionItems', optionItems)
           } else {
-            // console.log('run post')
             vm.dataPostDossier.templateNo = optionItems[0].templateNo
             vm.$store.commit('setServiceOptionItems', optionItems)
             vm.$store.commit('setServiceOptionThongTinChungHoSo', optionItems[0].templateNo)
             let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
             promise.then(function (result) {
-              console.log('result========', result)
+              console.log('result', result)
+              router.push('/danh-sach-ho-so/' + vm.$store.getters.index + '/tiep-nhan-ho-so/' + result.dossierId)
               vm.$store.dispatch('loadDossierFiles')
               vm.$store.dispatch('loadDossierTemplates', result)
             })
@@ -218,6 +219,8 @@
           vm.dataPostDossier.templateNo = vm.thongTinChungHoSo.serviceOption
           let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
           promise.then(function (result) {
+            console.log('log', vm.$store.getters.index, result.dossierId)
+            router.push('/danh-sach-ho-so/' + vm.$store.getters.index + '/tiep-nhan-ho-so/' + result.dossierId)
             vm.$store.dispatch('loadDossierFiles')
             vm.$store.dispatch('loadDossierTemplates', result)
           })

@@ -3,7 +3,7 @@
     <v-expansion-panel>
       <v-expansion-panel-content hide-actions value="1">
         <div slot="header">IV. THÀNH PHẦN HỒ SƠ</div>
-        <v-card>
+        <v-card v-if="dossierTemplates.length !== 0">
 
           <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">

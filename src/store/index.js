@@ -1,5 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
+import $ from 'jquery'
 import toastr from 'toastr'
 import axios from 'axios'
 import support from './support.json'
@@ -12,10 +13,11 @@ export const store = new Vuex.Store({
   state: {
     api: {
       serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
-      serviceConfigApi: '/o/api/onegate/serviceopts',
+      serviceConfigApi: 'http://127.0.0.1:8081/api/onegate/serviceconfigs/processes',
       regionApi: 'http://127.0.0.1:8081/api/dictcollections',
       serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
-      dossierApi: '/o/api/onegate',
+      postDossierApi: 'http://127.0.0.1:8081/api/onegate',
+      dossierApi: 'http://127.0.0.1:8081/api/dossiers',
       dossierTemplatesApi: 'http://hanoi.fds.vn:2281/api/dossiertemplates',
       applicantApi: '/o/rest/v2/applicant',
       govAgency: 'abc',
@@ -251,6 +253,21 @@ export const store = new Vuex.Store({
         })
       })
     },
+    deleteDossier ({commit, state}, arg) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            groupId: state.api.groupId
+          }
+        }
+        axios.delete(state.api.dossierApi + '/' + arg, param).then(function (response) {
+          resolve(response)
+          // commit('setLoadingTable', false)
+        }, error => {
+          reject(error)
+        })
+      })
+    },
     loadtrangThaiHoSoList ({commit}) {
       commit('setLoading', true)
 
@@ -260,7 +277,7 @@ export const store = new Vuex.Store({
           id: 'receiving',
           action: 'folder',
           action_active: 'play_arrow',
-          active: true,
+          active: false,
           link: '/'
         },
         {
@@ -388,8 +405,37 @@ export const store = new Vuex.Store({
       }).catch(function (xhr) {
       })
     },
+    resetThongTinChungHoSo ({commit}) {
+      // console.log('reset')
+      let data = {
+        serviceConfig: {},
+        serviceOption: '',
+        receiveDate: new Date(),
+        dueDate: (new Date()).toString(),
+        durationDate: 1,
+        dossierId: '',
+        dossierNo: ''
+      }
+      commit('setThongTinChungHoSo', data)
+    },
+    resetThongTinChuHoSo ({commit}) {
+      // console.log('reset')
+      let data = {
+        userType: true,
+        city: '',
+        district: '',
+        ward: '',
+        applicantNote: '',
+        applicantIdNo: '',
+        contactEmail: '',
+        contactName: '',
+        address: '',
+        applicantName: ''
+      }
+      commit('setThongTinChuHoSo', data)
+    },
     resetThongTinNguoiNopHoSo ({commit}) {
-      console.log('reset')
+      // console.log('reset')
       let data = {
         sameUser: '',
         delegateApplicantName: '',
@@ -402,6 +448,10 @@ export const store = new Vuex.Store({
         delegateApplicantIdNo: ''
       }
       commit('setThongTinNguoiNopHoSo', data)
+    },
+    resetThanhPhanHoSo ({commit}) {
+      // console.log('reset')
+      commit('setDossierTemplates', [])
     },
     loadDossierTemplates ({commit, state}, data) {
       let param = {
@@ -621,14 +671,18 @@ export const store = new Vuex.Store({
       })
     },
     submitDossier ({commit, state}, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            groupId: state.api.groupId
+          }
         }
-      }
-      axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/submitting', param).then(function (response) {
-      }).catch(function (xhr) {
-        console.log(xhr)
+        axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/submitting', param).then(function (response) {
+          resolve(response.data)
+        }).catch(function (xhr) {
+          reject(xhr)
+          console.log(xhr)
+        })
       })
     },
     postDossierMark ({commit, state}, data) {
@@ -687,8 +741,11 @@ export const store = new Vuex.Store({
           .then(axios.spread(function (resFormScript, resFormData) {
             let formScript = resFormScript.data
             let formData = resFormData.data
+            console.log(typeof (formScript))
+            console.log(typeof (formData))
+            eval('(' + formScript + ')')
             formScript.data = formData
-            document.getElementById('formAlpaca' + data.partNo).alpaca(formScript)
+            $('#formAlpaca' + data.partNo).alpaca(formScript)
           })).catch(function (xhr) {
             console.log(xhr)
           })
@@ -721,6 +778,9 @@ export const store = new Vuex.Store({
     },
     setThanhPhanHoso (state, payload) {
       state.thanhPhanHoSo = payload
+    },
+    setThanhPhanHosoTemplates (state, payload) {
+      state.thanhPhanHoSo.dossierTemplates = payload
     },
     setThongTinChuHoSo (state, payload) {
       let userTypeCondition = true
@@ -766,7 +826,7 @@ export const store = new Vuex.Store({
     setThongTinChungHoSo (state, payload) {
       let thongTinChungHoSoPayLoad = {
         serviceConfig: payload.serviceConfig,
-        serviceOption: payload.processOptionId,
+        serviceOption: payload.dossierTemplateNo,
         receiveDate: new Date(payload.receiveDate),
         dueDate: (new Date(payload.dueDate)).toString(),
         durationDate: 1,
@@ -819,6 +879,9 @@ export const store = new Vuex.Store({
     },
     setDossierFiles (state, payload) {
       state.dossierFiles = payload
+    },
+    setSameUser (state, payload) {
+      state.thongTinNguoiNopHoSo.sameUser = payload
     },
     setSameUser2 (state, payload) {
       state.sameUser2 = payload

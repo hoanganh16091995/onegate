@@ -391,7 +391,6 @@ export default {
       handler: function () {
         var vm = this
         let value = vm.thongTinNguoiNopHoSo
-        console.log('changeTTNNHS', value.sameUser)
         if (value.sameUser) {
           this.$store.dispatch('setThongTinNguoiNopHoSo', vm.thongTinChuHoSo)
         } else {
