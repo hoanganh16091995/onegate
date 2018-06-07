@@ -107,7 +107,7 @@
                     <content-placeholders-text :lines="1" />
                   </content-placeholders>
                   <v-subheader v-else style="float:left;height: 100%">
-                    <datetime v-model="thongTinChungHoSo.dueDate" @input="changeDate"
+                    <datetime v-model="thongTinChungHoSo.dueDate" 
                       type="datetime"
                       input-format="DD/MM/YYYY | HH:mm"
                       :i18n="{ok:'Chọn', cancel:'Thoát'}"
@@ -174,17 +174,17 @@
     },
     watch: {},
     methods: {
-      changeDate () {
-        var vm = this
-        console.log(vm.thongTinChungHoSo.dueDate)
-        var date = new Date(vm.thongTinChungHoSo.dueDate)
-        var dueDatePut = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
-        if (vm.isDetail) {
-          vm.$store.dispatch('putDuedateDossier', dueDatePut)
-        }
-        // let durationDate = vm.getDuedate()
-        // vm.$store.commit('setThongTinChungHoSoDurationDate', durationDate)
-      },
+      // changeDate () {
+      //   var vm = this
+      //   console.log(vm.thongTinChungHoSo.dueDate)
+      //   var date = new Date(vm.thongTinChungHoSo.dueDate)
+      //   var dueDatePut = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+      //   if (vm.isDetail) {
+      //     vm.$store.dispatch('putDuedateDossier', dueDatePut)
+      //   }
+      //   // let durationDate = vm.getDuedate()
+      //   // vm.$store.commit('setThongTinChungHoSoDurationDate', durationDate)
+      // },
       getCurentDateTime (type) {
         let date = new Date()
         if (type === 'datetime') {
