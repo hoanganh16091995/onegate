@@ -73,12 +73,13 @@ export default {
       let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
       // Save dossier mark and save Alpaca
       let dossierTemplates = thanhphanhoso.dossierTemplates
+      console.log('dossierTemplates ------', dossierTemplates)
       let listAction = []
       if (dossierTemplates) {
         dossierTemplates.forEach(function (val, index) {
-          listAction.push(vm.store.dispatch('postDossierMark', val))
+          listAction.push(vm.$store.dispatch('postDossierMark', val))
           if (val.hasForm) {
-            listAction.push(vm.store.dispatch('putAlpacaForm', val))
+            listAction.push(vm.$store.dispatch('putAlpacaForm', val))
           }
         })
       }

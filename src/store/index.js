@@ -23,6 +23,8 @@ export const store = new Vuex.Store({
       user: {},
       groupId: 0
     },
+    dataDetailDossier: {},
+    isDetail: false,
     loading: false,
     loadingTable: false,
     error: null,
@@ -37,13 +39,16 @@ export const store = new Vuex.Store({
       applicantIdNo: 'ccc'
     },
     serviceConfigObj: {},
+    dossierTemplateName: '',
     thongTinChungHoSo: {
+      serviceName: '',
+      dossierTemplateName: '',
       serviceConfig: '',
       serviceOption: '',
       dossierNo: '',
       receiveDate: new Date(),
       dueDate: (new Date()).toString(),
-      durationDate: 1,
+      durationDate: '',
       dossierId: ''
     },
     serviceConfigItems: null,
@@ -327,7 +332,10 @@ export const store = new Vuex.Store({
     setLePhi ({ commit }, data) {
       commit('setLePhi', data)
     },
-    setThongTinChuHoSo ({ commit }, data) {
+    setDataDetailDossier ({commit}, data) {
+      commit('dataDetailDossier', data)
+    },
+    setThongTinChuHoSo ({commit}, data) {
       commit('setThongTinChuHoSo', data)
     },
     setThongTinNguoiNopHoSo ({ commit }, data) {
@@ -443,7 +451,7 @@ export const store = new Vuex.Store({
           return item.partType === 1
         })
         let dossierMarkItems = resDossierMarks.data.data
-        if (dossierMarkItems.length) {
+        if (dossierMarkItems) {
           dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
             let itemMarkFinded = dossierMarkItems.find(itemMark => {
               return itemMark && itemMark.partNo === itemTemplate.partNo
@@ -455,13 +463,16 @@ export const store = new Vuex.Store({
               itemTemplate.fileType = ''
               itemTemplate.fileCheck = false
             }
+            return itemTemplate
           })
         } else {
           dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
             itemTemplate.fileType = ''
             itemTemplate.fileCheck = false
+            return itemTemplate
           })
         }
+        console.log(dossierTemplateItems)
         commit('setDossierTemplates', dossierTemplateItems)
         state.thanhPhanHoSo.dossierTemplates = dossierTemplateItems
         state.thanhPhanHoSo.dossierTemplateId = resDossierTemplates.dossierTemplateId
@@ -534,7 +545,7 @@ export const store = new Vuex.Store({
           }
         }
         if (data > 0) {
-          axios.get(state.api.dossierApi + '/' + data, param).then(function (response) {
+          axios.get(state.api.postDossierApi + '/' + data, param).then(function (response) {
             commit('setDossier', response.data)
             commit('setThongTinChuHoSo', response.data)
             commit('setThongTinChungHoSo', response.data)
@@ -599,15 +610,20 @@ export const store = new Vuex.Store({
             'Content-Type': 'application/x-www-form-urlencoded'
           }
         }
+        var applicantType = ''
+        if(data.userType) {
+          applicantType = 'business'
+        } else {
+          applicantType = 'citizen'
+        }
         var dataPutdossier = new URLSearchParams()
         dataPutdossier.append('applicantName', data.applicantName)
-        dataPutdossier.append('applicantIdType', data.applicantIdType)
+        dataPutdossier.append('applicantIdType', applicantType)
         dataPutdossier.append('applicantIdNo', data.applicantIdNo)
         dataPutdossier.append('address', data.address)
         dataPutdossier.append('cityCode', data.city)
         dataPutdossier.append('districtCode', data.district)
         dataPutdossier.append('wardCode', data.ward)
-        dataPutdossier.append('contactName', data.contactName)
         dataPutdossier.append('contactTelNo', data.contactTelNo)
         dataPutdossier.append('contactEmail', data.contactEmail)
         dataPutdossier.append('delegateName', data.delegateApplicantName)
@@ -619,7 +635,6 @@ export const store = new Vuex.Store({
         dataPutdossier.append('delegateDistrictCode', data.delegateDistrict)
         dataPutdossier.append('delegateWardCode', data.delegateWard)
         dataPutdossier.append('applicantNote', data.applicantNote)
-        dataPutdossier.append('briefNote', data.briefNote)
         if (data.viaPostal) {
           dataPutdossier.append('viaPostal', data.viaPostal)
           dataPutdossier.append('postalServiceCode', data.postalServiceCode)
@@ -701,28 +716,30 @@ export const store = new Vuex.Store({
       })
     },
     loadAlpcaForm ({ commit, state }, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        },
-        responseType: 'text'
-      }
+      // let param = {
+      //   headers: {
+      //     groupId: state.api.groupId
+      //   },
+      //   responseType: 'text'
+      // }
       console.log('alpaca')
       state.dossierFiles.map(item => {
         if (item.dossierPartNo === data.partNo) {
-          let urlFormScript = '/o/rest/v2/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formscript'
-          let urlFormDate = '/o/rest/v2/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formdata'
-          axios.all([axios.get(urlFormScript, param), axios.get(urlFormDate, param)])
-          .then(axios.spread(function (resFormScript, resFormData) {
-            let formScript = resFormScript.data
-            let formData = resFormData.data
-            console.log(typeof (formScript))
-            console.log(typeof (formData))
-            formScript.data = formData
-            $('#formAlpaca' + data.partNo).alpaca(formScript)
-          })).catch(function (xhr) {
-            console.log(xhr)
-          })
+          // let urlFormScript = '/o/rest/v2/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formscript'
+          // let urlFormDate = '/o/rest/v2/dossiers/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formdata'
+          // axios.all([axios.get(urlFormScript, param), axios.get(urlFormDate, param)])
+          // .then(axios.spread(function (resFormScript, resFormData) {
+          // })).catch(function (xhr) {
+          //   console.log(xhr)
+          // })
+          /* eslint-disable */
+          let formScript = eval('(' + item.formScript + ')')
+          let formData = eval('(' + item.formData + ')')
+          /* eslint-disable */
+          console.log(typeof (formScript))
+          console.log(typeof (formData))
+          formScript.data = formData
+          $('#formAlpaca' + data.partNo).alpaca(formScript)
         }
       })
     },
@@ -736,8 +753,10 @@ export const store = new Vuex.Store({
         }
         var control = $('#formAlpaca' + data.partNo).alpaca('get')
         var formData = control.getValue()
+        console.log('Data Form ------', data)
+        console.log('formData-------', formData)
         var dataPutAlpacaForm = new URLSearchParams()
-        dataPutAlpacaForm.append('formdata', formData)
+        dataPutAlpacaForm.append('formdata', JSON.stringify(formData))
         state.dossierFiles.map(item => {
           if (item.dossierPartNo === data.partNo) {
             let url = state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formdata'
@@ -771,6 +790,12 @@ export const store = new Vuex.Store({
     },
     setIndex (state, payload) {
       state.index = payload
+    },
+    setDossierTemplateName (state, payload) {
+      state.dossierTemplateName = payload
+    },
+    setIsDetail (state, payload) {
+      state.isDetail = payload
     },
     setLePhi (state, payload) {
       state.lePhi.fee = payload.fee
@@ -825,11 +850,13 @@ export const store = new Vuex.Store({
     },
     setThongTinChungHoSo (state, payload) {
       let thongTinChungHoSoPayLoad = {
+        dossierTemplateName: payload.dossierTemplateName,
+        serviceName: payload.serviceName,
         serviceConfig: payload.serviceConfig,
         serviceOption: payload.dossierTemplateNo,
         receiveDate: new Date(payload.receiveDate),
         dueDate: (new Date(payload.dueDate)).toString(),
-        durationDate: 1,
+        durationDate: '',
         dossierId: payload.dossierId,
         dossierNo: payload.dossierNo
       }
@@ -906,6 +933,12 @@ export const store = new Vuex.Store({
     lePhi (state) {
       return state.lePhi
     },
+    isDetail (state) {
+      return state.isDetail
+    },
+    dossierTemplateName (state) {
+      return state.dossierTemplateName
+    },
     thongTinChungHoSo (state, config) {
       return state.thongTinChungHoSo
     },
@@ -954,6 +987,9 @@ export const store = new Vuex.Store({
     },
     dossierTemplates (state) {
       return state.dossierTemplates
+    },
+    dataDetailDossier (state) {
+      return state.dossier
     },
     dossier (state) {
       return state.dossier
