@@ -73,6 +73,12 @@ export default {
       let thanhphanhoso = this.$store.getters.thanhPhanHoSo
       let lephi = this.$store.getters.thongTinChungHoSo
       let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
+      // Save dossier mark
+      let dossierTemplates = thanhphanhoso.dossierTemplates
+      if (dossierTemplates) {
+        dossierTemplates.forEach(function (val, index) {
+        })
+      }
       let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
       vm.$store.dispatch('putDossier', tempData).then(function (result) {
         vm.$store.dispatch('submitDossier')
