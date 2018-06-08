@@ -329,32 +329,16 @@ export const store = new Vuex.Store({
     },
     loadtrangThaiHoSoList ({ commit }) {
       commit('setLoading', true)
-
       let data = [{
-        title: 'Thông báo cần xử lý',
-        id: 'receiving',
-        action: 'folder',
-        action_active: 'play_arrow',
-        active: false,
-        link: '/'
-      },
-      {
-        title: 'Hồ sơ chờ chuyển xử lý',
+        title: 'Hồ sơ chờ bàn giao',
         id: 'new',
         action: 'folder',
         action_active: 'play_arrow',
         link: '/'
       },
       {
-        title: 'Hồ sơ bổ sung',
+        title: 'Hồ sơ chờ bổ sung',
         id: 'waiting',
-        action: 'folder',
-        action_active: 'play_arrow',
-        link: '/'
-      },
-      {
-        title: 'Hồ sơ đang xử lý',
-        id: 'processing',
         action: 'folder',
         action_active: 'play_arrow',
         link: '/'
@@ -362,20 +346,6 @@ export const store = new Vuex.Store({
       {
         title: 'Hồ sơ chờ trả kết quả',
         id: 'release',
-        action: 'folder',
-        action_active: 'play_arrow',
-        link: '/'
-      },
-      {
-        title: 'Hồ sơ đã trả kết quả',
-        id: 'done',
-        action: 'folder',
-        action_active: 'play_arrow',
-        link: '/'
-      },
-      {
-        title: 'Yêu cầu của chủ hồ sơ',
-        id: 'correcting',
         action: 'folder',
         action_active: 'play_arrow',
         link: '/'
