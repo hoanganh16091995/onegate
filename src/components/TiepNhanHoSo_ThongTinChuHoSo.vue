@@ -73,6 +73,7 @@
                   v-model="thongTinChuHoSo.city"
                   @change="onChangeCity"
                   autocomplete
+                  required
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -93,6 +94,7 @@
                   v-model="thongTinChuHoSo.district"
                   @change="onChangeDistrict"
                   autocomplete
+                  required
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -113,6 +115,7 @@
                   v-model="thongTinChuHoSo.ward"
                   autocomplete
                   @change="onChangeWard"
+                  required
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -232,6 +235,7 @@
                   @change="onChangeDelegateCity"
                   v-model="thongTinNguoiNopHoSo.delegateCity"
                   autocomplete
+                  required
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -252,6 +256,7 @@
                   @change="onChangeDelegateDistrict"
                   v-model="thongTinNguoiNopHoSo.delegateDistrict"
                   autocomplete
+                  required
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>

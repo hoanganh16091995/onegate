@@ -253,7 +253,7 @@ body .expaned__list__data .expansion-panel__header {
     height: 38px;
 }
 .group__thanh_phan .flex__checkbox .input-group {
-    width: 100px;
+    width: 50px;
     max-width: 100px;
     height: 38px;
     max-height: 38px;
@@ -264,7 +264,7 @@ body .expaned__list__data .expansion-panel__header {
     border-left: 1px solid #e2d7d7;
 }
 .group__thanh_phan .input-group.input-group--selection-controls .input-group__input .icon--selection-control {
-    width: 100px;
+    /* width: 100px; */
 }
 .group__thanh_phan .input-group--selection-controls__ripple:before {
     left: 83%;
@@ -428,6 +428,12 @@ body .input-group--select .input-group__selections__comma {
 }
 .group__thanh_phan .input-group.input-group--selection-controls .input-group__input .icon--selection-control {
     width: auto;
+}
+.group__thanh_phan .icon--selection-control {
+    left: 11px !important
+}
+.group__thanh_phan .input-group {
+    flex: none
 }
 
 
