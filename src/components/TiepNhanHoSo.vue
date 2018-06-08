@@ -1,5 +1,5 @@
 <template>
-  <form>
+  <v-form v-model="validTNHS" ref="formTiepNhanHoSo" lazy-validation>
     <content-placeholders class="mt-3" v-if="loading">
       <content-placeholders-text :lines="1" />
     </content-placeholders>
@@ -32,7 +32,7 @@
         <v-icon>undo</v-icon>
       </v-btn>
     </div>
-  </form>
+  </v-form>
 </template>
 
 <script>
@@ -52,7 +52,9 @@ export default {
     'le-phi': LePhi,
     'dich-vu-chuyen-phat-ket-qua': DichVuChuyenPhatKetQua
   },
-  data: () => ({}),
+  data: () => ({
+    validTNHS: false
+  }),
   computed: {
     loading () {
       return this.$store.getters.loading
@@ -92,28 +94,31 @@ export default {
         receiverTel: dichvuchuyenphatketqua.postalTelNo,
         receiverProvince: dichvuchuyenphatketqua.vnPostCode
       }
-      vm.$store.dispatch('postVNPOST', dataVNPOST).then(function (result) {
-        // vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
-        console.log('VNPOST Sucess-------------')
-      }).catch(function (xhr) {
-        // vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])
-        console.log('VNPOST Error-------------')
-      })
-      Promise.all(listAction).then(values => {
-        console.log(values)
-        let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
-        console.log('data put dossier -->', tempData)
-        vm.$store.dispatch('putDossier', tempData).then(function (result) {
-          let index = vm.$store.getters.index
-          let id = result.dossierId
-          vm.$store.dispatch('postAction').then(function (result) {
-            vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
-            router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
-          })
+      console.log('validate TNHS ------', vm.validTNHS)
+      if (vm.$refs.formTiepNhanHoSo.validate()) {
+        vm.$store.dispatch('postVNPOST', dataVNPOST).then(function (result) {
+          // vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
+          console.log('VNPOST Sucess-------------')
+        }).catch(function (xhr) {
+          // vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])
+          console.log('VNPOST Error-------------')
         })
-      }).catch(reject => {
-        vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])
-      })
+        Promise.all(listAction).then(values => {
+          console.log(values)
+          let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
+          console.log('data put dossier -->', tempData)
+          vm.$store.dispatch('putDossier', tempData).then(function (result) {
+            let index = vm.$store.getters.index
+            let id = result.dossierId
+            vm.$store.dispatch('postAction').then(function (result) {
+              vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
+              router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
+            })
+          })
+        }).catch(reject => {
+          vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])
+        })
+      }
     }
   }
 }

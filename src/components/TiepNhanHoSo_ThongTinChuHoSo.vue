@@ -76,6 +76,7 @@
                   @change="onChangeCity"
                   required
                   autocomplete
+                  required
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -97,6 +98,7 @@
                   @change="onChangeDistrict"
                   required
                   autocomplete
+                  required
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -241,6 +243,7 @@
                   v-model="thongTinNguoiNopHoSo.delegateCity"
                   required
                   autocomplete
+                  required
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -262,6 +265,7 @@
                   v-model="thongTinNguoiNopHoSo.delegateDistrict"
                   required
                   autocomplete
+                  required
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
