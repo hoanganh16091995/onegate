@@ -73,36 +73,43 @@ export default {
       let thanhphanhoso = this.$store.getters.thanhPhanHoSo
       let lephi = this.$store.getters.thongTinChungHoSo
       let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
+      console.log('thongtinchung:', thongtinchung)
+      console.log('thongtinchuhoso:', thongtinchuhoso)
+      console.log('thongtinnguoinophoso:', thongtinnguoinophoso)
+      console.log('thanhphanhoso:', thanhphanhoso)
+      console.log('lephi:', lephi)
+      console.log('dichvuchuyenphatketqua:', dichvuchuyenphatketqua)
       // Save dossier mark and save Alpaca
-      let dossierTemplates = thanhphanhoso.dossierTemplates
-      console.log('dossierTemplates ------', dossierTemplates)
-      let listAction = []
-      let listDossierMark = []
-      if (dossierTemplates) {
-        dossierTemplates.forEach(function (val, index) {
-          if (val.hasForm) {
-            listAction.push(vm.$store.dispatch('putAlpacaForm', val))
-          }
-          listDossierMark.push(vm.$store.dispatch('postDossierMark', val))
-        })
-      }
-      let dataVNPOST = {
-        senderProvince: 10,
-        senderAddress: thongtinnguoinophoso.delegateApplicantName,
-        senderName: thongtinnguoinophoso.senderName,
-        senderTel: thongtinnguoinophoso.delegateContactTelNo,
-        receiverName: thongtinnguoinophoso.delegateApplicantName,
-        receiverAddress: dichvuchuyenphatketqua.postalAddress,
-        receiverTel: dichvuchuyenphatketqua.postalTelNo,
-        receiverProvince: dichvuchuyenphatketqua.vnPostCode
-      }
-      Promise.all(listDossierMark).then(values => {
-        // vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
-      }).catch(function (xhr) {
-        // vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
-      })
-      console.log('validate TNHS ------', vm.validTNHS)
+      console.log('validate TNHS formThongtinchuhoso.validate()', vm.$refs.formTiepNhanHoSo.validate())
       if (vm.$refs.formTiepNhanHoSo.validate()) {
+        let dossierTemplates = thanhphanhoso.dossierTemplates
+        console.log('dossierTemplates ------', dossierTemplates)
+        let listAction = []
+        let listDossierMark = []
+        if (dossierTemplates) {
+          dossierTemplates.forEach(function (val, index) {
+            if (val.hasForm) {
+              listAction.push(vm.$store.dispatch('putAlpacaForm', val))
+            }
+            listDossierMark.push(vm.$store.dispatch('postDossierMark', val))
+          })
+        }
+        let dataVNPOST = {
+          senderProvince: 10,
+          senderAddress: thongtinnguoinophoso.delegateApplicantName,
+          senderName: thongtinnguoinophoso.senderName,
+          senderTel: thongtinnguoinophoso.delegateContactTelNo,
+          receiverName: thongtinnguoinophoso.delegateApplicantName,
+          receiverAddress: dichvuchuyenphatketqua.postalAddress,
+          receiverTel: dichvuchuyenphatketqua.postalTelNo,
+          receiverProvince: dichvuchuyenphatketqua.vnPostCode
+        }
+        Promise.all(listDossierMark).then(values => {
+          // vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
+        }).catch(function (xhr) {
+          // vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+        })
+        console.log('run tiep nhan')
         vm.$store.dispatch('postVNPOST', dataVNPOST).then(function (result) {
           // vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
           console.log('VNPOST Sucess-------------')

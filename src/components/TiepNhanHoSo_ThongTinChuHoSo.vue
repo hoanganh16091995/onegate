@@ -1,164 +1,162 @@
 <template>
   <div>
     <div style="position: relative;">
-      <v-expansion-panel class="expansion-pl">
-        <v-expansion-panel-content hide-actions value="1">
-          <div slot="header"> <div class="background-triangle-small"> II. </div> THÔNG TIN CHỦ HỒ SƠ</div>
-          <v-card>
-            <v-card-text>
-              <v-layout wrap>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0"> <!-- {{thongTinChuHoSo.userType}} --> {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-text-field
-                  v-else
-                  @change="onChangeApplicantIdNo"
-                  v-model="thongTinChuHoSo.applicantIdNo"
-                  required
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].nguoi_nop }}: </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-text-field
-                  v-else
-                  v-model="thongTinChuHoSo.applicantName"
-                  required
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0">Địa chỉ: </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm10>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-text-field
-                  v-else
-                  v-model="thongTinChuHoSo.address"
-                  multi-line
-                  rows="2"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0">Tỉnh/Thành phố: </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-select
-                  v-else
-                  :items="citys"
-                  item-text="itemName"
-                  item-value="itemCode"
-                  v-model="thongTinChuHoSo.city"
-                  @change="onChangeCity"
-                  required
-                  autocomplete
-                  required
-                  ></v-select>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0">Quận/Huyện: </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-select
-                  v-else
-                  :items="districts"
-                  item-text="itemName"
-                  item-value="itemCode"
-                  v-model="thongTinChuHoSo.district"
-                  @change="onChangeDistrict"
-                  required
-                  autocomplete
-                  required
-                  ></v-select>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0">Xã/Phường: </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-select
-                  v-else
-                  :items="wards"
-                  item-text="itemName"
-                  item-value="itemCode"
-                  v-model="thongTinChuHoSo.ward"
-                  autocomplete
-                  @change="onChangeWard"
-                  required
-                  ></v-select>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0">Số điện thoại: </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-text-field
-                  v-else
-                  v-model="thongTinChuHoSo.contactTelNo"
-                  append-icon="phone"
-                  ></v-text-field>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0">Địa chỉ E-mail: </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm6>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-text-field
-                  v-else
-                  v-model="thongTinChuHoSo.contactEmail"
-                  required
-                  ></v-text-field>
-                </v-flex>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
+      <!-- <v-form v-model="valid_thongtinchuhoso" ref="formChuHoSo" lazy-validation> -->
+        <v-expansion-panel class="expansion-pl">
+          <v-expansion-panel-content hide-actions value="1">
+            <div slot="header"> <div class="background-triangle-small"> II. </div> THÔNG TIN CHỦ HỒ SƠ</div>
+            <v-card>
+              <v-card-text>
+                <v-layout wrap>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-subheader v-else class="pl-0"> <!-- {{thongTinChuHoSo.userType}} --> {{ labelSwitch[thongTinChuHoSo.userType].cmtnd }}: </v-subheader>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-text-field
+                    v-else
+                    @change="onChangeApplicantIdNo"
+                    v-model="thongTinChuHoSo.applicantIdNo"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-subheader v-else class="pl-0"> {{ labelSwitch[thongTinChuHoSo.userType].nguoi_nop }}: </v-subheader>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-text-field
+                    v-else
+                    v-model="thongTinChuHoSo.applicantName"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-subheader v-else class="pl-0">Địa chỉ: </v-subheader>
+                  </v-flex>
+                  <v-flex xs12 sm10>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-text-field
+                    v-else
+                    v-model="thongTinChuHoSo.address"
+                    multi-line
+                    rows="2"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-subheader v-else class="pl-0">Tỉnh/Thành phố: </v-subheader>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-select
+                    v-else
+                    :items="citys"
+                    item-text="itemName"
+                    item-value="itemCode"
+                    v-model="thongTinChuHoSo.city"
+                    @change="onChangeCity"
+                    autocomplete
+                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
+                    required
+                    ></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-subheader v-else class="pl-0">Quận/Huyện: </v-subheader>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-select
+                    v-else
+                    :items="districts"
+                    item-text="itemName"
+                    item-value="itemCode"
+                    v-model="thongTinChuHoSo.district"
+                    @change="onChangeDistrict"
+                    autocomplete
+                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
+                    required
+                    ></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-subheader v-else class="pl-0">Xã/Phường: </v-subheader>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-select
+                    v-else
+                    :items="wards"
+                    item-text="itemName"
+                    item-value="itemCode"
+                    v-model="thongTinChuHoSo.ward"
+                    autocomplete
+                    @change="onChangeWard"
+                    ></v-select>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-subheader v-else class="pl-0">Số điện thoại: </v-subheader>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-text-field
+                    v-else
+                    v-model="thongTinChuHoSo.contactTelNo"
+                    append-icon="phone"
+                    ></v-text-field>
+                  </v-flex>
+                  <v-flex xs12 sm2>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-subheader v-else class="pl-0">Địa chỉ E-mail: </v-subheader>
+                  </v-flex>
+                  <v-flex xs12 sm6>
+                    <content-placeholders class="mt-1" v-if="loading">
+                      <content-placeholders-text :lines="1" />
+                    </content-placeholders>
+                    <v-text-field
+                    v-else
+                    v-model="thongTinChuHoSo.contactEmail"
+                    ></v-text-field>
+                  </v-flex>
+                </v-layout>
+              </v-card-text>
+            </v-card>
+          </v-expansion-panel-content>
+        </v-expansion-panel>
+      <!-- </v-form> -->
       <div class="absolute__btn" style="width: 270px;margin-top: 4px;">
         <content-placeholders class="mt-1" v-if="loading">
           <content-placeholders-text :lines="1" />
@@ -188,7 +186,6 @@
                   <v-text-field
                   v-else
                   v-model="thongTinNguoiNopHoSo.delegateApplicantIdNo"
-                  required
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -204,7 +201,6 @@
                   <v-text-field
                   v-else
                   v-model="thongTinNguoiNopHoSo.delegateApplicantName"
-                  required
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -241,8 +237,8 @@
                   item-value="itemCode"
                   @change="onChangeDelegateCity"
                   v-model="thongTinNguoiNopHoSo.delegateCity"
-                  required
                   autocomplete
+                  :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                   required
                   ></v-select>
                 </v-flex>
@@ -263,8 +259,8 @@
                   item-value="itemCode"
                   @change="onChangeDelegateDistrict"
                   v-model="thongTinNguoiNopHoSo.delegateDistrict"
-                  required
                   autocomplete
+                  :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
                   required
                   ></v-select>
                 </v-flex>
@@ -284,7 +280,6 @@
                   item-text="itemName"
                   item-value="itemCode"
                   v-model="thongTinNguoiNopHoSo.delegateWard"
-                  required
                   autocomplete
                   ></v-select>
                 </v-flex>
@@ -317,7 +312,6 @@
                   <v-text-field
                   v-else
                   v-model="thongTinNguoiNopHoSo.delegateContactEmail"
-                  required
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -344,6 +338,7 @@
 
 export default {
   data: () => ({
+    valid_thongtinchuhoso: false,
     citys: [],
     delegateDistricts: [],
     districts: [],

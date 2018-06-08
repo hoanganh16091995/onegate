@@ -70,8 +70,8 @@
           <td class="text-xs-left">{{ props.item.dossierIdCTN }}</td>
           <td class="text-xs-left">{{ props.item.applicantName }}</td>
           <td class="text-xs-left">
-            <a :href="'/danh-sach-ho-so/'+index+'/tiep-nhan-ho-so/'+props.item.dossierId">
-                <span>{{ props.item.serviceName }}</span>
+            <a title="Chi tiết hồ sơ" :href="'/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/'+index+'/tiep-nhan-ho-so/'+props.item.dossierId">
+              <span>{{ props.item.serviceName }}</span>
             </a>
           </td>
           <td class="text-xs-left">{{ props.item.address}}</td>

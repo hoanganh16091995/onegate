@@ -1,134 +1,134 @@
 <template>
   <div style="position: relative;">
-    <v-form v-model="thongTinChungHoSo.valid" ref="formThongtinchung" lazy-validation>
-      <v-expansion-panel class="expansion-pl">
-        <v-expansion-panel-content hide-actions value="1">
-          <div slot="header"><div class="background-triangle-small"> I. </div>THÔNG TIN CHUNG</div>
-          <v-card>
-            <v-card-text>
-              <v-layout wrap>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0">Thủ tục: </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm10>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-select
-                    v-if="loading === false&&isDetail === false"
-                    :items="serviceConfigItems"
-                    item-text="serviceName"
-                    item-value="serviceCode"
-                    v-model="thongTinChungHoSo.serviceConfig"
-                    autocomplete
-                    return-object
-                    hide-selected
-                    @change = "changeServiceConfigs"
-                  ></v-select>
-                  <v-subheader v-if="loading === false&&isDetail" style="float:left;height: 100%">
-                    <i>{{thongTinChungHoSo.serviceName}}</i>
-                  </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0">Dịch vụ: </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm10>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-select
-                    v-if="loading === false&&isDetail === false"
-                    :items="serviceOptionItems"
-                    item-text="optionName"
-                    item-value="templateNo"
-                    v-model="thongTinChungHoSo.serviceOption"
-                    @change="changeServiceOption"
-                    hide-selected
-                    autocomplete
-                  ></v-select>
-                  <v-subheader v-if="loading === false&&isDetail" style="float:left;height: 100%">
-                    <i>{{thongTinChungHoSo.dossierTemplateName}}</i>
-                  </v-subheader>
-                </v-flex>
-                <v-flex xs12></v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0" >
-                    Mã tiếp nhận * : 
-                  </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.dossierNo}}</i></v-subheader>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0">Thời gian giải quyết: </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <!-- <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.durationDate}} ngày làm việc</i></v-subheader> -->
-                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.durationDate}}</i></v-subheader>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0">Ngày giờ tiếp nhận * : </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.receiveDate|dateTimeView}}</i></v-subheader>
-                </v-flex>
-                <v-flex xs12 sm2>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else class="pl-0">Ngày hẹn trả * : </v-subheader>
-                </v-flex>
-                <v-flex xs12 sm4>
-                  <content-placeholders class="mt-1" v-if="loading">
-                    <content-placeholders-text :lines="1" />
-                  </content-placeholders>
-                  <v-subheader v-else style="float:left;height: 100%">
-                    <datetime v-model="thongTinChungHoSo.dueDate" 
-                      type="datetime"
-                      input-format="DD/MM/YYYY | HH:mm"
-                      :i18n="{ok:'Chọn', cancel:'Thoát'}"
-                      moment-locale="vi"
-                      zone="local"
-                      :min-date="minDate"
-                      monday-first
-                      wrapper-class="wrapper-datetime"
-                      auto-continue
-                      auto-close
-                      required
-                      ></datetime>
-                      <v-icon>event</v-icon>
-                  </v-subheader>
-                </v-flex>
-              </v-layout>
-            </v-card-text>
-          </v-card>
-        </v-expansion-panel-content>
-      </v-expansion-panel>
-    </v-form>
+    
+    <v-expansion-panel class="expansion-pl">
+      <v-expansion-panel-content hide-actions value="1">
+        <div slot="header"><div class="background-triangle-small"> I. </div>THÔNG TIN CHUNG</div>
+        <v-card>
+          <v-card-text>
+            <v-layout wrap>
+              <v-flex xs12 sm2>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else class="pl-0">Thủ tục: </v-subheader>
+              </v-flex>
+              <v-flex xs12 sm10>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-select
+                  v-if="loading === false&&isDetail === false"
+                  :items="serviceConfigItems"
+                  item-text="serviceName"
+                  item-value="serviceCode"
+                  v-model="thongTinChungHoSo.serviceConfig"
+                  autocomplete
+                  return-object
+                  hide-selected
+                  @change = "changeServiceConfigs"
+                ></v-select>
+                <v-subheader v-if="loading === false&&isDetail" style="float:left;height: 100%">
+                  <i>{{thongTinChungHoSo.serviceName}}</i>
+                </v-subheader>
+              </v-flex>
+              <v-flex xs12 sm2>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else class="pl-0">Dịch vụ: </v-subheader>
+              </v-flex>
+              <v-flex xs12 sm10>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-select
+                  v-if="loading === false&&isDetail === false"
+                  :items="serviceOptionItems"
+                  item-text="optionName"
+                  item-value="templateNo"
+                  v-model="thongTinChungHoSo.serviceOption"
+                  @change="changeServiceOption"
+                  hide-selected
+                  autocomplete
+                ></v-select>
+                <v-subheader v-if="loading === false&&isDetail" style="float:left;height: 100%">
+                  <i>{{thongTinChungHoSo.dossierTemplateName}}</i>
+                </v-subheader>
+              </v-flex>
+              <v-flex xs12></v-flex>
+              <v-flex xs12 sm2>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else class="pl-0" >
+                  Mã tiếp nhận * : 
+                </v-subheader>
+              </v-flex>
+              <v-flex xs12 sm4>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.dossierNo}}</i></v-subheader>
+              </v-flex>
+              <v-flex xs12 sm2>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else class="pl-0">Thời gian giải quyết: </v-subheader>
+              </v-flex>
+              <v-flex xs12 sm4>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <!-- <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.durationDate}} ngày làm việc</i></v-subheader> -->
+                <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.durationDate}}</i></v-subheader>
+              </v-flex>
+              <v-flex xs12 sm2>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else class="pl-0">Ngày giờ tiếp nhận * : </v-subheader>
+              </v-flex>
+              <v-flex xs12 sm4>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.receiveDate|dateTimeView}}</i></v-subheader>
+              </v-flex>
+              <v-flex xs12 sm2>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else class="pl-0">Ngày hẹn trả * : </v-subheader>
+              </v-flex>
+              <v-flex xs12 sm4>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else style="float:left;height: 100%">
+                  <datetime v-model="thongTinChungHoSo.dueDate" 
+                    type="datetime"
+                    input-format="DD/MM/YYYY | HH:mm"
+                    :i18n="{ok:'Chọn', cancel:'Thoát'}"
+                    moment-locale="vi"
+                    zone="local"
+                    :min-date="minDate"
+                    monday-first
+                    wrapper-class="wrapper-datetime"
+                    auto-continue
+                    auto-close
+                    required
+                    ></datetime>
+                    <v-icon>event</v-icon>
+                </v-subheader>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+        </v-card>
+      </v-expansion-panel-content>
+    </v-expansion-panel>
+    
     <v-btn flat class="absolute__btn">
       <v-icon size="16">file_copy</v-icon>
       Hướng dẫn
