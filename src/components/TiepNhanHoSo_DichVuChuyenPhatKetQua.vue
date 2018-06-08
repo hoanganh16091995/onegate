@@ -23,7 +23,7 @@
                   </content-placeholders>
                   <v-select
                     v-else
-                    :items="resultServices"
+                    :items="postalServiceItems"
                     item-text="itemName"
                     item-value="itemCode"
                     v-model="dichVuChuyenPhatKetQua.postalServiceCode"
@@ -44,6 +44,7 @@
                     v-else
                     v-model="dichVuChuyenPhatKetQua.postalTelNo"
                     append-icon="phone"
+                    :required='dichVuChuyenPhatKetQua.viaPostal'
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -62,6 +63,7 @@
                     item-text="itemName"
                     item-value="itemCode"
                     v-model="dichVuChuyenPhatKetQua.vnPostCode"
+                    :required='dichVuChuyenPhatKetQua.viaPostal'
                     autocomplete
                   ></v-select>
                 </v-flex>
@@ -170,7 +172,13 @@ export default {
     citys: [],
     resultDistricts: [],
     resultWards: [],
-    vnPostItems: []
+    vnPostItems: [],
+    postalServiceItems: [
+      {
+        itemName: 'VNPOST',
+        itemCode: 'VNPOST'
+      }
+    ]
   }),
   computed: {
     loading () {

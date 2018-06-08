@@ -10,7 +10,7 @@
                 <div slot="header" @click="loadAlpcaForm(item)" class="pl-2 py-1">
                   <div style="width: calc(100% - 320px );display: flex;align-items: center;min-height: 38px">
                     <span class="text-bold mr-2">{{index + 1}}.</span>
-                    <span>{{item.partName}} <span v-if="item.required" style="color: red"> (*)</span></span>
+                    <span>{{item.partName}} <span v-if="item.required" style="color: red"> (*)</span> <i v-if="item.hasForm">Form trực tuyến</i></span>
                   </div>
                 </div>
                 <v-card>
@@ -31,8 +31,8 @@
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox" v-else>
                 <v-flex style="width: 200px;" class="layout wrap">
-                  <v-checkbox light color="secondary" class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])"></v-checkbox>
-                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])">
+                  <v-checkbox light color="secondary" class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-checkbox>
+                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox">
                     <v-radio value="2"></v-radio>
                     <v-radio value="0"></v-radio>
                     <v-radio value="1"></v-radio>
@@ -136,9 +136,10 @@ export default {
       e.dataItem = data
       vm.$store.dispatch('uploadSingleFile', e).then(function (result) {
         vm.$store.dispatch('showMessageToastr', ['success', 'Upload thành công!'])
-        e.count ++
+        vm.$store.dispatch('loadDossierFiles', data)
       }).catch(function (xhr) {
         vm.$store.dispatch('showMessageToastr', ['error', 'Upload không thành công!'])
+        vm.$store.dispatch('loadDossierFiles', data)
       })
     },
     loadAlpcaForm (data) {

@@ -85,7 +85,7 @@ export default {
         })
       }
       let dataVNPOST = {
-        senderProvince: thongtinnguoinophoso.delegateCity,
+        senderProvince: 10,
         senderAddress: thongtinnguoinophoso.delegateApplicantName,
         senderName: thongtinnguoinophoso.senderName,
         senderTel: thongtinnguoinophoso.delegateContactTelNo,
@@ -110,7 +110,11 @@ export default {
           vm.$store.dispatch('putDossier', tempData).then(function (result) {
             let index = vm.$store.getters.index
             let id = result.dossierId
-            vm.$store.dispatch('postAction').then(function (result) {
+            let dataPostAction = {
+              dossierId: thongtinchung.dossierId,
+              actionCode: 10000
+            }
+            vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
               vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
               router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
             })
