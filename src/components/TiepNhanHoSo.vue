@@ -77,11 +77,13 @@ export default {
       let dossierTemplates = thanhphanhoso.dossierTemplates
       console.log('dossierTemplates ------', dossierTemplates)
       let listAction = []
+      let listDossierMark = []
       if (dossierTemplates) {
         dossierTemplates.forEach(function (val, index) {
           if (val.hasForm) {
             listAction.push(vm.$store.dispatch('putAlpacaForm', val))
           }
+          listDossierMark.push(vm.$store.dispatch('postDossierMark', val))
         })
       }
       let dataVNPOST = {
@@ -94,6 +96,11 @@ export default {
         receiverTel: dichvuchuyenphatketqua.postalTelNo,
         receiverProvince: dichvuchuyenphatketqua.vnPostCode
       }
+      Promise.all(listDossierMark).then(values => {
+        // vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
+      }).catch(function (xhr) {
+        // vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+      })
       console.log('validate TNHS ------', vm.validTNHS)
       if (vm.$refs.formTiepNhanHoSo.validate()) {
         vm.$store.dispatch('postVNPOST', dataVNPOST).then(function (result) {
