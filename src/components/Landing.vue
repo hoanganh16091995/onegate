@@ -69,7 +69,11 @@
           <td class="text-xs-center stt_column">{{ props.index + 1 }}</td>
           <td class="text-xs-left">{{ props.item.dossierIdCTN }}</td>
           <td class="text-xs-left">{{ props.item.applicantName }}</td>
-          <td class="text-xs-left">{{ props.item.serviceName }}</td>
+          <td class="text-xs-left">
+            <a :href="'/danh-sach-ho-so/'+index+'/tiep-nhan-ho-so/'+props.item.dossierId">
+                <span>{{ props.item.serviceName }}</span>
+            </a>
+          </td>
           <td class="text-xs-left">{{ props.item.address}}</td>
           <td class="text-xs-center">{{ props.item.dueDate }}</td>
           <td class="text-xs-left">{{ props.item.durationText }}</td>
