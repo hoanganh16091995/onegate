@@ -7,16 +7,12 @@
           <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
-<<<<<<< HEAD
-                <div slot="header" @click="loadAlpcaForm(item)"> {{ (index + 1) + ' . ' + item.partName }} <span v-if="item.required" style="color: red">(*)</span> <i v-if="item.hasForm">Form trực tuyến</i></div>
-=======
                 <div slot="header" @click="loadAlpcaForm(item)" class="pl-2 py-1">
                   <div style="width: calc(100% - 320px );display: flex;align-items: center;min-height: 38px">
                     <span class="text-bold mr-2">{{index + 1}}.</span>
-                    <span>{{item.partName}} <span v-if="item.required" style="color: red"> (*)</span></span>
+                    <span>{{item.partName}} <span v-if="item.required" style="color: red"> (*)</span> <i v-if="item.hasForm">Form trực tuyến</i></span>
                   </div>
                 </div>
->>>>>>> origin/onegate
                 <v-card>
                   <v-card-text>
                     <v-layout wrap>
@@ -35,8 +31,8 @@
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox" v-else>
                 <v-flex style="width: 200px;" class="layout wrap">
-                  <v-checkbox light color="secondary" class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])"></v-checkbox>
-                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])">
+                  <v-checkbox light color="secondary" class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-checkbox>
+                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox">
                     <v-radio value="2"></v-radio>
                     <v-radio value="0"></v-radio>
                     <v-radio value="1"></v-radio>

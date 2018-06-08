@@ -81,7 +81,7 @@
               <span>In phiếu hẹn</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('send')">
-              <v-btn slot="activator" icon class="mx-0 my-0">
+              <v-btn slot="activator" icon class="mx-0 my-0" @click="chuyenXuLy(props.item)">
                 <v-icon size="16" class="mx-0">send</v-icon>
               </v-btn>
               <span>Chuyển hồ sơ vào xử lý</span>
@@ -93,7 +93,7 @@
               <span>Phiếu kiểm soát</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('result')">
-              <v-btn slot="activator" icon class="mx-0 my-0">
+              <v-btn slot="activator" icon class="mx-0 my-0" @click="traKetQua(props.item)">
                 <v-icon size="16" class="mx-0">send</v-icon>
               </v-btn>
               <span>Trả kết quả</span>
@@ -275,12 +275,62 @@ export default {
         vm.pages = Math.ceil(vm.total / vm.itemperpage)
       })
     },
+    chuyenXuLy (data) {
+      var vm = this
+      let dataPost = {
+        dossierId: data.dossierId,
+        actionCode: 20000
+      }
+      vm.$store.dispatch('postAction', dataPost).then(function (result) {
+        vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
+      }).catch(function (xhr) {
+        vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+      })
+    },
+    traKetQua (data) {
+      var vm = this
+      let dataPost = {
+        dossierId: data.dossierId,
+        actionCode: 20000
+      }
+      vm.$store.dispatch('postAction', dataPost).then(function (result) {
+        vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
+      }).catch(function (xhr) {
+        vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+      })
+    },
     moveProcess () {
       var vm = this
+      var listPost = []
+      vm.selected.forEach(val => {
+        let data = {
+          dossierId: val.dossierId,
+          actionCode: 30000
+        }
+        listPost.push(vm.$store.dispatch('postAction', data))
+      })
+      Promise.all(listPost).then(function (ressult) {
+        vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
+      }).catch(function (xhr) {
+        vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+      })
       console.log(vm.selected)
     },
     moveRelease () {
       var vm = this
+      var listPost = []
+      vm.selected.forEach(val => {
+        let data = {
+          dossierId: val.dossierId,
+          actionCode: 20000
+        }
+        listPost.push(vm.$store.dispatch('postAction', data))
+      })
+      Promise.all(listPost).then(function (ressult) {
+        vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
+      }).catch(function (xhr) {
+        vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+      })
       console.log(vm.selected)
     },
     deleteDosier (dossierId, index) {

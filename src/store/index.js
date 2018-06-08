@@ -822,9 +822,9 @@ export const store = new Vuex.Store({
           }
         }
         var dataPostActionDossier = new URLSearchParams()
-        dataPostActionDossier.append('actionCode', '10000')
+        dataPostActionDossier.append('actionCode', data.actionCode)
         dataPostActionDossier.append('actionNote', '')
-        let url = state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/actions'
+        let url = state.api.dossierApi + '/' + data.dossierId + '/actions'
         axios.post(url, dataPostActionDossier, options).then(function (response) {
           resolve(response.data)
           commit('setLoading', false)
