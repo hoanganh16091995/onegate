@@ -121,7 +121,12 @@ export default {
   },
   methods: {
     deleteAttackFiles (item) {
-      this.$store.dispatch('deleteAttackFiles', item)
+      var vm = this
+      vm.$store.dispatch('deleteAttackFiles', item).then(function (result) {
+        vm.$store.dispatch('showMessageToastr', ['success', 'Delete thành công!'])
+      }).catch(function (xhr) {
+        vm.$store.dispatch('showMessageToastr', ['error', 'Delete không thành công!'])
+      })
     },
     pickFile (item) {
       document.getElementById('file' + item.partNo).click()
@@ -130,7 +135,10 @@ export default {
       var vm = this
       e.dataItem = data
       vm.$store.dispatch('uploadSingleFile', e).then(function (result) {
-        vm.$store.dispatch('loadDossierFiles', data)
+        vm.$store.dispatch('showMessageToastr', ['success', 'Upload thành công!'])
+        e.count ++
+      }).catch(function (xhr) {
+        vm.$store.dispatch('showMessageToastr', ['error', 'Upload không thành công!'])
       })
     },
     loadAlpcaForm (data) {
