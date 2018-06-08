@@ -859,8 +859,17 @@ export const store = new Vuex.Store({
           //   console.log(xhr)
           // })
           /* eslint-disable */
-          let formScript = eval('(' + item.formScript + ')')
-          let formData = eval('(' + item.formData + ')')
+          var formScript, formData
+          if(item.formScript) {
+            formScript = eval('(' + item.formScript + ')')
+          } else {
+            formScript = {}
+          }
+          if(item.formData) {
+            formData = eval('(' + item.formData + ')')
+          } else {
+            formData = {}
+          }
           /* eslint-disable */
           console.log(typeof (formScript))
           console.log(typeof (formData))

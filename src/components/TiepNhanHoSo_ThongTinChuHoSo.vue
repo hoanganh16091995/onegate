@@ -118,6 +118,8 @@
                     v-model="thongTinChuHoSo.ward"
                     autocomplete
                     @change="onChangeWard"
+                    :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
+                    required
                     ></v-select>
                   </v-flex>
                   <v-flex xs12 sm2>
@@ -281,6 +283,8 @@
                   item-value="itemCode"
                   v-model="thongTinNguoiNopHoSo.delegateWard"
                   autocomplete
+                  :rules="[v => !!v || 'Trường dữ liệu bắt buộc']"
+                  required
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
