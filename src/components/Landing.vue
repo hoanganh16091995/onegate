@@ -283,7 +283,7 @@ export default {
       var vm = this
       let dataPost = {
         dossierId: data.dossierId,
-        actionCode: 20000
+        actionCode: 10000
       }
       vm.$store.dispatch('postAction', dataPost).then(function (result) {
         vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
@@ -309,7 +309,7 @@ export default {
       vm.selected.forEach(val => {
         let data = {
           dossierId: val.dossierId,
-          actionCode: 20000
+          actionCode: 10000
         }
         listPost.push(vm.$store.dispatch('postAction', data))
       })
