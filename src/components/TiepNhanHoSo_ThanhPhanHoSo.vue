@@ -8,7 +8,7 @@
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
                 <div slot="header" @click="loadAlpcaForm(item)" class="pl-2 py-1">
-                  <div style="width: calc(100% - 350px );display: flex;align-items: center">
+                  <div style="width: calc(100% - 320px );display: flex;align-items: center">
                     <span class="text-bold mr-2">{{index + 1}}.</span>
                     <span>{{item.partName}} <span v-if="item.required" style="color: red"> (*)</span></span>
                   </div>
@@ -25,20 +25,20 @@
                 </v-card>
               </v-expansion-panel-content>
             </v-expansion-panel>
-            <div class="absolute__btn group__thanh_phan">
+            <div class="absolute__btn group__thanh_phan px-2 py-1">
               <content-placeholders class="mt-1" v-if="loading">
                 <content-placeholders-text :lines="1" />
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox">
                 <v-flex style="width: 200px;" class="layout wrap">
-                  <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])"></v-checkbox>
+                  <v-checkbox light color="secondary" class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])"></v-checkbox>
                   <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])">
                     <v-radio value="2"></v-radio>
                     <v-radio value="0"></v-radio>
                     <v-radio value="1"></v-radio>
                   </v-radio-group>
                 </v-flex>
-                <v-flex style="width: 150px;" class="text-right">
+                <v-flex style="width: 120px;" class="text-right">
                   <v-tooltip top>
                     <v-btn slot="activator" icon class="mx-0 my-0">
                       <v-badge>
@@ -54,10 +54,10 @@
                     <span>Tải file lên</span>
                   </v-tooltip>
                   <v-tooltip top>
-                    <v-btn slot="activator" fab dark small color="primary" @click="viewFile(item)" style="height:25px;width:25px">
+                    <v-btn slot="activator" class="mx-0" fab dark small color="primary" @click="viewFile(item)" style="height:25px;width:25px">
                       {{item.count}}
                     </v-btn>
-                    <span>View</span>
+                    <span>Xem</span>
                   </v-tooltip>
                   <v-tooltip top>
                     <v-btn slot="activator" @click="deleteAttackFiles(item)" icon class="mx-0 my-0">
