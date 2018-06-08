@@ -7,8 +7,11 @@
           <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
-                <div slot="header" @click="loadAlpcaForm(item)">
-                  {{ (index + 1) + ' . ' + item.partName }} <span v-if="item.required" style="color: red">(*)</span>
+                <div slot="header" @click="loadAlpcaForm(item)" class="pl-2 py-1">
+                  <div style="width: calc(100% - 350px );display: flex;align-items: center">
+                    <span class="text-bold mr-2">{{index + 1}}.</span>
+                    <span>{{item.partName}} <span v-if="item.required" style="color: red"> (*)</span></span>
+                  </div>
                 </div>
                 <v-card>
                   <v-card-text>
@@ -27,7 +30,7 @@
                 <content-placeholders-text :lines="1" />
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox">
-                <v-flex style="width: 300px;" class="layout wrap">
+                <v-flex style="width: 200px;" class="layout wrap">
                   <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])"></v-checkbox>
                   <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])">
                     <v-radio value="2"></v-radio>
@@ -36,22 +39,32 @@
                   </v-radio-group>
                 </v-flex>
                 <v-flex style="width: 150px;" class="text-right">
-                  <v-btn icon class="mt-0 ml-0 mr-2">
-                    <v-badge left>
-                      <span slot="badge" @click="viewFile(item)">{{item.count}}</span>
-                      <input
-                      type="file"
-                      style="display: none"
-                      :id="'file' + item.partNo"
-                      @change="onUploadSingleFile($event,item)"
-                      >
-                      <v-icon size="20" color="primary" @click="pickFile(item)">attach_file</v-icon>
-                    </v-badge>
-                  </v-btn>
-                  <v-btn flat class="mt-0 mx-0" @click="deleteAttackFiles(item)">
-                    <v-icon size="20">delete</v-icon>
-                    Xoá
-                  </v-btn>
+                  <v-tooltip top>
+                    <v-btn slot="activator" icon class="mx-0 my-0">
+                      <v-badge>
+                        <input
+                        type="file"
+                        style="display: none"
+                        :id="'file' + item.partNo"
+                        @change="onUploadSingleFile($event,item)"
+                        >
+                        <v-icon size="20" color="primary" @click="pickFile(item)">attach_file</v-icon>
+                      </v-badge>
+                    </v-btn>
+                    <span>Tải file lên</span>
+                  </v-tooltip>
+                  <v-tooltip top>
+                    <v-btn slot="activator" fab dark small color="primary" @click="viewFile(item)" style="height:25px;width:25px">
+                      {{item.count}}
+                    </v-btn>
+                    <span>View</span>
+                  </v-tooltip>
+                  <v-tooltip top>
+                    <v-btn slot="activator" @click="deleteAttackFiles(item)" icon class="mx-0 my-0">
+                      <v-icon size="18" class="mx-0" color="red darken-3">delete</v-icon>
+                    </v-btn>
+                    <span>Xóa</span>
+                  </v-tooltip>
                 </v-flex>
               </v-layout>
             </div>

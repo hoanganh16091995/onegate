@@ -683,7 +683,6 @@ export const store = new Vuex.Store({
         dataPostdossier.append('govAgencyCode', data.govAgencyCode)
         dataPostdossier.append('dossierTemplateNo', data.templateNo)
         axios.post(state.api.postDossierApi, dataPostdossier, options).then(function (response) {
-          store.dispatch('showMessageToastr', ['success', 'Thêm mới thành công'])
           response.data.serviceConfig = state.serviceConfigObj
           commit('setLoading', false)
           commit('setDossier', response.data)
