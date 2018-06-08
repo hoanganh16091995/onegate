@@ -1,9 +1,9 @@
 <template>
   <div style="position: relative;">
     <v-form v-model="thongTinChungHoSo.valid" ref="formThongtinchung" lazy-validation>
-      <v-expansion-panel>
+      <v-expansion-panel class="expansion-pl">
         <v-expansion-panel-content hide-actions value="1">
-          <div slot="header">I. THÔNG TIN CHUNG</div>
+          <div slot="header"><div class="background-triangle-small"> I. </div>THÔNG TIN CHUNG</div>
           <v-card>
             <v-card-text>
               <v-layout wrap>
@@ -176,8 +176,14 @@
     methods: {
       // changeDate () {
       //   var vm = this
-      //   let durationDate = vm.getDuedate()
-      //   vm.$store.commit('setThongTinChungHoSoDurationDate', durationDate)
+      //   console.log(vm.thongTinChungHoSo.dueDate)
+      //   var date = new Date(vm.thongTinChungHoSo.dueDate)
+      //   var dueDatePut = `${date.getDate().toString().padStart(2, '0')}/${(date.getMonth() + 1).toString().padStart(2, '0')}/${date.getFullYear()} ${date.getHours().toString().padStart(2, '0')}:${date.getMinutes().toString().padStart(2, '0')}`
+      //   if (vm.isDetail) {
+      //     vm.$store.dispatch('putDuedateDossier', dueDatePut)
+      //   }
+      //   // let durationDate = vm.getDuedate()
+      //   // vm.$store.commit('setThongTinChungHoSoDurationDate', durationDate)
       // },
       getCurentDateTime (type) {
         let date = new Date()
