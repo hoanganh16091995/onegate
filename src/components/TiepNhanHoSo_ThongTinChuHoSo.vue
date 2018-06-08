@@ -1,9 +1,9 @@
 <template>
   <div>
     <div style="position: relative;">
-      <v-expansion-panel>
+      <v-expansion-panel class="expansion-pl">
         <v-expansion-panel-content hide-actions value="1">
-          <div slot="header">II. THÔNG TIN CHỦ HỒ SƠ</div>
+          <div slot="header"> <div class="background-triangle-small"> II. </div> THÔNG TIN CHỦ HỒ SƠ</div>
           <v-card>
             <v-card-text>
               <v-layout wrap>
@@ -167,9 +167,9 @@
         </v-radio-group>
       </div>
       <div style="position: relative;">
-       <v-expansion-panel>
+       <v-expansion-panel class="expansion-pl">
         <v-expansion-panel-content hide-actions value="1">
-          <div slot="header">III. THÔNG TIN NGƯỜI NỘP HỒ SƠ</div>
+          <div slot="header"> <div class="background-triangle-small"> III. </div> THÔNG TIN NGƯỜI NỘP HỒ SƠ</div>
           <v-card>
             <v-card-text>
               <v-layout wrap>
