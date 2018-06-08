@@ -378,30 +378,33 @@ export default {
         level: 0,
         parent: 0
       }
+      var thongTinChuHoSo = vm.$store.getters.thongTinChuHoSo
+      var thongTinNguoiNopHoSo = vm.$store.getters.thongTinNguoiNopHoSo
       vm.$store.getters.getDictItems(filter).then(function (result) {
         vm.citys = result.data
       })
-      if (vm.thongTinChuHoSo.city) {
-        filter.parent = vm.thongTinChuHoSo.city
+      if (thongTinChuHoSo.city) {
+        console.log('no citycode')
+        filter.parent = thongTinChuHoSo.city
         vm.$store.getters.getDictItems(filter).then(function (result) {
           vm.districts = result.data
         })
       }
-      if (vm.thongTinChuHoSo.district) {
-        filter.parent = vm.thongTinChuHoSo.district
+      if (thongTinChuHoSo.district) {
+        filter.parent = thongTinChuHoSo.district
         vm.$store.getters.getDictItems(filter).then(function (result) {
           vm.wards = result.data
         })
       }
-      if (!vm.thongTinNguoiNopHoSo.sameUser) {
+      if (!thongTinNguoiNopHoSo.sameUser) {
         if (vm.thongTinNguoiNopHoSo.delegateCity) {
-          filter.parent = vm.thongTinNguoiNopHoSo.delegateCity
+          filter.parent = thongTinNguoiNopHoSo.delegateCity
           vm.$store.getters.getDictItems(filter).then(function (result) {
             vm.delegateDistricts = result.data
           })
         }
-        if (vm.thongTinNguoiNopHoSo.delegateDistrict) {
-          filter.parent = vm.thongTinNguoiNopHoSo.delegateDistrict
+        if (thongTinNguoiNopHoSo.delegateDistrict) {
+          filter.parent = thongTinNguoiNopHoSo.delegateDistrict
           vm.$store.getters.getDictItems(filter).then(function (result) {
             vm.delegateWards = result.data
           })
