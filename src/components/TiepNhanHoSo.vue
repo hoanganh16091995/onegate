@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <form>
     <content-placeholders class="mt-3" v-if="loading">
       <content-placeholders-text :lines="1" />
     </content-placeholders>
@@ -32,7 +32,7 @@
         <v-icon>undo</v-icon>
       </v-btn>
     </div>
-  </div>
+  </form>
 </template>
 
 <script>
@@ -82,6 +82,23 @@ export default {
           }
         })
       }
+      let dataVNPOST = {
+        senderProvince: thongtinnguoinophoso.delegateCity,
+        senderAddress: thongtinnguoinophoso.delegateApplicantName,
+        senderName: thongtinnguoinophoso.senderName,
+        senderTel: thongtinnguoinophoso.delegateContactTelNo,
+        receiverName: thongtinnguoinophoso.delegateApplicantName,
+        receiverAddress: dichvuchuyenphatketqua.postalAddress,
+        receiverTel: dichvuchuyenphatketqua.postalTelNo,
+        receiverProvince: dichvuchuyenphatketqua.vnPostCode
+      }
+      vm.$store.dispatch('postVNPOST', dataVNPOST).then(function (result) {
+        // vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
+        console.log('VNPOST Sucess-------------')
+      }).catch(function (xhr) {
+        // vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])
+        console.log('VNPOST Error-------------')
+      })
       Promise.all(listAction).then(values => {
         console.log(values)
         let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
@@ -90,9 +107,12 @@ export default {
           let index = vm.$store.getters.index
           let id = result.dossierId
           vm.$store.dispatch('postAction').then(function (result) {
+            vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
             router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
           })
         })
+      }).catch(reject => {
+        vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])
       })
     }
   }

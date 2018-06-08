@@ -51,6 +51,7 @@ export const store = new Vuex.Store({
       durationDate: '',
       dossierId: ''
     },
+    vnpostCodeItems: [],
     serviceConfigItems: null,
     serviceOptionItems: [],
     citys: null,
@@ -217,7 +218,8 @@ export const store = new Vuex.Store({
       postalDistrictName: '',
       postalWardCode: '',
       postalWardName: '',
-      postalTelNo: ''
+      postalTelNo: '',
+      vnPostCode: ''
     },
     danhSachHoSo: null
   },
@@ -461,14 +463,15 @@ export const store = new Vuex.Store({
               itemTemplate.fileType = itemMarkFinded.fileType
               itemTemplate.fileCheck = itemMarkFinded.fileCheck
             } else {
-              itemTemplate.fileType = ''
+              itemTemplate.fileType = 0
               itemTemplate.fileCheck = false
             }
             return itemTemplate
           })
         } else {
           dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
-            itemTemplate.fileType = ''
+            itemTemplate.count = 0
+            itemTemplate.fileType = 0
             itemTemplate.fileCheck = false
             return itemTemplate
           })
@@ -482,28 +485,34 @@ export const store = new Vuex.Store({
       })
     },
     deleteAttackFiles ({ commit, state }, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
-        }
-      }
-      if (data.hasForm) {
-        state.dossierFiles.forEach(item => {
-          if (item.partNo === data.partNo) {
-            axios.put(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + data.referenceUid + '/resetformdata', {}, param).then(function (response) {
-              console.log('success')
-            }).catch(function (xhr) {
-              console.log(xhr)
-            })
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            groupId: state.api.groupId
           }
-        })
-      } else {
-        axios.delete(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + data.fileTemplateNo + '/all', param).then(function (response) {
-          console.log('success!')
-        }).catch(function (xhr) {
-          console.log(xhr)
-        })
-      }
+        }
+        if (data.hasForm) {
+          state.dossierFiles.forEach(item => {
+            if (item.partNo === data.partNo) {
+              axios.put(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + data.referenceUid + '/resetformdata', {}, param).then(function (response) {
+                console.log('success')
+                resolve(response)
+              }).catch(function (xhr) {
+                console.log(xhr)
+                reject(xhr)
+              })
+            }
+          })
+        } else {
+          axios.delete(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + data.fileTemplateNo + '/all', param).then(function (response) {
+            console.log('success!')
+            resolve(response)
+          }).catch(function (xhr) {
+            console.log(xhr)
+            reject(xhr)
+          })
+        }
+      })
     },
     deleteSingleFile ({ commit, state }, data) {
       let param = {
@@ -526,7 +535,7 @@ export const store = new Vuex.Store({
         formData.append('displayName', file.name)
         formData.append('fileType', file.type)
         formData.append('fileSize', file.size)
-        formData.append('isSign', 'true')
+        formData.append('isSync', 'false')
         formData.append('file', file)
         formData.append('dossierPartNo', data.partNo)
         formData.append('dossierTemplateNo', state.thongTinChungHoSo.dossierTemplateNo)
@@ -534,6 +543,7 @@ export const store = new Vuex.Store({
         formData.append('formData', '')
         axios.post(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files', formData, {
           headers: {
+            groupId: state.api.groupId,
             'Content-Type': 'multipart/form-data'
           }
         }).then(function (response) {
@@ -580,6 +590,7 @@ export const store = new Vuex.Store({
         if (response.data.data) {
           let dossierFiles = response.data.data
           state.dossierTemplates.forEach(itemTemplate => {
+            itemTemplate.count = 0
             dossierFiles.forEach(itemFile => {
               if (itemTemplate.partNo === itemFile.dossierPartNo) {
                 itemTemplate.count ++
@@ -600,7 +611,7 @@ export const store = new Vuex.Store({
       }
       state.dossierFiles.forEach(val => {
         if (val.dossierPartNo === data.partNo) {
-          axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + data.referenceUid, param).then(function (response) {
+          axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + val.referenceUid, param).then(function (response) {
             var url = window.URL.createObjectURL(response.data)
             window.open(url, '_blank')
           }).catch(function (xhr) {
@@ -743,7 +754,7 @@ export const store = new Vuex.Store({
           }
         }
         var dataPostActionDossier = new URLSearchParams()
-        dataPostActionDossier.append('actionCode', '1000')
+        dataPostActionDossier.append('actionCode', '10000')
         dataPostActionDossier.append('actionNote', '')
         let url = state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/actions'
         axios.post(url, dataPostActionDossier, options).then(function (response) {
@@ -803,7 +814,6 @@ export const store = new Vuex.Store({
       })
     },
     putAlpacaForm ({ commit, state }, data) {
-      commit('setLoading', true)
       return new Promise((resolve, reject) => {
         let options = {
           headers: {
@@ -822,10 +832,8 @@ export const store = new Vuex.Store({
               let url = state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/formdata'
               axios.put(url, dataPutAlpacaForm, options).then(function (response) {
                 resolve(response.data)
-                commit('setLoading', false)
               }).catch(function (xhr) {
                 reject(xhr)
-                commit('setLoading', false)
               })
             }
           })
@@ -833,11 +841,45 @@ export const store = new Vuex.Store({
           console.log(e)
         }
       })
+    },
+    postVNPOST ({commit, state}, data) {
+      return new Promise((resolve, reject) => {
+        commit('setLoading', true)
+        let options = {
+          headers: {
+            'groupId': state.api.groupId,
+            'Accept': 'application/json',
+            'Content-Type': 'application/x-www-form-urlencoded'
+          }
+        }
+        var dataVnPost = new URLSearchParams()
+        dataVnPost.append('customerCode', 'ccth')
+        dataVnPost.append('orderNumber', state.thongTinChungHoSo.dossierId)
+        dataVnPost.append('senderProvince', data.senderProvince)
+        dataVnPost.append('senderAddress', data.senderAddress)
+        dataVnPost.append('senderName', data.senderName)
+        dataVnPost.append('senderTel', data.senderTel)
+        dataVnPost.append('receiverName', data.receiverName)
+        dataVnPost.append('receiverAddress', data.receiverAddress)
+        dataVnPost.append('receiverTel', data.receiverTel)
+        dataVnPost.append('receiverProvince', data.receiverProvince)
+        let url = "/o/rest/v2/postal/vnpost"
+        axios.post(url, dataVnPost, options).then(function (response) {
+          resolve(response.data)
+          commit('setLoading', false)
+        }).catch(function (xhr) {
+          reject(xhr)
+          commit('setLoading', false)
+        })
+      })
     }
   },
   mutations: {
     setLoading (state, payload) {
       state.loading = payload
+    },
+    setVnpostCodeItems (state, payload) {
+      state.vnpostCodeItems = payload
     },
     setLoadingTable (state, payload) {
       state.loadingTable = payload
@@ -1078,6 +1120,9 @@ export const store = new Vuex.Store({
     },
     sameUser2 (state) {
       return state.sameUser2
+    },
+    getVnpostCodeItems (state) {
+      return state.vnpostCodeItems
     }
   }
 })

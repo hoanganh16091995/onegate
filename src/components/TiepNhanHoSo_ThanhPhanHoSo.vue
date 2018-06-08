@@ -26,8 +26,8 @@
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox">
                 <v-flex style="width: 300px;" class="layout wrap">
-                  <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-checkbox @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])">
-                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])">
+                  <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-checkbox>
+                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])" :disabled="!thanhPhanHoSo.dossierTemplates[index].fileCheck">
                     <v-radio value="2"></v-radio>
                     <v-radio value="0"></v-radio>
                     <v-radio value="1"></v-radio>
@@ -106,7 +106,12 @@ export default {
   },
   methods: {
     deleteAttackFiles (item) {
-      this.$store.dispatch('deleteAttackFiles', item)
+      var vm = this
+      vm.$store.dispatch('deleteAttackFiles', item).then(function (result) {
+        vm.$store.dispatch('showMessageToastr', ['success', 'Delete thành công!'])
+      }).catch(function (xhr) {
+        vm.$store.dispatch('showMessageToastr', ['error', 'Delete không thành công!'])
+      })
     },
     pickFile (item) {
       document.getElementById('file' + item.partNo).click()
@@ -115,7 +120,10 @@ export default {
       var vm = this
       e.dataItem = data
       vm.$store.dispatch('uploadSingleFile', e).then(function (result) {
-        vm.$store.dispatch('loadDossierFiles', data)
+        vm.$store.dispatch('showMessageToastr', ['success', 'Upload thành công!'])
+        e.count ++
+      }).catch(function (xhr) {
+        vm.$store.dispatch('showMessageToastr', ['error', 'Upload không thành công!'])
       })
     },
     loadAlpcaForm (data) {

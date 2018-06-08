@@ -366,6 +366,32 @@ export default {
       vm.$store.getters.getDictItems(filter).then(function (result) {
         vm.citys = result.data
       })
+      if (vm.thongTinChuHoSo.city) {
+        filter.parent = vm.thongTinChuHoSo.city
+        vm.$store.getters.getDictItems(filter).then(function (result) {
+          vm.districts = result.data
+        })
+      }
+      if (vm.thongTinChuHoSo.district) {
+        filter.parent = vm.thongTinChuHoSo.district
+        vm.$store.getters.getDictItems(filter).then(function (result) {
+          vm.wards = result.data
+        })
+      }
+      if (!vm.thongTinNguoiNopHoSo.sameUser) {
+        if (vm.thongTinNguoiNopHoSo.delegateCity) {
+          filter.parent = vm.thongTinNguoiNopHoSo.delegateCity
+          vm.$store.getters.getDictItems(filter).then(function (result) {
+            vm.delegateDistricts = result.data
+          })
+        }
+        if (vm.thongTinNguoiNopHoSo.delegateDistrict) {
+          filter.parent = vm.thongTinNguoiNopHoSo.delegateDistrict
+          vm.$store.getters.getDictItems(filter).then(function (result) {
+            vm.delegateWards = result.data
+          })
+        }
+      }
     })
   },
   watch: {
