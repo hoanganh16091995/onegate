@@ -1,8 +1,8 @@
 <template>
   <div style="position: relative;">
-    <v-expansion-panel>
+    <v-expansion-panel class="expansion-pl">
       <v-expansion-panel-content hide-actions value="1">
-        <div slot="header">IV. THÀNH PHẦN HỒ SƠ &nbsp;&nbsp;&nbsp;&nbsp; <i><span style="color: red">(*)</span> Những thành phần bắt buộc</i></div>
+        <div slot="header"><div class="background-triangle-small"> IV. </div>THÀNH PHẦN HỒ SƠ &nbsp;&nbsp;&nbsp;&nbsp; <i><span style="color: red">(*)</span> Những thành phần bắt buộc</i></div>
         <v-card v-if="dossierTemplates.length !== 0">
           <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">

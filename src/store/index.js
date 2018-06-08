@@ -17,7 +17,7 @@ export const store = new Vuex.Store({
       serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
       postDossierApi: 'http://127.0.0.1:8081/api/onegate',
       dossierApi: 'http://127.0.0.1:8081/api/dossiers',
-      dossierTemplatesApi: 'http://hanoi.fds.vn:2281/api/dossiertemplates',
+      dossierTemplatesApi: 'http://127.0.0.1:8081/api/dossiertemplates',
       applicantApi: '/o/rest/v2/applicant',
       govAgency: 'abc',
       user: {},
@@ -222,6 +222,62 @@ export const store = new Vuex.Store({
     danhSachHoSo: null
   },
   actions: {
+    showMessageToastr ({ commit, state }, data) {
+      toastr.options = {
+        'closeButton': true,
+        'debug': false,
+        'progressBar': true,
+        'positionClass': 'toast-top-right',
+        'onclick': null,
+        'showDuration': '400',
+        'hideDuration': '1000',
+        'timeOut': '3000',
+        'extendedTimeOut': '1000',
+        'showEasing': 'swing',
+        'hideEasing': 'linear',
+        'showMethod': 'fadeIn',
+        'hideMethod': 'fadeOut'
+      }
+      toastr[data[0]](data[1])
+    },
+    showMessageByAPICode ({ commit, state }, code) {
+      var message, status
+      switch (code) {
+        case 200:
+          message = 'Yêu cầu của bạn được xử lý thành công'
+          status = 'success'
+          break
+        case 401:
+          message = 'Yêu cầu của bạn xử lý thất bại, chưa đăng nhập vào hệ thống'
+          status = 'error'
+          break
+        case 403:
+          message = 'Yêu cầu của bạn xử lý thất bại, không có quyền thay đổi dữ liệu'
+          status = 'error'
+          break
+        case 404:
+          message = 'Yêu cầu của bạn xử lý thất bại, không tìm thấy tài nguyên'
+          status = 'error'
+          break
+        case 405:
+          message = 'Yêu cầu không được phép xử lý'
+          status = 'error'
+          break
+        case 409:
+          message = 'Yêu cầu của bạn xử lý thất bại, xung đột dữ liệu'
+          status = 'error'
+          break
+        case 500:
+          message = 'Yêu cầu của bạn xử lý thất bại, lỗi hệ thống'
+          status = 'error'
+          break
+        default:
+          message = 'Lỗi kết nối'
+          status = 'error'
+          break
+      }
+      store.dispatch('showMessageToastr', [status, message])
+    },
     clearError ({ commit }) {
       commit('clearError')
     },
@@ -627,6 +683,7 @@ export const store = new Vuex.Store({
         dataPostdossier.append('govAgencyCode', data.govAgencyCode)
         dataPostdossier.append('dossierTemplateNo', data.templateNo)
         axios.post(state.api.postDossierApi, dataPostdossier, options).then(function (response) {
+          store.dispatch('showMessageToastr', ['success', 'Thêm mới thành công'])
           response.data.serviceConfig = state.serviceConfigObj
           commit('setLoading', false)
           commit('setDossier', response.data)
@@ -634,6 +691,7 @@ export const store = new Vuex.Store({
           commit('setThongTinChungHoSo', response.data)
           resolve(response.data)
         }).catch(function (xhr) {
+          store.dispatch('showMessageByAPICode', xhr.status)
           reject(xhr)
           commit('setLoading', false)
         })

@@ -1,9 +1,9 @@
 <template>
   <div style="position: relative;">
     <v-form v-model="thongTinChungHoSo.valid" ref="formThongtinchung" lazy-validation>
-      <v-expansion-panel>
+      <v-expansion-panel class="expansion-pl">
         <v-expansion-panel-content hide-actions value="1">
-          <div slot="header">I. THÔNG TIN CHUNG</div>
+          <div slot="header"><div class="background-triangle-small"> I. </div>THÔNG TIN CHUNG</div>
           <v-card>
             <v-card-text>
               <v-layout wrap>

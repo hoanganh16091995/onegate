@@ -1,8 +1,8 @@
 <template>
   <div style="position: relative;">
-    <v-expansion-panel>
+    <v-expansion-panel class="expansion-pl">
       <v-expansion-panel-content hide-actions value="1">
-        <div slot="header">VI. DỊCH VỤ CHUYỂN PHÁT KẾT QUẢ</div>
+        <div slot="header"><div class="background-triangle-small"> VI. </div>DỊCH VỤ CHUYỂN PHÁT KẾT QUẢ</div>
         <v-card>
           <v-card-text>
             

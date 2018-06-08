@@ -1,8 +1,8 @@
 <template>
   <div style="position: relative;">
-    <v-expansion-panel>
+    <v-expansion-panel class="expansion-pl">
       <v-expansion-panel-content hide-actions value="1">
-        <div slot="header">V. LỆ PHÍ</div>
+        <div slot="header"><div class="background-triangle-small"> V. </div>LỆ PHÍ</div>
         <v-card>
           <v-card-text>
             <v-layout wrap>
