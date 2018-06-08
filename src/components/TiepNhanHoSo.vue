@@ -83,7 +83,7 @@ export default {
         })
       }
       let dataVNPOST = {
-        senderProvince: thongtinnguoinophoso.delegateCity,
+        senderProvince: 10,
         senderAddress: thongtinnguoinophoso.delegateApplicantName,
         senderName: thongtinnguoinophoso.senderName,
         senderTel: thongtinnguoinophoso.delegateContactTelNo,

@@ -7,7 +7,7 @@
           <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
-                <div slot="header" @click="loadAlpcaForm(item)"> {{ (index + 1) + ' . ' + item.partName }} <span v-if="item.required" style="color: red">(*)</span></div>
+                <div slot="header" @click="loadAlpcaForm(item)"> {{ (index + 1) + ' . ' + item.partName }} <span v-if="item.required" style="color: red">(*)</span> <i v-if="item.hasForm">Form trực tuyến</i></div>
                 <v-card>
                   <v-card-text>
                     <v-layout wrap>
@@ -27,7 +27,7 @@
               <v-layout row wrap class="flex__checkbox">
                 <v-flex style="width: 300px;" class="layout wrap">
                   <v-checkbox class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-checkbox>
-                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox" @change="postDossierMark(thanhPhanHoSo.dossierTemplates[index])" :disabled="!thanhPhanHoSo.dossierTemplates[index].fileCheck">
+                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox" :disabled="!thanhPhanHoSo.dossierTemplates[index].fileCheck">
                     <v-radio value="2"></v-radio>
                     <v-radio value="0"></v-radio>
                     <v-radio value="1"></v-radio>
@@ -121,9 +121,10 @@ export default {
       e.dataItem = data
       vm.$store.dispatch('uploadSingleFile', e).then(function (result) {
         vm.$store.dispatch('showMessageToastr', ['success', 'Upload thành công!'])
-        e.count ++
+        vm.$store.dispatch('loadDossierFiles', data)
       }).catch(function (xhr) {
         vm.$store.dispatch('showMessageToastr', ['error', 'Upload không thành công!'])
+        vm.$store.dispatch('loadDossierFiles', data)
       })
     },
     loadAlpcaForm (data) {

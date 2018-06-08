@@ -275,14 +275,6 @@ export const store = new Vuex.Store({
       commit('setLoading', true)
 
       let data = [{
-        title: 'Thông báo cần xử lý',
-        id: 'receiving',
-        action: 'folder',
-        action_active: 'play_arrow',
-        active: false,
-        link: '/'
-      },
-      {
         title: 'Hồ sơ chờ chuyển xử lý',
         id: 'new',
         action: 'folder',
@@ -313,13 +305,6 @@ export const store = new Vuex.Store({
       {
         title: 'Hồ sơ đã trả kết quả',
         id: 'done',
-        action: 'folder',
-        action_active: 'play_arrow',
-        link: '/'
-      },
-      {
-        title: 'Yêu cầu của chủ hồ sơ',
-        id: 'correcting',
         action: 'folder',
         action_active: 'play_arrow',
         link: '/'
@@ -921,9 +906,9 @@ export const store = new Vuex.Store({
         applicantIdNo: payload.applicantIdNo,
         applicantName: payload.applicantName,
         address: payload.address,
-        city: payload.city,
-        district: payload.district,
-        ward: payload.ward,
+        city: payload.cityCode,
+        district: payload.districtCode,
+        ward: payload.wardCode,
         contactEmail: payload.contactEmail,
         contactTelNo: payload.contactTelNo,
         userType: userTypeCondition

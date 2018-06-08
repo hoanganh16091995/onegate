@@ -21,6 +21,7 @@
                   v-else
                   @change="onChangeApplicantIdNo"
                   v-model="thongTinChuHoSo.applicantIdNo"
+                  required
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -36,6 +37,7 @@
                   <v-text-field
                   v-else
                   v-model="thongTinChuHoSo.applicantName"
+                  required
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -72,6 +74,7 @@
                   item-value="itemCode"
                   v-model="thongTinChuHoSo.city"
                   @change="onChangeCity"
+                  required
                   autocomplete
                   ></v-select>
                 </v-flex>
@@ -92,6 +95,7 @@
                   item-value="itemCode"
                   v-model="thongTinChuHoSo.district"
                   @change="onChangeDistrict"
+                  required
                   autocomplete
                   ></v-select>
                 </v-flex>
@@ -113,6 +117,7 @@
                   v-model="thongTinChuHoSo.ward"
                   autocomplete
                   @change="onChangeWard"
+                  required
                   ></v-select>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -144,6 +149,7 @@
                   <v-text-field
                   v-else
                   v-model="thongTinChuHoSo.contactEmail"
+                  required
                   ></v-text-field>
                 </v-flex>
               </v-layout>
@@ -180,6 +186,7 @@
                   <v-text-field
                   v-else
                   v-model="thongTinNguoiNopHoSo.delegateApplicantIdNo"
+                  required
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -195,6 +202,7 @@
                   <v-text-field
                   v-else
                   v-model="thongTinNguoiNopHoSo.delegateApplicantName"
+                  required
                   ></v-text-field>
                 </v-flex>
                 <v-flex xs12 sm2>
@@ -231,6 +239,7 @@
                   item-value="itemCode"
                   @change="onChangeDelegateCity"
                   v-model="thongTinNguoiNopHoSo.delegateCity"
+                  required
                   autocomplete
                   ></v-select>
                 </v-flex>
@@ -251,6 +260,7 @@
                   item-value="itemCode"
                   @change="onChangeDelegateDistrict"
                   v-model="thongTinNguoiNopHoSo.delegateDistrict"
+                  required
                   autocomplete
                   ></v-select>
                 </v-flex>
@@ -270,6 +280,7 @@
                   item-text="itemName"
                   item-value="itemCode"
                   v-model="thongTinNguoiNopHoSo.delegateWard"
+                  required
                   autocomplete
                   ></v-select>
                 </v-flex>
@@ -302,6 +313,7 @@
                   <v-text-field
                   v-else
                   v-model="thongTinNguoiNopHoSo.delegateContactEmail"
+                  required
                   ></v-text-field>
                 </v-flex>
               </v-layout>
