@@ -299,7 +299,8 @@ export const store = new Vuex.Store({
             status: filter.status.id,
             keyword: filter.keywords,
             start: filter.start,
-            end: filter.end
+            end: filter.end,
+            online: false
           }
         }
         axios.get(state.api.dossierApi, param).then(function (response) {
@@ -321,9 +322,11 @@ export const store = new Vuex.Store({
           }
         }
         axios.delete(state.api.dossierApi + '/' + arg, param).then(function (response) {
+          store.dispatch('showMessageToastr', ['success', 'Xóa hồ sơ thành công'])
           resolve(response)
-        }, error => {
-          reject(error)
+        }).catch(function (xhr) {
+          reject(xhr)
+          store.dispatch('showMessageByAPICode', xhr.status)
         })
       })
     },
@@ -856,8 +859,17 @@ export const store = new Vuex.Store({
           //   console.log(xhr)
           // })
           /* eslint-disable */
-          let formScript = eval('(' + item.formScript + ')')
-          let formData = eval('(' + item.formData + ')')
+          var formScript, formData
+          if(item.formScript) {
+            formScript = eval('(' + item.formScript + ')')
+          } else {
+            formScript = {}
+          }
+          if(item.formData) {
+            formData = eval('(' + item.formData + ')')
+          } else {
+            formData = {}
+          }
           /* eslint-disable */
           console.log(typeof (formScript))
           console.log(typeof (formData))
