@@ -24,7 +24,7 @@
             <v-icon size="16">send</v-icon>
             Trả kết quả
           </v-btn>
-          <v-btn flat class="my-0 mx-0" @click="deleteDosier" v-if="showMultiDelete(trangThaiHoSoList[index].id)">
+          <v-btn flat class="my-0 mx-0" @click="moveDelete" v-if="showMultiDelete(trangThaiHoSoList[index].id)">
             <v-icon size="16">delete</v-icon>
             Xóa
           </v-btn>
@@ -123,7 +123,7 @@
             <v-icon size="16">send</v-icon>
             Trả kết quả
           </v-btn>
-          <v-btn outline color="indigo" class="my-0 mx-0 mr-2" @click="deleteDosier" v-if="showMultiDelete(trangThaiHoSoList[index].id)">
+          <v-btn outline color="indigo" class="my-0 mx-0 mr-2" @click="moveDelete" v-if="showMultiDelete(trangThaiHoSoList[index].id)">
             <v-icon size="16">delete</v-icon>
             Xóa
           </v-btn>
@@ -341,6 +341,19 @@ export default {
           vm.danhSachHoSoTables.splice(index, 1)
         })
       }
+      console.log(vm.selected)
+    },
+    moveDelete () {
+      var vm = this
+      var listDelete = []
+      vm.selected.forEach(val => {
+        listDelete.push(vm.$store.dispatch('deleteDossier', val.dossierId))
+      })
+      Promise.all(listDelete).then(function (ressult) {
+        vm.$store.dispatch('showMessageToastr', ['success', 'Xóa thành công'])
+      }).catch(function (xhr) {
+        vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+      })
       console.log(vm.selected)
     }
   }

@@ -481,7 +481,11 @@ export const store = new Vuex.Store({
         let dossierMarkItems = resDossierMarks.data.data
         if (dossierMarkItems) {
           dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
-            itemTemplate.count = 0
+            if (itemTemplate.hasForm) {
+              itemTemplate.count = 1
+            } else {
+              itemTemplate.count = 0
+            }
             let itemMarkFinded = dossierMarkItems.find(itemMark => {
               return itemMark && itemMark.partNo === itemTemplate.partNo
             })
@@ -496,7 +500,11 @@ export const store = new Vuex.Store({
           })
         } else {
           dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
-            itemTemplate.count = 0
+            if (itemTemplate.hasForm) {
+              itemTemplate.count = 1
+            } else {
+              itemTemplate.count = 0
+            }
             itemTemplate.fileType = 0
             itemTemplate.fileCheck = false
             return itemTemplate
