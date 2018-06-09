@@ -69,7 +69,11 @@
           <td class="text-xs-center stt_column">{{ props.index + 1 }}</td>
           <td class="text-xs-left">{{ props.item.dossierIdCTN }}</td>
           <td class="text-xs-left">{{ props.item.applicantName }}</td>
-          <td class="text-xs-left">{{ props.item.serviceName }}</td>
+          <td class="text-xs-left">
+            <a title="Chi tiết hồ sơ" :href="'/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/'+index+'/tiep-nhan-ho-so/'+props.item.dossierId">
+              <span>{{ props.item.serviceName }}</span>
+            </a>
+          </td>
           <td class="text-xs-left">{{ props.item.address}}</td>
           <td class="text-xs-center">{{ props.item.dueDate }}</td>
           <td class="text-xs-left">{{ props.item.durationText }}</td>
@@ -279,7 +283,7 @@ export default {
       var vm = this
       let dataPost = {
         dossierId: data.dossierId,
-        actionCode: 20000
+        actionCode: 10000
       }
       vm.$store.dispatch('postAction', dataPost).then(function (result) {
         vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
@@ -305,7 +309,7 @@ export default {
       vm.selected.forEach(val => {
         let data = {
           dossierId: val.dossierId,
-          actionCode: 20000
+          actionCode: 10000
         }
         listPost.push(vm.$store.dispatch('postAction', data))
       })

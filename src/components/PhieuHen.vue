@@ -130,7 +130,7 @@ export default {
       var vm = this
       let promise = vm.$store.dispatch('submitDossier')
       promise.then(function (result) {
-
+        vm.$store.dispatch('showMessageToastr', ['success', 'Gửi hồ sơ thành công'])
       })
     },
     hoanThanhVaThemMoi () {
