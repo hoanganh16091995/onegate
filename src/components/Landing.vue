@@ -146,6 +146,7 @@
 </template>
 
 <script>
+import * as utils from '../store/onegate_utils'
 export default {
   props: ['index'],
   data: () => ({
@@ -299,10 +300,10 @@ export default {
       }
       vm.$root.$confirm.open('Thông báo', 'Bạn chắc chắn muốn thực hiện thao tác này?', { color: 'blue darken-4' }).then((confirm) => {
         vm.$store.dispatch('postAction', dataPost).then(function (result) {
-          vm.$store.dispatch('showMessageToastr', ['success', 'Xử lý thành công'])
+          utils.showMessageToastr('success', 'Xử lý thành công')
           vm.loadDataTable()
         }).catch(function (xhr) {
-          vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+          utils.showMessageToastr('error', 'Xử lý thất bại')
         })
       }).catch(function (xhr) {
         console.log('kkk')
@@ -316,10 +317,10 @@ export default {
       }
       vm.$root.$confirm.open('Thông báo', 'Bạn chắc chắn muốn thực hiện thao tác này?', { color: 'blue darken-4' }).then((confirm) => {
         vm.$store.dispatch('postAction', dataPost).then(function (result) {
-          vm.$store.dispatch('showMessageToastr', ['success', 'Xử lý thành công'])
+          utils.showMessageToastr('success', 'Xử lý thành công')
           vm.loadDataTable()
         }).catch(function (xhr) {
-          vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+          utils.showMessageToastr('error', 'Xử lý thất bại')
         })
       }).catch(function (xhr) {
         console.log('kkk')
@@ -347,14 +348,14 @@ export default {
           listPost.push(vm.$store.dispatch('postAction', data))
         })
         if (listPost.length === 0) {
-          vm.$store.dispatch('showMessageToastr', ['error', 'Bạn chưa chọn hồ sơ nào!'])
+          utils.showMessageToastr('error', 'Bạn chưa chọn hồ sơ nào')
           return
         }
         Promise.all(listPost).then(function (ressult) {
-          vm.$store.dispatch('showMessageToastr', ['success', 'Xử lý thành công'])
+          utils.showMessageToastr('success', 'Xử lý thành công')
           vm.loadDataTable()
         }).catch(function (xhr) {
-          vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+          utils.showMessageToastr('error', 'Xử lý thất bại')
         })
       }).catch(function (xhr) {
         console.log('kkk')
@@ -383,14 +384,14 @@ export default {
           listPost.push(vm.$store.dispatch('postAction', data))
         })
         if (listPost.length === 0) {
-          vm.$store.dispatch('showMessageToastr', ['error', 'Bạn chưa chọn hồ sơ nào!'])
+          utils.showMessageToastr('error', 'Bạn chưa chọn hồ sơ nào')
           return
         }
         Promise.all(listPost).then(function (ressult) {
-          vm.$store.dispatch('showMessageToastr', ['success', 'Xử lý thành công'])
+          utils.showMessageToastr('success', 'Xử lý thành công')
           vm.loadDataTable()
         }).catch(function (xhr) {
-          vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+          utils.showMessageToastr('error', 'Xử lý thất bại')
         })
       }).catch(function (xhr) {
         console.log('kkk')
@@ -419,7 +420,7 @@ export default {
           listDelete.push(vm.$store.dispatch('deleteDossier', val.dossierId))
         })
         if (listDelete.length === 0) {
-          vm.$store.dispatch('showMessageToastr', ['error', 'Bạn chưa chọn hồ sơ nào!'])
+          utils.showMessageToastr('error', 'Bạn chưa chọn hồ sơ nào')
           return
         }
         Promise.all(listDelete).then(function (ressult) {
@@ -430,9 +431,9 @@ export default {
               }), 1)
             })
           }
-          vm.$store.dispatch('showMessageToastr', ['success', 'Xóa thành công'])
+          utils.showMessageToastr('success', 'Xử lý thành công')
         }).catch(function (xhr) {
-          vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+          utils.showMessageToastr('error', 'Xử lý thất bại')
         })
       }).catch(function (xhr) {
       })

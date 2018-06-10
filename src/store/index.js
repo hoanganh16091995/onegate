@@ -3,6 +3,7 @@ import Vuex from 'vuex'
 import $ from 'jquery'
 import toastr from 'toastr'
 import axios from 'axios'
+import * as utils from './onegate_utils'
 import support from './support.json'
 
 Vue.use(toastr)
@@ -32,7 +33,7 @@ export const store = new Vuex.Store({
     trangThaiHoSoList: [],
     index: 0,
     lePhi: {
-      fee: 0,
+      fee: '',
       feeNote: ''
     },
     dossier: {
@@ -225,62 +226,6 @@ export const store = new Vuex.Store({
     danhSachHoSo: null
   },
   actions: {
-    showMessageToastr ({ commit, state }, data) {
-      toastr.options = {
-        'closeButton': true,
-        'debug': false,
-        'progressBar': true,
-        'positionClass': 'toast-top-right',
-        'onclick': null,
-        'showDuration': '400',
-        'hideDuration': '1000',
-        'timeOut': '3000',
-        'extendedTimeOut': '1000',
-        'showEasing': 'swing',
-        'hideEasing': 'linear',
-        'showMethod': 'fadeIn',
-        'hideMethod': 'fadeOut'
-      }
-      toastr[data[0]](data[1])
-    },
-    showMessageByAPICode ({ commit, state }, code) {
-      var message, status
-      switch (code) {
-        case 200:
-          message = 'Yêu cầu của bạn được xử lý thành công'
-          status = 'success'
-          break
-        case 401:
-          message = 'Yêu cầu của bạn xử lý thất bại, chưa đăng nhập vào hệ thống'
-          status = 'error'
-          break
-        case 403:
-          message = 'Yêu cầu của bạn xử lý thất bại, không có quyền thay đổi dữ liệu'
-          status = 'error'
-          break
-        case 404:
-          message = 'Yêu cầu của bạn xử lý thất bại, không tìm thấy tài nguyên'
-          status = 'error'
-          break
-        case 405:
-          message = 'Yêu cầu không được phép xử lý'
-          status = 'error'
-          break
-        case 409:
-          message = 'Yêu cầu của bạn xử lý thất bại, xung đột dữ liệu'
-          status = 'error'
-          break
-        case 500:
-          message = 'Yêu cầu của bạn xử lý thất bại, lỗi hệ thống'
-          status = 'error'
-          break
-        default:
-          message = 'Lỗi kết nối'
-          status = 'error'
-          break
-      }
-      store.dispatch('showMessageToastr', [status, message])
-    },
     clearError ({ commit }) {
       commit('clearError')
     },
@@ -324,8 +269,10 @@ export const store = new Vuex.Store({
         }
         axios.delete(state.api.dossierApi + '/' + arg, param).then(function (response) {
           resolve(response)
-        }).catch(function (xhr) {
-          reject(xhr)
+          utils.showMessageToastr('success', 'Xóa hồ sơ thành công')
+        }).catch(function (error) {
+          reject(error)
+          utils.showMessageByAPICode(error.response.status)
         })
       })
     },
@@ -432,7 +379,7 @@ export const store = new Vuex.Store({
     resetThongTinChuHoSo ({ commit }) {
       let data = {
         userType: true,
-        cityCode: '',
+        cityCode: 25,
         districtCode: '',
         wardCode: '',
         applicantNote: '',
@@ -448,7 +395,7 @@ export const store = new Vuex.Store({
       let data = {
         sameUser: '',
         delegateName: '',
-        delegateCityCode: '',
+        delegateCityCode: 25,
         delegateAddress: '',
         delegateDistrictCode: '',
         delegateWardCode: '',
@@ -678,9 +625,9 @@ export const store = new Vuex.Store({
           commit('setThongTinChuHoSo', response.data)
           commit('setThongTinChungHoSo', response.data)
           resolve(response.data)
-        }).catch(function (xhr) {
-          store.dispatch('showMessageByAPICode', xhr.status)
-          reject(xhr)
+        }).catch(function (error) {
+          utils.showMessageByAPICode(error.response.status)
+          reject(error)
           commit('setLoading', false)
         })
       })
@@ -866,19 +813,17 @@ export const store = new Vuex.Store({
           // })).catch(function (xhr) {
           //   console.log(xhr)
           // })
-          /* eslint-disable */
           var formScript, formData
-          if(item.formScript) {
+          if (item.formScript) {
             formScript = eval('(' + item.formScript + ')')
           } else {
             formScript = {}
           }
-          if(item.formData) {
+          if (item.formData) {
             formData = eval('(' + item.formData + ')')
           } else {
             formData = {}
           }
-          /* eslint-disable */
           console.log(typeof (formScript))
           console.log(typeof (formData))
           formScript.data = formData
@@ -937,7 +882,7 @@ export const store = new Vuex.Store({
         dataVnPost.append('receiverAddress', data.receiverAddress)
         dataVnPost.append('receiverTel', data.receiverTel)
         dataVnPost.append('receiverProvince', data.receiverProvince)
-        let url = "/o/rest/v2/postal/vnpost"
+        let url = '/o/rest/v2/postal/vnpost'
         axios.post(url, dataVnPost, options).then(function (response) {
           resolve(response.data)
           commit('setLoading', false)
