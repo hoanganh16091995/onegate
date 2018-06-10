@@ -19,6 +19,7 @@
                 <v-text-field
                   v-else
                   v-model="lePhi.fee"
+                  v-on:keyup.native="clearTotalMoney"
                 ></v-text-field>
                 <!-- <v-text-field
                   v-else
@@ -54,7 +55,6 @@
 </template>
 
 <script>
-import * as utils from '../store/onegate_utils'
 export default {
   data: () => ({
     rules: {

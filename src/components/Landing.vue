@@ -108,12 +108,12 @@
               </v-btn>
               <span>Trả kết quả</span>
             </v-tooltip>
-            <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('view')">
+            <!-- <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('view')">
               <v-btn slot="activator" icon class="mx-0 my-0">
                 <v-icon size="16" class="mx-0">remove_red_eye</v-icon>
               </v-btn>
               <span>Xem danh sách giấy tờ cần trả</span>
-            </v-tooltip>
+            </v-tooltip> -->
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('delete')">
               <v-btn slot="activator" icon class="mx-0 my-0" @click="deleteDosier(props.item.dossierId, props.index)">
                 <v-icon size="16" class="mx-0" color="red darken-3">delete</v-icon>
@@ -247,7 +247,7 @@ export default {
     checkAction (status) {
       if (status === 'new') {
         return 'print,send,delete'
-      } else if (status === 'release') {
+      } else if (status === 'releasing') {
         return 'result,ticket'
       } else if (status === 'done') {
         return 'view,ticket'

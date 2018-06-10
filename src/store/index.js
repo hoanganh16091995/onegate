@@ -50,7 +50,8 @@ export const store = new Vuex.Store({
       receiveDate: new Date(),
       dueDate: (new Date()).toString(),
       durationDate: '',
-      dossierId: ''
+      dossierId: '',
+      dossierStatus: ''
     },
     vnpostCodeItems: [],
     serviceConfigItems: null,
@@ -293,7 +294,7 @@ export const store = new Vuex.Store({
       },
       {
         title: 'Hồ sơ chờ trả kết quả',
-        id: 'release',
+        id: 'releasing',
         action: 'folder',
         action_active: 'play_arrow',
         link: '/'
@@ -669,7 +670,7 @@ export const store = new Vuex.Store({
         dataPutdossier.append('delegateWardCode', data.delegateWardCode)
         dataPutdossier.append('applicantNote', data.applicantNote)
         if (data.viaPostal) {
-          dataPutdossier.append('viaPostal', data.viaPostal)
+          dataPutdossier.append('viaPostal', data.viaPostal ? 1 : 0)
           dataPutdossier.append('postalServiceCode', data.postalServiceCode)
           dataPutdossier.append('postalServiceName', data.postalServiceName)
           dataPutdossier.append('postalAddress', data.postalAddress)
@@ -813,6 +814,7 @@ export const store = new Vuex.Store({
           // })).catch(function (xhr) {
           //   console.log(xhr)
           // })
+          /* eslint-disable */
           var formScript, formData
           if (item.formScript) {
             formScript = eval('(' + item.formScript + ')')
@@ -824,6 +826,7 @@ export const store = new Vuex.Store({
           } else {
             formData = {}
           }
+          /* eslint-disable */
           console.log(typeof (formScript))
           console.log(typeof (formData))
           formScript.data = formData
@@ -851,12 +854,13 @@ export const store = new Vuex.Store({
               axios.put(url, dataPutAlpacaForm, options).then(function (response) {
                 resolve(response.data)
               }).catch(function (xhr) {
-                reject(xhr)
+                reject(data)
               })
             }
           })
         } catch (e) {
           console.log(e)
+          reject(data)
         }
       })
     },
@@ -984,6 +988,7 @@ export const store = new Vuex.Store({
         dueDate: (new Date(payload.dueDate)).toString(),
         durationDate: '',
         dossierId: payload.dossierId,
+        dossierStatus: payload.dossierStatus,
         dossierNo: payload.dossierNo,
         govAgencyName: payload.govAgencyName
       }
