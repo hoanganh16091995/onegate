@@ -396,6 +396,12 @@ export default {
           vm.wards = result.data
         })
       }
+      if (vm.thongTinNguoiNopHoSo.delegateCity) {
+        filter.parent = thongTinNguoiNopHoSo.delegateCity
+        vm.$store.getters.getDictItems(filter).then(function (result) {
+          vm.delegateDistricts = result.data
+        })
+      }
       if (!thongTinNguoiNopHoSo.sameUser) {
         if (vm.thongTinNguoiNopHoSo.delegateCity) {
           filter.parent = thongTinNguoiNopHoSo.delegateCity
