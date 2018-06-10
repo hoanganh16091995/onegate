@@ -62,3 +62,10 @@ export function currency (value) {
   }
   return ''
 }
+// export function currency (value) {
+//   if (value) {
+//     let moneyCur = (value / 1).toFixed(0).replace('.', ',')
+//     return moneyCur.toString().replace(/\B(?=(\d{3})+(?!\d))/g, '.')
+//   }
+//   return ''
+// }

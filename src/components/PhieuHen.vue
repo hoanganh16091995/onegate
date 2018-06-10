@@ -84,7 +84,7 @@
         <v-btn outline color="primary" v-on:click.native="hoanThanh">
           Hoàn thành
         </v-btn>
-        <v-btn outline color="primary" v-on:click.native="printContent">
+        <v-btn outline color="primary" v-on:click.native="printContent()">
           In hồ sơ
         </v-btn>
         <v-btn outline color="primary" v-on:click.native="quayLai(index)" active-class="temp_active">
@@ -98,6 +98,7 @@
 
 <script>
 import router from '@/router'
+import printJS from 'print-js/dist/print.min.js'
 import * as utils from '../store/onegate_utils'
 import ThongTinChung from './TiepNhanHoSo_ThongTinChung.vue'
 import ThongTinChuHoSo from './TiepNhanHoSo_ThongTinChuHoSo.vue'
@@ -168,10 +169,15 @@ export default {
     },
     printContent () {
       var printContents = document.getElementById('printContent').innerHTML
-      var originalContents = document.body.innerHTML
-      document.body.innerHTML = printContents
-      window.print()
-      document.body.innerHTML = originalContents
+      // var originalContents = document.body.innerHTML
+      // document.body.innerHTML = printContents
+      // window.print()
+      // document.body.innerHTML = originalContents
+      printJS({
+        printable: 'printContent',
+        type: 'html',
+        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.c950577a0829a5013671843dacdbb9c4.css'
+      })
     },
     receiveDateText () {
       var vm = this
