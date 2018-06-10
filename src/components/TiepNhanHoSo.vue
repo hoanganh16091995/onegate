@@ -23,8 +23,12 @@
     <le-phi ref="lephi"></le-phi>
     <dich-vu-chuyen-phat-ket-qua ref="dichvuchuyenphatketqua"></dich-vu-chuyen-phat-ket-qua>
     <div class="text-center mt-2">
-      <v-btn color="primary" v-on:click.native="tiepNhanHoSo">
+      <v-btn color="primary" v-on:click.native="tiepNhanHoSo" v-if="thongTinChungHoSo.dossierStatus !== 'waiting'">
         Tiếp nhận &nbsp;
+        <v-icon>save</v-icon>
+      </v-btn>
+      <v-btn color="primary" v-on:click.native="boSungHoSo" v-if="thongTinChungHoSo.dossierStatus === 'waiting'">
+        Bổ sung &nbsp;
         <v-icon>save</v-icon>
       </v-btn>
       <v-btn color="primary" :to="'/danh-sach-ho-so/' + index">
@@ -58,6 +62,9 @@ export default {
   computed: {
     loading () {
       return this.$store.getters.loading
+    },
+    thongTinChungHoSo () {
+      return this.$store.getters.thongTinChungHoSo
     }
   },
   created () {
@@ -128,6 +135,61 @@ export default {
             router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
           })
         }).catch(reject => {
+          console.log('reject=============', reject)
+          vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])
+        })
+      }
+    },
+    boSungHoSo () {
+      var vm = this
+      let thongtinchung = this.$store.getters.thongTinChungHoSo
+      let thongtinchuhoso = this.$store.getters.thongTinChuHoSo
+      let thongtinnguoinophoso = this.$store.getters.thongTinNguoiNopHoSo
+      let thanhphanhoso = this.$store.getters.thanhPhanHoSo
+      let lephi = this.$store.getters.thongTinChungHoSo
+      let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
+      console.log('thongtinchung:', thongtinchung)
+      console.log('thongtinchuhoso:', thongtinchuhoso)
+      console.log('thongtinnguoinophoso:', thongtinnguoinophoso)
+      console.log('thanhphanhoso:', thanhphanhoso)
+      console.log('lephi:', lephi)
+      console.log('dichvuchuyenphatketqua:', dichvuchuyenphatketqua)
+      // Save dossier mark and save Alpaca
+      console.log('validate TNHS formThongtinchuhoso.validate()', vm.$refs.formTiepNhanHoSo.validate())
+      if (vm.$refs.formTiepNhanHoSo.validate()) {
+        let dossierTemplates = thanhphanhoso.dossierTemplates
+        console.log('dossierTemplates ------', dossierTemplates)
+        let listAction = []
+        let listDossierMark = []
+        if (dossierTemplates) {
+          dossierTemplates.forEach(function (val, index) {
+            if (val.hasForm) {
+              listAction.push(vm.$store.dispatch('putAlpacaForm', val))
+            }
+            listDossierMark.push(vm.$store.dispatch('postDossierMark', val))
+          })
+        }
+        Promise.all(listDossierMark).then(values => {
+          // vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
+        }).catch(function (xhr) {
+          // vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+        })
+        console.log('run tiep nhan')
+        Promise.all(listAction).then(values => {
+          console.log(values)
+          let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
+          console.log('data put dossier -->', tempData)
+          vm.$store.dispatch('putDossier', tempData).then(function (result) {
+            let dataPostAction = {
+              dossierId: vm.thongTinChungHoSo.dossierId,
+              actionCode: 20000
+            }
+            vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
+              vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
+            })
+          })
+        }).catch(reject => {
+          console.log('reject=============', reject)
           vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])
         })
       }

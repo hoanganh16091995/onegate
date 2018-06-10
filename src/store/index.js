@@ -49,7 +49,8 @@ export const store = new Vuex.Store({
       receiveDate: new Date(),
       dueDate: (new Date()).toString(),
       durationDate: '',
-      dossierId: ''
+      dossierId: '',
+      dossierStatus: ''
     },
     vnpostCodeItems: [],
     serviceConfigItems: null,
@@ -346,7 +347,7 @@ export const store = new Vuex.Store({
       },
       {
         title: 'Hồ sơ chờ trả kết quả',
-        id: 'release',
+        id: 'releasing',
         action: 'folder',
         action_active: 'play_arrow',
         link: '/'
@@ -905,12 +906,13 @@ export const store = new Vuex.Store({
               axios.put(url, dataPutAlpacaForm, options).then(function (response) {
                 resolve(response.data)
               }).catch(function (xhr) {
-                reject(xhr)
+                reject(data)
               })
             }
           })
         } catch (e) {
           console.log(e)
+          reject(data)
         }
       })
     },
@@ -1038,6 +1040,7 @@ export const store = new Vuex.Store({
         dueDate: (new Date(payload.dueDate)).toString(),
         durationDate: '',
         dossierId: payload.dossierId,
+        dossierStatus: payload.dossierStatus,
         dossierNo: payload.dossierNo
       }
       state.thongTinChungHoSo = thongTinChungHoSoPayLoad

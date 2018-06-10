@@ -18,8 +18,8 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
+                  mask="###.###.###.###.###.###.###.###"
                   v-model="lePhi.fee"
-                  :rules="[rules.number]"
                   v-on:keyup.native="clearTotalMoney"
                 ></v-text-field>
               </v-flex>

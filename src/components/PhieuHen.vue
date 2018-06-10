@@ -14,7 +14,7 @@
         </div>
       </div>
     </div>
-    <div style="background-color: white;">
+    <div style="background-color: white;" id="printContent">
         <div class="receipt-wrapper"><div class="row head">
         <div class="left">
           <p class="text-uppercase text-bold">Cục bản quyền tác gỉa</p>
@@ -80,6 +80,9 @@
       </v-btn>
       <v-btn outline color="primary" v-on:click.native="hoanThanh">
         Hoàn thành
+      </v-btn>
+      <v-btn outline color="primary" v-on:click.native="inPhieu">
+        In phiếu
       </v-btn>
       <v-btn outline color="primary" :to="'/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id" active-class="temp_active">
         Quay lại &nbsp;
@@ -151,6 +154,13 @@ export default {
     },
     hoanThanh () {
       router.push('/danh-sach-ho-so/0')
+    },
+    inPhieu () {
+      var printContents = document.getElementById('printContent').innerHTML
+      var originalContents = document.body.innerHTML
+      document.body.innerHTML = printContents
+      window.print()
+      document.body.innerHTML = originalContents
     }
   }
 }
