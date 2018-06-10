@@ -24,7 +24,7 @@
             <v-icon size="16">send</v-icon>
             Trả kết quả
           </v-btn>
-          <v-btn flat class="my-0 mx-0" @click="deleteDosier" v-if="showMultiDelete(trangThaiHoSoList[index].id)">
+          <v-btn flat class="my-0 mx-0" @click="moveDelete" v-if="showMultiDelete(trangThaiHoSoList[index].id)">
             <v-icon size="16">delete</v-icon>
             Xóa
           </v-btn>
@@ -66,26 +66,32 @@
               hide-details
             ></v-checkbox>
           </td>
-          <td class="text-xs-center stt_column">{{ props.index + 1 }}</td>
-          <td class="text-xs-left">{{ props.item.dossierIdCTN }}</td>
-          <td class="text-xs-left">{{ props.item.applicantName }}</td>
-          <td class="text-xs-left">
+          <td class="text-xs-center stt_column" style="width: 4%">{{ props.index + 1 }}</td>
+          <td class="text-xs-left" style="width: 8%">{{ props.item.dossierIdCTN }}</td>
+          <td class="text-xs-left" style="width: 15%">{{ props.item.applicantName }}</td>
+          <td class="text-xs-left" style="width: 15%">
             <a title="Chi tiết hồ sơ" :href="'/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/'+index+'/tiep-nhan-ho-so/'+props.item.dossierId">
               <span>{{ props.item.serviceName }}</span>
             </a>
           </td>
-          <td class="text-xs-left">{{ props.item.address}}</td>
-          <td class="text-xs-center">{{ props.item.dueDate }}</td>
-          <td class="text-xs-left">{{ props.item.durationText }}</td>
+          <td class="text-xs-left" style="width: 15%">{{ props.item.address}}</td>
+          <td class="text-xs-center" style="width: 14%">{{ props.item.dueDate }}</td>
+          <td class="text-xs-left" style="width: 11%">{{ props.item.durationText }}</td>
           <td class="text-xs-right px-0">
-            <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('print')">
-              <v-btn slot="activator" icon class="mx-0 my-0">
+            <v-tooltip top>
+              <v-btn slot="activator" icon class="mx-0 my-0" @click="toDetailDossier(index, props.item.dossierId)">
+                <v-icon size="16" class="mx-0">visibility</v-icon>
+              </v-btn>
+              <span>Xem hồ sơ</span>
+            </v-tooltip>
+            <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('send')">
+              <v-btn slot="activator" icon class="mx-0 my-0" :disabled="checkPrint(props.item)">
                 <v-icon size="16" class="mx-0">print</v-icon>
               </v-btn>
               <span>In phiếu hẹn</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('send')">
-              <v-btn slot="activator" icon class="mx-0 my-0" @click="chuyenXuLy(props.item)">
+              <v-btn slot="activator" icon class="mx-0 my-0" @click="chuyenXuLy(props.item)" :disabled="checkPrint(props.item)">
                 <v-icon size="16" class="mx-0">send</v-icon>
               </v-btn>
               <span>Chuyển hồ sơ vào xử lý</span>
@@ -127,7 +133,7 @@
             <v-icon size="16">send</v-icon>
             Trả kết quả
           </v-btn>
-          <v-btn outline color="indigo" class="my-0 mx-0 mr-2" @click="deleteDosier" v-if="showMultiDelete(trangThaiHoSoList[index].id)">
+          <v-btn outline color="indigo" class="my-0 mx-0 mr-2" @click="moveDelete" v-if="showMultiDelete(trangThaiHoSoList[index].id)">
             <v-icon size="16">delete</v-icon>
             Xóa
           </v-btn>
@@ -254,6 +260,12 @@ export default {
         return 'view,ticket'
       }
     },
+    checkPrint (item, status) {
+      if (!item.applicantName && !item.address) {
+        return true
+      }
+      return false
+    },
     showMultiDelete (status) {
       if (status === 'new') {
         return true
@@ -285,10 +297,15 @@ export default {
         dossierId: data.dossierId,
         actionCode: 10000
       }
-      vm.$store.dispatch('postAction', dataPost).then(function (result) {
-        vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
+      vm.$root.$confirm.open('Thông báo', 'Bạn chắc chắn muốn thực hiện thao tác này?', { color: 'blue darken-4' }).then((confirm) => {
+        vm.$store.dispatch('postAction', dataPost).then(function (result) {
+          vm.$store.dispatch('showMessageToastr', ['success', 'Xử lý thành công'])
+          vm.loadDataTable()
+        }).catch(function (xhr) {
+          vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+        })
       }).catch(function (xhr) {
-        vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+        console.log('kkk')
       })
     },
     traKetQua (data) {
@@ -297,55 +314,133 @@ export default {
         dossierId: data.dossierId,
         actionCode: 30000
       }
-      vm.$store.dispatch('postAction', dataPost).then(function (result) {
-        vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
+      vm.$root.$confirm.open('Thông báo', 'Bạn chắc chắn muốn thực hiện thao tác này?', { color: 'blue darken-4' }).then((confirm) => {
+        vm.$store.dispatch('postAction', dataPost).then(function (result) {
+          vm.$store.dispatch('showMessageToastr', ['success', 'Xử lý thành công'])
+          vm.loadDataTable()
+        }).catch(function (xhr) {
+          vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+        })
       }).catch(function (xhr) {
-        vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+        console.log('kkk')
       })
     },
     moveProcess () {
       var vm = this
-      var listPost = []
-      vm.selected.forEach(val => {
-        let data = {
-          dossierId: val.dossierId,
-          actionCode: 10000
+      vm.$root.$confirm.open('Thông báo', 'Bạn chắc chắn muốn thực hiện thao tác này?', { color: 'blue darken-4' }).then((confirm) => {
+        var listPost = []
+        for (var i = 0; i < vm.selected.length; i++) {
+          if (!vm.selected[i].applicantName && !vm.selected[i].address) {
+            vm.$root.$confirm.open('Thông báo', 'Bạn phải điền đầy đủ thông tin của hồ sơ trước khi thực hiện thao tác này?', { color: 'blue darken-4' }).then(function (ressult) {
+              return
+            }).catch(function (xhr) {
+              return
+            })
+            return
+          }
         }
-        listPost.push(vm.$store.dispatch('postAction', data))
-      })
-      Promise.all(listPost).then(function (ressult) {
-        vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
+        vm.selected.forEach(val => {
+          let data = {
+            dossierId: val.dossierId,
+            actionCode: 10000
+          }
+          listPost.push(vm.$store.dispatch('postAction', data))
+        })
+        if (listPost.length === 0) {
+          vm.$store.dispatch('showMessageToastr', ['error', 'Bạn chưa chọn hồ sơ nào!'])
+          return
+        }
+        Promise.all(listPost).then(function (ressult) {
+          vm.$store.dispatch('showMessageToastr', ['success', 'Xử lý thành công'])
+          vm.loadDataTable()
+        }).catch(function (xhr) {
+          vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+        })
       }).catch(function (xhr) {
-        vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+        console.log('kkk')
       })
       console.log(vm.selected)
     },
     moveRelease () {
       var vm = this
-      var listPost = []
-      vm.selected.forEach(val => {
-        let data = {
-          dossierId: val.dossierId,
-          actionCode: 30000
+      vm.$root.$confirm.open('Thông báo', 'Bạn chắc chắn muốn thực hiện thao tác này?', { color: 'blue darken-4' }).then((confirm) => {
+        var listPost = []
+        for (var i = 0; i < vm.selected.length; i++) {
+          if (!vm.selected[i].applicantName && !vm.selected[i].address) {
+            vm.$root.$confirm.open('Thông báo', 'Bạn phải điền đầy đủ thông tin của hồ sơ trước khi thực hiện thao tác này?', { color: 'blue darken-4' }).then(function (ressult) {
+              return
+            }).catch(function (xhr) {
+              return
+            })
+            return
+          }
         }
-        listPost.push(vm.$store.dispatch('postAction', data))
-      })
-      Promise.all(listPost).then(function (ressult) {
-        vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
+        vm.selected.forEach(val => {
+          let data = {
+            dossierId: val.dossierId,
+            actionCode: 30000
+          }
+          listPost.push(vm.$store.dispatch('postAction', data))
+        })
+        if (listPost.length === 0) {
+          vm.$store.dispatch('showMessageToastr', ['error', 'Bạn chưa chọn hồ sơ nào!'])
+          return
+        }
+        Promise.all(listPost).then(function (ressult) {
+          vm.$store.dispatch('showMessageToastr', ['success', 'Xử lý thành công'])
+          vm.loadDataTable()
+        }).catch(function (xhr) {
+          vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+        })
       }).catch(function (xhr) {
-        vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+        console.log('kkk')
       })
       console.log(vm.selected)
     },
     deleteDosier (dossierId, index) {
       var vm = this
-      if (dossierId) {
-        let promise = vm.$store.dispatch('deleteDossier', dossierId)
-        promise.then(function (ressult) {
-          vm.danhSachHoSoTables.splice(index, 1)
-        })
-      }
+      vm.$root.$confirm.open('Xóa', 'Bạn có muốn xoá hồ sơ này?', { color: 'red' }).then((confirm) => {
+        if (dossierId) {
+          let promise = vm.$store.dispatch('deleteDossier', dossierId)
+          promise.then(function (ressult) {
+            vm.danhSachHoSoTables.splice(index, 1)
+          })
+        }
+      }).catch(function (xhr) {
+        console.log('kkk')
+      })
       console.log(vm.selected)
+    },
+    moveDelete () {
+      var vm = this
+      vm.$root.$confirm.open('Xóa', 'Bạn có chắc chắn muốn xoá các mục đã chọn?', { color: 'red' }).then((confirm) => {
+        var listDelete = []
+        vm.selected.forEach(val => {
+          listDelete.push(vm.$store.dispatch('deleteDossier', val.dossierId))
+        })
+        if (listDelete.length === 0) {
+          vm.$store.dispatch('showMessageToastr', ['error', 'Bạn chưa chọn hồ sơ nào!'])
+          return
+        }
+        Promise.all(listDelete).then(function (ressult) {
+          if (vm.selected) {
+            vm.selected.forEach(val => {
+              vm.danhSachHoSoTables.splice(vm.danhSachHoSoTables.findIndex(item => {
+                return val.dossierId === item.dossierId
+              }), 1)
+            })
+          }
+          vm.$store.dispatch('showMessageToastr', ['success', 'Xóa thành công'])
+        }).catch(function (xhr) {
+          vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
+        })
+      }).catch(function (xhr) {
+      })
+      console.log(vm.selected)
+    },
+    toDetailDossier (index, dossierId) {
+      let url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + dossierId
+      window.location.href = url
     }
   }
 }

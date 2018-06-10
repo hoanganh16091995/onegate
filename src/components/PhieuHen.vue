@@ -128,9 +128,20 @@ export default {
   methods: {
     guiHoSo () {
       var vm = this
-      let promise = vm.$store.dispatch('submitDossier')
-      promise.then(function (result) {
-        vm.$store.dispatch('showMessageToastr', ['success', 'Gửi hồ sơ thành công'])
+      vm.$root.$confirm.open('Thông báo', 'Bạn chắc chắn muốn thực hiện thao tác này?', { color: 'blue darken-4' }).then((confirm) => {
+        // let promise = vm.$store.dispatch('submitDossier')
+        // promise.then(function (result) {
+        //   vm.$store.dispatch('showMessageToastr', ['success', 'Gửi hồ sơ thành công'])
+        // })
+        let dataPostAction = {
+          dossierId: vm.thongTinChungHoSo.dossierId,
+          actionCode: 10000
+        }
+        vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
+          vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
+        })
+      }).catch(function (xhr) {
+        console.log('kkk')
       })
     },
     hoanThanhVaThemMoi () {
@@ -139,7 +150,7 @@ export default {
       router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so')
     },
     hoanThanh () {
-      router.push('/danh-sach-ho-so/1')
+      router.push('/danh-sach-ho-so/0')
     }
   }
 }

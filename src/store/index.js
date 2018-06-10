@@ -186,9 +186,9 @@ export const store = new Vuex.Store({
     ],
     thongTinChuHoSo: {
       userType: true,
-      city: '',
-      district: '',
-      ward: '',
+      cityCode: '',
+      districtCode: '',
+      wardCode: '',
       applicantNote: '',
       applicantIdNo: '',
       contactEmail: '',
@@ -198,14 +198,14 @@ export const store = new Vuex.Store({
     },
     thongTinNguoiNopHoSo: {
       sameUser: true,
-      delegateApplicantName: '',
-      delegateCity: '',
+      delegateName: '',
+      delegateCityCode: '',
       delegateAddress: '',
-      delegateDistrict: '',
-      delegateWard: '',
-      delegateContactEmail: '',
-      delegateContactTelNo: '',
-      delegateApplicantIdNo: ''
+      delegateDistrictCode: '',
+      delegateWardCode: '',
+      delegateEmail: '',
+      delegateTelNo: '',
+      delegateIdNo: ''
     },
     dichVuChuyenPhatKetQua: {
       viaPostal: false,
@@ -322,11 +322,9 @@ export const store = new Vuex.Store({
           }
         }
         axios.delete(state.api.dossierApi + '/' + arg, param).then(function (response) {
-          store.dispatch('showMessageToastr', ['success', 'Xóa hồ sơ thành công'])
           resolve(response)
         }).catch(function (xhr) {
           reject(xhr)
-          store.dispatch('showMessageByAPICode', xhr.status)
         })
       })
     },
@@ -433,9 +431,9 @@ export const store = new Vuex.Store({
     resetThongTinChuHoSo ({ commit }) {
       let data = {
         userType: true,
-        city: '',
-        district: '',
-        ward: '',
+        cityCode: '',
+        districtCode: '',
+        wardCode: '',
         applicantNote: '',
         applicantIdNo: '',
         contactEmail: '',
@@ -448,14 +446,14 @@ export const store = new Vuex.Store({
     resetThongTinNguoiNopHoSo ({ commit }) {
       let data = {
         sameUser: '',
-        delegateApplicantName: '',
-        delegateCity: '',
+        delegateName: '',
+        delegateCityCode: '',
         delegateAddress: '',
-        delegateDistrict: '',
-        delegateWard: '',
-        delegateContactEmail: '',
-        delegateContactTelNo: '',
-        delegateApplicantIdNo: ''
+        delegateDistrictCode: '',
+        delegateWardCode: '',
+        delegateEmail: '',
+        delegateTelNo: '',
+        delegateIdNo: ''
       }
       commit('setThongTinNguoiNopHoSo', data)
     },
@@ -484,7 +482,11 @@ export const store = new Vuex.Store({
         let dossierMarkItems = resDossierMarks.data.data
         if (dossierMarkItems) {
           dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
-            itemTemplate.count = 0
+            if (itemTemplate.hasForm) {
+              itemTemplate.count = 1
+            } else {
+              itemTemplate.count = 0
+            }
             let itemMarkFinded = dossierMarkItems.find(itemMark => {
               return itemMark && itemMark.partNo === itemTemplate.partNo
             })
@@ -499,7 +501,11 @@ export const store = new Vuex.Store({
           })
         } else {
           dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
-            itemTemplate.count = 0
+            if (itemTemplate.hasForm) {
+              itemTemplate.count = 1
+            } else {
+              itemTemplate.count = 0
+            }
             itemTemplate.fileType = 0
             itemTemplate.fileCheck = false
             return itemTemplate
@@ -696,22 +702,23 @@ export const store = new Vuex.Store({
         }
         var dataPutdossier = new URLSearchParams()
         dataPutdossier.append('applicantName', data.applicantName)
+        dataPutdossier.append('dossierNo', data.dossierNo)
         dataPutdossier.append('applicantIdType', applicantType)
         dataPutdossier.append('applicantIdNo', data.applicantIdNo)
         dataPutdossier.append('address', data.address)
-        dataPutdossier.append('cityCode', data.city)
-        dataPutdossier.append('districtCode', data.district)
-        dataPutdossier.append('wardCode', data.ward)
+        dataPutdossier.append('cityCode', data.cityCode)
+        dataPutdossier.append('districtCode', data.districtCode)
+        dataPutdossier.append('wardCode', data.wardCode)
         dataPutdossier.append('contactTelNo', data.contactTelNo)
         dataPutdossier.append('contactEmail', data.contactEmail)
-        dataPutdossier.append('delegateName', data.delegateApplicantName)
-        dataPutdossier.append('delegateIdNo', data.delegateApplicantIdNo)
-        dataPutdossier.append('delegateTelNo', data.delegateContactTelNo)
-        dataPutdossier.append('delegateEmail', data.delegateContactEmail)
+        dataPutdossier.append('delegateName', data.delegateName)
+        dataPutdossier.append('delegateIdNo', data.delegateIdNo)
+        dataPutdossier.append('delegateTelNo', data.delegateTelNo)
+        dataPutdossier.append('delegateEmail', data.delegateEmail)
         dataPutdossier.append('delegateAddress', data.delegateAddress)
-        dataPutdossier.append('delegateCityCode', data.delegateCity)
-        dataPutdossier.append('delegateDistrictCode', data.delegateDistrict)
-        dataPutdossier.append('delegateWardCode', data.delegateWard)
+        dataPutdossier.append('delegateCityCode', data.delegateCityCode)
+        dataPutdossier.append('delegateDistrictCode', data.delegateDistrictCode)
+        dataPutdossier.append('delegateWardCode', data.delegateWardCode)
         dataPutdossier.append('applicantNote', data.applicantNote)
         if (data.viaPostal) {
           dataPutdossier.append('viaPostal', data.viaPostal)
@@ -829,14 +836,14 @@ export const store = new Vuex.Store({
         }
       }
       axios.get(state.api.applicantApi + '/' + data, param).then(function (response) {
-        state.thongTinChuHoSo.applicantIdNo = response.data.applicantIdNo
-        state.thongTinChuHoSo.applicantName = response.data.applicantName
-        state.thongTinChuHoSo.address = response.data.address
-        state.thongTinChuHoSo.contactEmail = response.data.contactEmail
-        state.thongTinChuHoSo.contactTelNo = response.data.contactTelNo
-        state.thongTinChuHoSo.city = response.data.city
-        state.thongTinChuHoSo.district = response.data.district
-        state.thongTinChuHoSo.ward = response.data.ward
+        // state.thongTinChuHoSo.applicantIdNo = response.data.applicantIdNo
+        // state.thongTinChuHoSo.applicantName = response.data.applicantName
+        // state.thongTinChuHoSo.address = response.data.address
+        // state.thongTinChuHoSo.contactEmail = response.data.contactEmail
+        // state.thongTinChuHoSo.contactTelNo = response.data.contactTelNo
+        // state.thongTinChuHoSo.city = response.data.city
+        // state.thongTinChuHoSo.district = response.data.district
+        // state.thongTinChuHoSo.ward = response.data.ward
       }).catch(function (xhr) {
         console.log(xhr)
       })
@@ -937,6 +944,9 @@ export const store = new Vuex.Store({
           commit('setLoading', false)
         })
       })
+    },
+    setDefaultCityCode ({commit, state}, data) {
+      state.thongTinChuHoSo.cityCode = data
     }
   },
   mutations: {
@@ -986,9 +996,9 @@ export const store = new Vuex.Store({
         applicantIdNo: payload.applicantIdNo,
         applicantName: payload.applicantName,
         address: payload.address,
-        city: payload.cityCode,
-        district: payload.districtCode,
-        ward: payload.wardCode,
+        cityCode: payload.cityCode,
+        districtCode: payload.districtCode,
+        wardCode: payload.wardCode,
         contactEmail: payload.contactEmail,
         contactTelNo: payload.contactTelNo,
         userType: userTypeCondition
@@ -996,7 +1006,6 @@ export const store = new Vuex.Store({
       state.thongTinChuHoSo = thongTinChuHoSoPayLoad
     },
     setThongTinNguoiNopHoSo (state, payload) {
-      console.log(payload)
       state.thongTinNguoiNopHoSo = Object.assign(state.thongTinNguoiNopHoSo, payload)
     },
     setDichVuChuyenPhatKetQua (state, payload) {
