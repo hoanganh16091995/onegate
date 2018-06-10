@@ -2,13 +2,22 @@
   <div style="position: relative;">
     <v-expansion-panel class="expansion-pl">
       <v-expansion-panel-content hide-actions value="1">
-        <div slot="header"><div class="background-triangle-small"> IV. </div>THÀNH PHẦN HỒ SƠ &nbsp;&nbsp;&nbsp;&nbsp; <i><span style="color: red">(*)</span> Những thành phần bắt buộc</i></div>
+        <div slot="header">
+          <div class="background-triangle-small"> IV.</div>
+          THÀNH PHẦN HỒ SƠ &nbsp;&nbsp;&nbsp;&nbsp; 
+          <i><span style="color: red">(*)</span> Những thành phần bắt buộc</i>
+          <div class="absolute-lable">
+            <span class="text-bold">Bản chính</span>
+            <span class="text-bold">Bản chụp</span>
+            <span class="text-bold">Công chứng</span>
+          </div>
+        </div>
         <v-card v-if="dossierTemplates.length !== 0">
           <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
                 <div slot="header" class="pl-2 py-1">
-                  <div style="width: calc(100% - 320px );display: flex;align-items: center;min-height: 38px">
+                  <div style="width: calc(100% - 420px );display: flex;align-items: center;min-height: 38px">
                     <span class="text-bold mr-2">{{index + 1}}.</span>
                     <span @click="loadAlpcaForm(item)">{{item.partName}} <span v-if="item.required" style="color: red"> (*)</span> <i v-if="item.hasForm">Form trực tuyến</i></span>
                   </div>
@@ -30,7 +39,7 @@
                 <content-placeholders-text :lines="1" />
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox" v-else>
-                <v-flex style="width: 200px;" class="layout wrap">
+                <v-flex style="width: 300px;" class="layout wrap">
                   <v-checkbox light color="secondary" class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-checkbox>
                   <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox">
                     <v-radio value="2"></v-radio>
@@ -101,7 +110,7 @@
 
 <script>
 // import $ from 'jquery'
-
+import * as utils from '../store/onegate_utils'
 export default {
   data: () => ({
   }),
@@ -132,9 +141,9 @@ export default {
     deleteAttackFiles (item) {
       var vm = this
       vm.$store.dispatch('deleteAttackFiles', item).then(function (result) {
-        vm.$store.dispatch('showMessageToastr', ['success', 'Delete thành công!'])
+        utils.showMessageToastr('success', 'Xóa thành công')
       }).catch(function (xhr) {
-        vm.$store.dispatch('showMessageToastr', ['error', 'Delete không thành công!'])
+        utils.showMessageToastr('error', 'Xóa thất bại')
       })
     },
     pickFile (item) {
@@ -144,10 +153,10 @@ export default {
       var vm = this
       e.dataItem = data
       vm.$store.dispatch('uploadSingleFile', e).then(function (result) {
-        vm.$store.dispatch('showMessageToastr', ['success', 'Upload thành công!'])
+        utils.showMessageToastr('success', 'Tải lên thành công')
         vm.$store.dispatch('loadDossierFiles', data)
       }).catch(function (xhr) {
-        vm.$store.dispatch('showMessageToastr', ['error', 'Upload không thành công!'])
+        utils.showMessageToastr('error', 'Tải lên thất bại')
         vm.$store.dispatch('loadDossierFiles', data)
       })
     },

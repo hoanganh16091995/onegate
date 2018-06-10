@@ -37,6 +37,7 @@
 
 <script>
 import router from '@/router'
+import * as utils from '../store/onegate_utils'
 import ThongTinChung from './TiepNhanHoSo_ThongTinChung.vue'
 import ThongTinChuHoSo from './TiepNhanHoSo_ThongTinChuHoSo.vue'
 import ThanhPhanHoSo from './TiepNhanHoSo_ThanhPhanHoSo.vue'
@@ -85,6 +86,7 @@ export default {
         let dossierTemplates = thanhphanhoso.dossierTemplates
         console.log('dossierTemplates ------', dossierTemplates)
         let listAction = []
+        /*
         let listDossierMark = []
         if (dossierTemplates) {
           dossierTemplates.forEach(function (val, index) {
@@ -109,14 +111,13 @@ export default {
         }).catch(function (xhr) {
           // vm.$store.dispatch('showMessageToastr', ['error', 'Xử lý không thành công'])
         })
-        console.log('run tiep nhan')
         vm.$store.dispatch('postVNPOST', dataVNPOST).then(function (result) {
           // vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
           console.log('VNPOST Sucess-------------')
         }).catch(function (xhr) {
           // vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])
           console.log('VNPOST Error-------------')
-        })
+        }) */
         Promise.all(listAction).then(values => {
           console.log(values)
           let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
@@ -124,11 +125,11 @@ export default {
           vm.$store.dispatch('putDossier', tempData).then(function (result) {
             let index = vm.$store.getters.index
             let id = result.dossierId
-            vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
+            utils.showMessageToastr('success', 'Lưu thành công')
             router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
           })
         }).catch(reject => {
-          vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])
+          utils.showMessageToastr('error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ')
         })
       }
     }

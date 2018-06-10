@@ -268,8 +268,10 @@ export const store = new Vuex.Store({
         }
         axios.delete(state.api.dossierApi + '/' + arg, param).then(function (response) {
           resolve(response)
-        }).catch(function (xhr) {
-          reject(xhr)
+          utils.showMessageToastr('success', 'Xóa hồ sơ thành công')
+        }).catch(function (error) {
+          reject(error)
+          utils.showMessageByAPICode(error.response.status)
         })
       })
     },
@@ -376,7 +378,7 @@ export const store = new Vuex.Store({
     resetThongTinChuHoSo ({ commit }) {
       let data = {
         userType: true,
-        cityCode: '',
+        cityCode: 25,
         districtCode: '',
         wardCode: '',
         applicantNote: '',
@@ -392,7 +394,7 @@ export const store = new Vuex.Store({
       let data = {
         sameUser: '',
         delegateName: '',
-        delegateCityCode: '',
+        delegateCityCode: 25,
         delegateAddress: '',
         delegateDistrictCode: '',
         delegateWardCode: '',

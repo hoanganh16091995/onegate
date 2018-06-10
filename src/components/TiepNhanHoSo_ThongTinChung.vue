@@ -240,8 +240,19 @@
     },
     filters: {
       dateTimeView (arg) {
-        let value = new Date(arg)
-        return `${value.getDate().toString().padStart(2, '0')}/${(value.getMonth() + 1).toString().padStart(2, '0')}/${value.getFullYear()} | ${value.getHours().toString().padStart(2, '0')}:${value.getMinutes().toString().padStart(2, '0')}`
+        if (arg) {
+          let value = new Date(arg)
+          return `${value.getDate().toString().padStart(2, '0')}/${(value.getMonth() + 1).toString().padStart(2, '0')}/${value.getFullYear()} | ${value.getHours().toString().padStart(2, '0')}:${value.getMinutes().toString().padStart(2, '0')}`
+        }
+        //  else {
+        //   if (!arg) {
+        //     return ''
+        //   }
+        //   const [date, time] = date.split(' ')
+        //   const [day, month, year] = date.split('/')
+        //   const [hour, minute] = time.split(':')
+        //   return `${day.toString().padStart(2, '0')}/${(month + 1).toString().padStart(2, '0')}/${year} | ${hour.toString().padStart(2, '0')}:${minute.toString().padStart(2, '0')}`
+        // }
       }
     }
   }
