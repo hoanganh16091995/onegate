@@ -813,6 +813,7 @@ export const store = new Vuex.Store({
           // })).catch(function (xhr) {
           //   console.log(xhr)
           // })
+          /* eslint-disable */
           var formScript, formData
           if (item.formScript) {
             formScript = eval('(' + item.formScript + ')')
@@ -824,6 +825,7 @@ export const store = new Vuex.Store({
           } else {
             formData = {}
           }
+          /* eslint-disable */
           console.log(typeof (formScript))
           console.log(typeof (formData))
           formScript.data = formData
