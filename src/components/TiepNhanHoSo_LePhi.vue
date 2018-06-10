@@ -19,9 +19,12 @@
                 <v-text-field
                   v-else
                   v-model="lePhi.fee"
-                  :rules="[rules.number]"
-                  v-on:keyup.native="clearTotalMoney"
                 ></v-text-field>
+                <!-- <v-text-field
+                  v-else
+                  @blur="toCurrency= false"
+                  @focus="toCurrency = true"
+                >{{amount|currency}}</v-text-field> -->
               </v-flex>
               <v-flex xs12 sm6 class="hidden-xs-and-down"></v-flex>
               <v-flex xs12 sm2>
@@ -51,6 +54,7 @@
 </template>
 
 <script>
+import * as utils from '../store/onegate_utils'
 export default {
   data: () => ({
     rules: {
@@ -58,7 +62,9 @@ export default {
         const pattern = /^\d+$/
         return pattern.test(value) || 'Sai định dạng kiểu dữ liệu số.'
       }
-    }
+    },
+    toCurrency: '',
+    amount: 10000
   }),
   computed: {
     loading () {
@@ -75,8 +81,20 @@ export default {
     clearTotalMoney () {
       if (this.lePhi.fee === '') {
         this.lePhi.fee = 0
+      } else {
+        this.lePhi.fee = parseInt(this.lePhi.fee)
+        console.log(this.lePhi.fee)
       }
     }
   }
+  // filters: {
+  //   currency (val) {
+  //     var vm = this
+  //     if (vm.toCurrency) {
+  //       return utils.currency(val)
+  //     }
+  //     return val
+  //   }
+  // }
 }
 </script>

@@ -253,7 +253,7 @@ body .expaned__list__data .expansion-panel__header {
     height: 38px;
 }
 .group__thanh_phan .flex__checkbox .input-group {
-    width: 50px;
+    width: 78px;
     max-width: 100px;
     height: 38px;
     max-height: 38px;
@@ -430,10 +430,20 @@ body .input-group--select .input-group__selections__comma {
     width: auto;
 }
 .group__thanh_phan .icon--selection-control {
-    left: 11px !important
+    left: 24px !important
 }
 .group__thanh_phan .input-group {
     flex: none
+}
+.absolute-lable {
+    position: absolute;
+    right: 120px;
+    top: 10px
+}
+.absolute-lable span {
+    display: inline-block;
+    width: 76px;
+    text-align: center
 }
 
 
