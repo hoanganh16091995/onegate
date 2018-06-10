@@ -17,9 +17,9 @@
         <div class="receipt-wrapper">
           <div class="row head">
             <div class="left">
-              <p class="text-uppercase text-bold">UBND TỈNH PHÚ THỌ</p>
+              <p class="text-uppercase text-bold">{{thongTinChungHoSo.govAgencyName}}</p>
               <span class="text-bold">BỘ PHẬN TIẾP NHẬN VÀ TRẢ KẾT QUẢ</span>
-              <p></p>
+              <p>==================</p>
             </div>
             <div class="right">
               <p class="text-uppercase text-bold">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
@@ -31,11 +31,11 @@
         
           <div class="row title">
             <h4 class="text-uppercase">GIẤY TIẾP NHẬN HỒ SƠ VÀ HẸN TRẢ KẾT QUẢ</h4>
-            <p><span class="text-bold">Mã hồ sơ:</span> {{thongTinChuHoSo.dossierNo}}</p>
+            <p><span class="text-bold">Mã hồ sơ:</span> {{thongTinChungHoSo.dossierId}}</p>
             <p><i>(Liên 1: Lưu)</i></p>
           </div>
           <div class="row">
-            <p>Bộ phận tiếp nhận và trả kết quả: UBND Tỉnh Phú Thọ</p>
+            <p>Bộ phận tiếp nhận và trả kết quả: {{thongTinChungHoSo.govAgencyName}}</p>
             <p>Tiếp nhận hồ sơ của: {{ thongTinChuHoSo.applicantName }}</p>
             <p>Địa chỉ: {{ thongTinChuHoSo.address }}</p>
             <p>Số điện thoại: {{ thongTinChuHoSo.contactTelNo}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Email: {{ thongTinChuHoSo.contactEmail }}</p>

@@ -372,7 +372,8 @@ export const store = new Vuex.Store({
         dueDate: (new Date()).toString(),
         durationDate: 1,
         dossierId: '',
-        dossierNo: ''
+        dossierNo: '',
+        govAgencyName: ''
       }
       commit('setThongTinChungHoSo', data)
     },
@@ -988,7 +989,8 @@ export const store = new Vuex.Store({
         durationDate: '',
         dossierId: payload.dossierId,
         dossierStatus: payload.dossierStatus,
-        dossierNo: payload.dossierNo
+        dossierNo: payload.dossierNo,
+        govAgencyName: payload.govAgencyName
       }
       state.thongTinChungHoSo = thongTinChungHoSoPayLoad
     },
