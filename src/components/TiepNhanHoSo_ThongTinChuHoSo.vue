@@ -364,11 +364,52 @@ export default {
       return this.$store.getters.loading
     },
     thongTinChuHoSo () {
-      console.log(this.$store.getters.thongTinChuHoSo)
-      return this.$store.getters.thongTinChuHoSo
+      var vm = this
+      var thongTinChuHoSoTemp = this.$store.getters.thongTinChuHoSo
+      var filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 0,
+        parent: 0
+      }
+      if (thongTinChuHoSoTemp.cityCode) {
+        filter.parent = thongTinChuHoSoTemp.cityCode
+        filter.level = 1
+        vm.$store.getters.getDictItems(filter).then(function (result) {
+          vm.districts = result.data
+        })
+      }
+      if (thongTinChuHoSoTemp.districtCode) {
+        filter.parent = thongTinChuHoSoTemp.districtCode
+        filter.level = 1
+        vm.$store.getters.getDictItems(filter).then(function (result) {
+          vm.wards = result.data
+        })
+      }
+      return thongTinChuHoSoTemp
     },
     thongTinNguoiNopHoSo () {
-      return this.$store.getters.thongTinNguoiNopHoSo
+      var vm = this
+      var thongTinNguoiNopHoSoTemp = this.$store.getters.thongTinNguoiNopHoSo
+      var filter = {
+        collectionCode: 'ADMINISTRATIVE_REGION',
+        level: 0,
+        parent: 0
+      }
+      if (thongTinNguoiNopHoSoTemp.delegateCityCode) {
+        filter.parent = thongTinNguoiNopHoSoTemp.delegateCityCode
+        filter.level = 1
+        vm.$store.getters.getDictItems(filter).then(function (result) {
+          vm.delegateDistricts = result.data
+        })
+      }
+      if (thongTinNguoiNopHoSoTemp.delegateDistrictCode) {
+        filter.parent = thongTinNguoiNopHoSoTemp.delegateDistrictCode
+        filter.level = 1
+        vm.$store.getters.getDictItems(filter).then(function (result) {
+          vm.delegateWards = result.data
+        })
+      }
+      return thongTinNguoiNopHoSoTemp
     }
   },
   created () {
@@ -379,41 +420,9 @@ export default {
         level: 0,
         parent: 0
       }
-      var thongTinChuHoSo = vm.$store.getters.thongTinChuHoSo
-      var thongTinNguoiNopHoSo = vm.$store.getters.thongTinNguoiNopHoSo
-      console.log('thongTinChuHoSo===========', thongTinChuHoSo)
-      console.log('thongTinNguoiNopHoSo===========', thongTinNguoiNopHoSo)
       vm.$store.getters.getDictItems(filter).then(function (result) {
         vm.citys = result.data
       })
-      if (thongTinChuHoSo.cityCode) {
-        filter.parent = thongTinChuHoSo.cityCode
-        filter.level = 1
-        vm.$store.getters.getDictItems(filter).then(function (result) {
-          vm.districts = result.data
-        })
-      }
-      if (thongTinChuHoSo.districtCode) {
-        filter.parent = thongTinChuHoSo.districtCode
-        filter.level = 1
-        vm.$store.getters.getDictItems(filter).then(function (result) {
-          vm.wards = result.data
-        })
-      }
-      if (vm.thongTinNguoiNopHoSo.delegateCityCode) {
-        filter.parent = thongTinNguoiNopHoSo.delegateCityCode
-        filter.level = 1
-        vm.$store.getters.getDictItems(filter).then(function (result) {
-          vm.delegateDistricts = result.data
-        })
-      }
-      if (thongTinNguoiNopHoSo.delegateDistrictCode) {
-        filter.parent = thongTinNguoiNopHoSo.delegateDistrictCode
-        filter.level = 1
-        vm.$store.getters.getDictItems(filter).then(function (result) {
-          vm.delegateWards = result.data
-        })
-      }
     })
   },
   watch: {

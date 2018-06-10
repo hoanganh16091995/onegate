@@ -20,7 +20,7 @@ const routerOptions = [
   },
   { path: '/danh-sach-ho-so/:index/tiep-nhan-ho-so/:id',
     component: 'TiepNhanHoSo',
-    props: false,
+    props: true,
     beforeEnter: function (to, from, next) {
       console.log('run active component chi tiết hồ sơ tiếp nhận')
       store.commit('setIsDetail', true)

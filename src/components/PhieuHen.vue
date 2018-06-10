@@ -12,8 +12,8 @@
         </div>
       </div>
     </div>
-    <div style="background-color: white;" id='printContent'>
-      <div>
+    <div style="background-color: white;">
+      <div id='printContent'>
         <div class="receipt-wrapper">
           <div class="row head">
             <div class="left">
@@ -87,7 +87,7 @@
         <v-btn outline color="primary" v-on:click.native="printContent">
           In hồ sơ
         </v-btn>
-        <v-btn outline color="primary" :to="'/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id" active-class="temp_active">
+        <v-btn outline color="primary" v-on:click.native="quayLai(index)" active-class="temp_active">
           Quay lại &nbsp;
           <v-icon>undo</v-icon>
         </v-btn>
@@ -177,6 +177,10 @@ export default {
       var vm = this
       let date = new Date(vm.thongTinChungHoSo.receiveDate)
       return `Phú Thọ, Ngày ${date.getDate().toString().padStart(2, '0')} tháng ${(date.getMonth() + 1).toString().padStart(2, '0')} năm ${date.getFullYear()}`
+    },
+    quayLai (index) {
+      var vm = this
+      window.location.href = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + vm.thongTinChungHoSo.dossierId
     }
     // {{thongTinChungHoSo.receiveDate|dateTimeView}}
   },

@@ -247,7 +247,7 @@ export default {
     checkAction (status) {
       if (status === 'new') {
         return 'print,send,delete'
-      } else if (status === 'release') {
+      } else if (status === 'releasing') {
         return 'result,ticket'
       } else if (status === 'done') {
         return 'view,ticket'
