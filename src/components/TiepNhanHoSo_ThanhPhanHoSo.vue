@@ -7,10 +7,10 @@
           <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
-                <div slot="header" @click="loadAlpcaForm(item)" class="pl-2 py-1">
+                <div slot="header" class="pl-2 py-1">
                   <div style="width: calc(100% - 320px );display: flex;align-items: center;min-height: 38px">
                     <span class="text-bold mr-2">{{index + 1}}.</span>
-                    <span>{{item.partName}} <span v-if="item.required" style="color: red"> (*)</span> <i v-if="item.hasForm">Form trực tuyến</i></span>
+                    <span @click="loadAlpcaForm(item)">{{item.partName}} <span v-if="item.required" style="color: red"> (*)</span> <i v-if="item.hasForm">Form trực tuyến</i></span>
                   </div>
                 </div>
                 <v-card>
@@ -118,6 +118,15 @@ export default {
     dossierFiles () {
       return this.$store.getters.dossierFiles
     }
+  },
+  mounted () {
+    var vm = this
+    vm.page = 1
+    vm.$nextTick(function () {
+      // vm.dossierTemplates.forEach(val => {
+      //   vm.$store.dispatch('loadAlpcaForm', val)
+      // })
+    })
   },
   methods: {
     deleteAttackFiles (item) {
