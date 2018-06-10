@@ -195,7 +195,7 @@ export default {
       // vm.dichVuChuyenPhatKetQua.postalCityCode = vm.$store.getters.getCityVal
       // vm.dichVuChuyenPhatKetQua.postalDistrictCode = vm.$store.getters.getDistrictVal
       // vm.dichVuChuyenPhatKetQua.postalWardCode = vm.$store.getters.getWardVal
-      let filter = {
+      var filter = {
         collectionCode: 'ADMINISTRATIVE_REGION',
         level: 0,
         parent: 0
@@ -205,12 +205,14 @@ export default {
       })
       if (vm.dichVuChuyenPhatKetQua.postalCityCode) {
         filter.parent = vm.dichVuChuyenPhatKetQua.postalCityCode
+        filter.level = 1
         vm.$store.getters.getDictItems(filter).then(function (result) {
           vm.resultDistricts = result.data
         })
       }
       if (vm.dichVuChuyenPhatKetQua.postalDistrictCode) {
         filter.parent = vm.dichVuChuyenPhatKetQua.postalDistrictCode
+        filter.level = 1
         vm.$store.getters.getDictItems(filter).then(function (result) {
           vm.resultWards = result.data
         })

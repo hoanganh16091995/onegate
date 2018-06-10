@@ -124,14 +124,8 @@ export default {
           vm.$store.dispatch('putDossier', tempData).then(function (result) {
             let index = vm.$store.getters.index
             let id = result.dossierId
-            let dataPostAction = {
-              dossierId: thongtinchung.dossierId,
-              actionCode: 10000
-            }
-            vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
-              vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
-              router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
-            })
+            vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
+            router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
           })
         }).catch(reject => {
           vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])

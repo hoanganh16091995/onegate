@@ -27,12 +27,19 @@
     <v-content>
       <router-view></router-view>
     </v-content>
-    
+    <confirm ref="confirm"></confirm>
   </v-app>
 </template>
 
 <script>
+  import Confirm from './components/Confirm.vue'
   export default {
+    components: {
+      'confirm': Confirm
+    },
+    mounted () {
+      this.$root.$confirm = this.$refs.confirm
+    },
     data: () => ({}),
     computed: {
       loading () {
