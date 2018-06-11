@@ -147,7 +147,7 @@
 
 <script>
 import * as utils from '../store/onegate_utils'
-import printJS from 'print-js/dist/print.min.js'
+// import printJS from 'print-js/dist/print.min.js'
 export default {
   props: ['index'],
   data: () => ({
