@@ -75,11 +75,12 @@ export default {
   methods: {
     tiepNhanHoSo () {
       var vm = this
+      vm.$store.commit('setPrintPH', false)
       let thongtinchung = this.$store.getters.thongTinChungHoSo
       let thongtinchuhoso = this.$store.getters.thongTinChuHoSo
       let thongtinnguoinophoso = this.$store.getters.thongTinNguoiNopHoSo
       let thanhphanhoso = this.$store.getters.thanhPhanHoSo
-      let lephi = this.$store.getters.lePhi
+      let lephi = this.$store.getters.thongTinChungHoSo
       let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
       console.log('thongtinchung:', thongtinchung)
       console.log('thongtinchuhoso:', thongtinchuhoso)
@@ -93,7 +94,6 @@ export default {
         let dossierTemplates = thanhphanhoso.dossierTemplates
         console.log('dossierTemplates ------', dossierTemplates)
         let listAction = []
-        /*
         let listDossierMark = []
         if (dossierTemplates) {
           dossierTemplates.forEach(function (val, index) {
@@ -124,7 +124,7 @@ export default {
         }).catch(function (xhr) {
           // vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])
           console.log('VNPOST Error-------------')
-        }) */
+        })
         Promise.all(listAction).then(values => {
           console.log(values)
           let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)

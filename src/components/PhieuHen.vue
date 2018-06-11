@@ -48,7 +48,7 @@
                   ({{index+1}}) &nbsp;{{item.partName}}
                 </p>
               </li>
-              <li><p>2. Số bộ hồ sơ: 01 (bộ)</p></li>
+              <li><p>2. Số bộ hồ sơ: ………… (bộ)</p></li>
               <li><p>3. Thời gian giải quyết hồ sơ theo quy định là: {{ thongTinChungHoSo.durationDate }} ngày</p></li>
               <li><p>4. Thời gian nhận hồ sơ: {{thongTinChungHoSo.receiveDate|dateTimeView}} </p></li>
               <li><p>5. Thời gian trả kết quả giải quyết hồ sơ: {{ thongTinChungHoSo.dueDate|dateTimeView }}</p></li>
@@ -116,6 +116,31 @@ export default {
     'dich-vu-chuyen-phat-ket-qua': DichVuChuyenPhatKetQua
   },
   data: () => ({}),
+  created () {
+    var vm = this
+    vm.$nextTick(function () {
+      console.log(vm.$store.getters.printPH)
+      setTimeout(function () {
+        if (vm.$store.getters.printPH) {
+          let promise = vm.$store.dispatch('getDetailDossier', vm.id)
+          promise.then(function (result) {
+            let promise2 = vm.$store.dispatch('loadDossierTemplates', result)
+            promise2.then(function (result) {
+              setTimeout(function () {
+                vm.printContent()
+                vm.$store.commit('setPrintPH', false)
+              }, 500)
+            })
+          })
+          // console.log('run print')
+          // setTimeout(function () {
+          //   vm.printContent()
+          //   vm.$store.commit('setPrintPH', false)
+          // }, 500)
+        }
+      }, 100)
+    })
+  },
   computed: {
     loading () {
       return this.$store.getters.loading
@@ -176,7 +201,7 @@ export default {
       printJS({
         printable: 'printContent',
         type: 'html',
-        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.c950577a0829a5013671843dacdbb9c4.css'
+        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.8944bd0f519fdcccc81f45838019a3f1.css'
       })
     },
     receiveDateText () {
