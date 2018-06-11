@@ -43,7 +43,7 @@
         v-model="selected"
         item-key="dossierId"
         select-all
-        class="table-bordered"
+        class="table-landing table-bordered"
         hide-actions
         :no-data-text="'Không tìm thấy ' + trangThaiHoSoList[index].title"
         :no-results-text="'Không tìm thấy ' + trangThaiHoSoList[index].title"
@@ -66,44 +66,44 @@
               hide-details
             ></v-checkbox>
           </td>
-          <td class="text-xs-center stt_column" style="width: 4%">{{ props.index + 1 }}</td>
-          <td class="text-xs-left" style="width: 8%">{{ props.item.dossierIdCTN }}</td>
-          <td class="text-xs-left" style="width: 15%">{{ props.item.applicantName }}</td>
-          <td class="text-xs-left" style="width: 15%">
+          <td class="text-xs-center stt_column">{{ props.index + 1 }}</td>
+          <td class="text-xs-left" >{{ props.item.dossierIdCTN }}</td>
+          <td class="text-xs-left" >{{ props.item.applicantName }}</td>
+          <td class="text-xs-left" >
             <a title="Chi tiết hồ sơ" :href="'/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/'+index+'/tiep-nhan-ho-so/'+props.item.dossierId">
               <span>{{ props.item.serviceName }}</span>
             </a>
           </td>
-          <td class="text-xs-left" style="width: 15%">{{ props.item.address}}</td>
-          <td class="text-xs-center" style="width: 14%">{{ props.item.dueDate }}</td>
-          <td class="text-xs-left" style="width: 11%">{{ props.item.durationText }}</td>
-          <td class="text-xs-right px-0">
+          <td class="text-xs-left" >{{ props.item.address}}</td>
+          <td class="text-xs-left" >{{ props.item.dueDate }}</td>
+          <td class="text-xs-left" >{{ props.item.durationText }}</td>
+          <td class="text-xs-center px-0">
             <v-tooltip top>
               <v-btn slot="activator" icon class="mx-0 my-0" @click="toDetailDossier(index, props.item.dossierId)">
-                <v-icon size="16" class="mx-0">visibility</v-icon>
+                <v-icon size="16" class="mx-0" style="color:#1976d2">visibility</v-icon>
               </v-btn>
               <span>Xem hồ sơ</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('send')">
               <v-btn slot="activator" @click="toDetailPhieuHen(index, props.item.dossierId)" icon class="mx-0 my-0" :disabled="checkPrint(props.item)">
-                <v-icon size="16" class="mx-0">print</v-icon>
+                <v-icon size="16" class="mx-0" style="color:#1976d2">print</v-icon>
               </v-btn>
               <span>In phiếu hẹn</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('send')">
               <v-btn slot="activator" icon class="mx-0 my-0" @click="chuyenXuLy(props.item)" :disabled="checkPrint(props.item)">
-                <v-icon size="16" class="mx-0">send</v-icon>
+                <v-icon size="16" class="mx-0" style="color:#1976d2">send</v-icon>
               </v-btn>
               <span>Chuyển hồ sơ vào xử lý</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('ticket')">
               <v-btn slot="activator" icon class="mx-0 my-0">
-                <v-icon size="16" class="mx-0">description</v-icon>
+                <v-icon size="16" class="mx-0" style="color:#1976d2">description</v-icon>
               </v-btn>
               <span>Phiếu kiểm soát</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('result')">
-              <v-btn slot="activator" icon class="mx-0 my-0" @click="traKetQua(props.item)">
+              <v-btn slot="activator" icon class="mx-0 my-0" @click="traKetQua(props.item)" style="color:#1976d2">
                 <v-icon size="16" class="mx-0">send</v-icon>
               </v-btn>
               <span>Trả kết quả</span>
@@ -147,7 +147,7 @@
 
 <script>
 import * as utils from '../store/onegate_utils'
-// import printJS from 'print-js/dist/print.min.js'
+import printJS from 'print-js/dist/print.min.js'
 export default {
   props: ['index'],
   data: () => ({
@@ -162,22 +162,22 @@ export default {
       },
       {
         text: 'Mã hồ sơ',
-        align: 'left',
+        align: 'center',
         sortable: false
       },
       {
         text: 'Người đăng ký',
-        align: 'left',
+        align: 'center',
         sortable: false
       },
       {
         text: 'Tên thủ tục',
-        align: 'left',
+        align: 'center',
         sortable: false
       },
       {
         text: 'Địa chỉ',
-        align: 'left',
+        align: 'center',
         sortable: false
       },
       {
@@ -187,12 +187,12 @@ export default {
       },
       {
         text: 'Thời hạn',
-        align: 'left',
+        align: 'center',
         sortable: false
       },
       {
         text: '',
-        align: 'right',
+        align: 'center',
         sortable: false,
         class: 'action_column'
       }

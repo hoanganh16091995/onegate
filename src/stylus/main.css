@@ -298,9 +298,9 @@ table .stt_column ,
 table .action_column {
     padding: 2px 5px !important;
 }
-table .action_column {
+/* table .action_column {
     width: 125px;
-}
+} */
 
 .table-bordered table.table thead tr {
     height: 42px;
@@ -445,5 +445,61 @@ body .input-group--select .input-group__selections__comma {
     width: 76px;
     text-align: center
 }
+/* style table landing.vue */
+.table-landing table.datatable--select-all thead th:nth-child(1), 
+.table-landing table.datatable--select-all tbody td:nth-child(1){
+    min-width: 0px !important;
+    width: 3% !important;
+}
+.table-landing table.datatable--select-all thead th:nth-child(2), 
+.table-landing table.datatable--select-all tbody td:nth-child(2){
+    min-width: 0px !important;
+    width: 4% !important;
+}
+.table-landing table.datatable--select-all thead th:nth-child(3), 
+.table-landing table.datatable--select-all tbody td:nth-child(3){
+    min-width: 0px !important;
+    width: 6% !important;
+}
+
+.table-landing table.datatable--select-all thead th:nth-child(4), 
+.table-landing table.datatable--select-all tbody td:nth-child(4){
+    min-width: 0px !important;
+    width: 12% !important;
+}
+
+.table-landing table.datatable--select-all thead th:nth-child(5), 
+.table-landing table.datatable--select-all tbody td:nth-child(5){
+    min-width: 0px !important;
+    width: 26% !important;
+}
+
+.table-landing table.datatable--select-all thead th:nth-child(6), 
+.table-landing table.datatable--select-all tbody td:nth-child(6){
+    min-width: 0px !important;
+    width: 15% !important;
+}
+
+.table-landing table.datatable--select-all thead th:nth-child(7), 
+.table-landing table.datatable--select-all tbody td:nth-child(7){
+    min-width: 0px !important;
+    width: 9% !important;
+}
+
+.table-landing table.datatable--select-all thead th:nth-child(8), 
+.table-landing table.datatable--select-all tbody td:nth-child(8){
+    min-width: 0px !important;
+    width: 10% !important;
+}
+
+.table-landing table.datatable--select-all thead th:nth-child(9), 
+.table-landing table.datatable--select-all tbody td:nth-child(9){
+    min-width: 0px !important;
+    width: 15% !important;
+}
+.table-landing table.datatable--select-all tbody td:nth-child(5) a:hover {
+    color: #1976d2 !important;
+}
+
 
 
