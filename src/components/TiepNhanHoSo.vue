@@ -31,11 +31,11 @@
         Bổ sung &nbsp;
         <v-icon>save</v-icon>
       </v-btn>
-      <v-btn color="primary" v-on:click.native="tiepNhanHoSo" v-if="thongTinChungHoSo.dossierStatus === 'releasing'">
+      <v-btn color="primary" v-on:click.native="tiepNhanHoSo" v-if="thongTinChungHoSo.dossierStatus === 'releasing'" :to="'/danh-sach-ho-so/' + index">
         Trả kết quả &nbsp;
         <v-icon>send</v-icon>
       </v-btn>
-      <v-btn color="primary" :to="'/danh-sach-ho-so/' + index">
+      <v-btn color="primary" :to="'/danh-sach-ho-so/' + index + '/tra-ket-qua/' + thongTinChungHoSo.dossierId">
         Quay lại &nbsp;
         <v-icon>undo</v-icon>
       </v-btn>
@@ -163,7 +163,7 @@ export default {
       console.log('validate TNHS formThongtinchuhoso.validate()', vm.$refs.formTiepNhanHoSo.validate())
       if (vm.$refs.formTiepNhanHoSo.validate()) {
         let dossierTemplates = thanhphanhoso.dossierTemplates
-        console.log('dossierTemplates ------', dossierTemplates)
+        console.log('dosierTemplates ------', dossierTemplates)
         let listAction = []
         let listDossierMark = []
         if (dossierTemplates) {

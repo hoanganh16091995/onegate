@@ -5,14 +5,14 @@
         <div slot="header">
           <div class="background-triangle-small"> IV.</div>
           THÀNH PHẦN HỒ SƠ &nbsp;&nbsp;&nbsp;&nbsp; 
-          <i><span style="color: red">(*)</span> Những thành phần bắt buộc</i>
+         <!--  <i><span style="color: red">(*)</span> Những thành phần bắt buộc</i> -->
           <div class="absolute-lable">
             <span class="text-bold">Bản chính</span>
             <span class="text-bold">Bản chụp</span>
             <span class="text-bold">Công chứng</span>
           </div>
         </div>
-        <v-card v-if="dossierTemplates.length !== 0">
+        <v-card>
           <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
@@ -132,9 +132,9 @@ export default {
     var vm = this
     vm.page = 1
     vm.$nextTick(function () {
-      // vm.dossierTemplates.forEach(val => {
-      //   vm.$store.dispatch('loadAlpcaForm', val)
-      // })
+      vm.dossierTemplates.forEach(val => {
+        vm.$store.dispatch('loadAlpcaForm', val)
+      })
     })
   },
   methods: {

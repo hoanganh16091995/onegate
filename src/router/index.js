@@ -32,6 +32,20 @@ const routerOptions = [
       next()
     }
   },
+  { path: '/danh-sach-ho-so/:index/tra-ket-qua/:id',
+    component: 'TraKetQua',
+    props: true,
+    beforeEnter: function (to, from, next) {
+      console.log('run active component chi tiết hồ sơ tiếp nhận')
+      store.commit('setIsDetail', true)
+      let promise = store.dispatch('getDetailDossier', to.params.id)
+      promise.then(function (result) {
+        store.dispatch('loadDossierFiles')
+        store.dispatch('loadAllDossierTemplates', result)
+      })
+      next()
+    }
+  },
   { path: '/danh-sach-ho-so/:index/tiep-nhan-ho-so/:id/phieu-hen', component: 'PhieuHen', props: true },
   { path: '*', redirect: '/danh-sach-ho-so/0' }
 ]

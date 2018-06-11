@@ -55,7 +55,7 @@
 </template>
 
 <script>
-import * as utils from '../store/onegate_utils'
+// import * as utils from '../store/onegate_utils'
 export default {
   data: () => ({
     rules: {

@@ -473,6 +473,21 @@ export const store = new Vuex.Store({
         })
       })
     },
+    loadAllDossierTemplates ({commit, state}, data) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            groupId: state.api.groupId
+          }
+        }
+        axios.get(state.api.dossierTemplatesApi + '/' + data.dossierTemplateNo, param).then(function (response) {
+          let serializable = response.data
+          resolve(serializable.dossierParts)
+        }, error => {
+          reject(error)
+        })
+      })
+    },
     deleteAttackFiles ({ commit, state }, data) {
       return new Promise((resolve, reject) => {
         let param = {
