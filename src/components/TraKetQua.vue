@@ -1,45 +1,50 @@
 <template>
-  <v-form v-model="validTNHS" ref="formTiepNhanHoSo" lazy-validation>
+  <div>
     <content-placeholders class="mt-3" v-if="loading">
       <content-placeholders-text :lines="1" />
     </content-placeholders>
     <div v-else class="row-header" style="margin-top: 6px;">
-      <div class="background-triangle-big"> TIẾP NHẬN HỒ SƠ </div> 
+      <div class="background-triangle-big"> TRẢ KẾT QUẢ THỤ LÝ HỒ SƠ </div> 
       <div class="layout row wrap header_tools row-blue">
-        <div class="flex solo text-ellipsis">
-          
-        </div> 
         <div class="flex text-right" style="margin-left: auto;">
-          <v-btn flat class="my-0 mx-0 btn-border-left" :to="'/danh-sach-ho-so/' + index" active-class="temp_active">
-            Quay lại &nbsp;
+          <v-btn flat class="my-0 mx-0 btn-border-left" @click="moveRelease">
+            <v-icon size="16">send</v-icon>
+            Trả kết quả
+          </v-btn>
+          <v-btn flat class="my-0 mx-0 btn-border-left" @click="redirectBack">
             <v-icon size="16">undo</v-icon>
+            Quay lại
           </v-btn>
         </div>
       </div>
     </div>
+    <div class="list-traketqua">
+      <div class="px-2 py-2 text-bold" style="background-color: #e1f5fe;">Giấy tờ nộp vào là bản gốc</div>
+      <v-list class="py-0">
+        <v-list-tile v-for="(item, index) in mainItems" :key="item" style="height: auto;">
+          <v-list-tile-content style="font-size: 14px;">
+            <v-list-tile-title style="display: flex;align-items: center;height: auto;white-space:normal">
+              <span class="text-bold mr-2">{{index + 1}}.</span>
+              <span>{{item.partName}}</span>
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
+    </div>
     <div>
-      
-      <h1>11111111111111111111111111</h1>
+      <div class="px-2 py-2 text-bold" style="background-color: #e1f5fe;">Giấy tờ trả kết quả</div>
+      <v-list class="py-0">
+        <v-list-tile class="py-1" v-for="(item, index) in mainItems2" :key="item" style="height: auto;">
+          <v-list-tile-content style="font-size: 14px;">
+            <v-list-tile-title style="display: flex;align-items: center;height: auto;white-space:normal">
+              <span class="text-bold mr-2">{{index + 1}}.</span>
+              <span>{{item.partName}}</span>
+            </v-list-tile-title>
+          </v-list-tile-content>
+        </v-list-tile>
+      </v-list>
     </div>
-    <div class="text-center mt-2">
-      <v-btn color="primary" v-on:click.native="tiepNhanHoSo" v-if="thongTinChungHoSo.dossierStatus === 'new'">
-        Tiếp nhận &nbsp;
-        <v-icon>save</v-icon>
-      </v-btn>
-      <v-btn color="primary" v-on:click.native="boSungHoSo" v-if="thongTinChungHoSo.dossierStatus === 'waiting'">
-        Bổ sung &nbsp;
-        <v-icon>save</v-icon>
-      </v-btn>
-      <v-btn color="primary" v-on:click.native="tiepNhanHoSo" v-if="thongTinChungHoSo.dossierStatus === 'releasing'" :to="'/danh-sach-ho-so/' + index">
-        Trả kết quả &nbsp;
-        <v-icon>send</v-icon>
-      </v-btn>
-      <v-btn color="primary" :to="'/danh-sach-ho-so/' + index + '/tra-ket-qua/' + thongTinChungHoSo.dossierId">
-        Quay lại &nbsp;
-        <v-icon>undo</v-icon>
-      </v-btn>
-    </div>
-  </v-form>
+  </div>
 </template>
 
 <script>
@@ -47,14 +52,15 @@
 export default {
   props: ['index', 'id'],
   data: () => ({
-    dossierTemplatesResult: []
+    validTNHS: false,
+    mainItems: [
+    ],
+    mainItems2: [
+    ]
   }),
   computed: {
     loading () {
       return this.$store.getters.loading
-    },
-    thongTinChungHoSo () {
-      return this.$store.getters.thongTinChungHoSo
     }
   },
   created () {
@@ -63,21 +69,37 @@ export default {
       console.log('thongTinChungHoSo-RE====================', vm.thongTinChungHoSo)
       vm.$store.dispatch('setThongTinNguoiNopHoSo', vm.thongTinChungHoSo.dossierTemplateNo).then(function (result) {
         console.log('dossierTemplatesResult============', result)
-        vm.dossierTemplatesResult = result
+        var mainItemsTemplatePart = result.filter((val, index) => {
+          return val.partType === 1
+        })
+        vm.mainItems2 = mainItemsTemplatePart
+        var mainItems2TemplatePart = result.filter((val, index) => {
+          return val.partType === 2
+        })
+        vm.mainItems2 = mainItems2TemplatePart
+        console.log('mainItemsTemplatePart===========', mainItemsTemplatePart)
+        console.log('mainItems2TemplatePart===========', mainItems2TemplatePart)
       }).catch(function (xhr) {
-        vm.dossierTemplatesResult = []
+        console.log(xhr)
       })
     })
   },
   methods: {
-    traKetQua () {
+    moveRelease () {
       var vm = this
-      let param = {
-        dossierId: vm.thongTinChungHoSo.dossierId,
-        actionCode: 30000
-      }
-      vm.$store.dispatch('postAction', param)
+      vm.$root.$confirm.open('Thông báo', 'Bạn chắc chắn muốn thực hiện thao tác này?', { color: 'blue darken-4' }).then((confirm) => {
+        console.log('run')
+        let param = {
+          dossierId: vm.thongTinChungHoSo.dossierId,
+          actionCode: 30000
+        }
+        vm.$store.dispatch('postAction', param)
+      }).catch(function (xhr) {})
+    },
+    redirectBack () {
+      window.history.back()
     }
   }
 }
 </script>
+
