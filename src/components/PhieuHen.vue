@@ -48,7 +48,7 @@
                   ({{index+1}}) &nbsp;{{item.partName}}
                 </p>
               </li>
-              <li><p>2. Số bộ hồ sơ: 01 (bộ)</p></li>
+              <li><p>2. Số bộ hồ sơ: ………… (bộ)</p></li>
               <li><p>3. Thời gian giải quyết hồ sơ theo quy định là: {{ thongTinChungHoSo.durationDate }} ngày</p></li>
               <li><p>4. Thời gian nhận hồ sơ: {{thongTinChungHoSo.receiveDate|dateTimeView}} </p></li>
               <li><p>5. Thời gian trả kết quả giải quyết hồ sơ: {{ thongTinChungHoSo.dueDate|dateTimeView }}</p></li>
@@ -122,9 +122,21 @@ export default {
       console.log(vm.$store.getters.printPH)
       setTimeout(function () {
         if (vm.$store.getters.printPH) {
-          console.log('run print')
-          vm.printContent()
-          vm.$store.commit('setPrintPH', false)
+          let promise = vm.$store.dispatch('getDetailDossier', vm.id)
+          promise.then(function (result) {
+            let promise2 = vm.$store.dispatch('loadDossierTemplates', result)
+            promise2.then(function (result) {
+              setTimeout(function () {
+                vm.printContent()
+                vm.$store.commit('setPrintPH', false)
+              }, 500)
+            })
+          })
+          // console.log('run print')
+          // setTimeout(function () {
+          //   vm.printContent()
+          //   vm.$store.commit('setPrintPH', false)
+          // }, 500)
         }
       }, 100)
     })
