@@ -11,6 +11,7 @@ Vue.use(Vuex)
 
 export const store = new Vuex.Store({
   state: {
+    printPH: true,
     api: {
       serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
       serviceConfigApi: 'http://127.0.0.1:8081/api/onegate/serviceconfigs/processes',
@@ -34,8 +35,7 @@ export const store = new Vuex.Store({
     index: 0,
     lePhi: {
       fee: '',
-      feeNote: '',
-      request: ''
+      feeNote: ''
     },
     dossier: {
       applicantIdNo: 'ccc'
@@ -52,8 +52,7 @@ export const store = new Vuex.Store({
       dueDate: (new Date()).toString(),
       durationDate: '',
       dossierId: '',
-      dossierStatus: '',
-      dossierActionId: ''
+      dossierStatus: ''
     },
     vnpostCodeItems: [],
     serviceConfigItems: null,
@@ -375,8 +374,7 @@ export const store = new Vuex.Store({
         durationDate: 1,
         dossierId: '',
         dossierNo: '',
-        govAgencyName: '',
-        dossierActionId: ''
+        govAgencyName: ''
       }
       commit('setThongTinChungHoSo', data)
     },
@@ -413,62 +411,66 @@ export const store = new Vuex.Store({
       commit('setDossierTemplates', [])
     },
     loadDossierTemplates ({ commit, state }, data) {
-      let param = {
-        headers: {
-          groupId: state.api.groupId
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            groupId: state.api.groupId
+          }
         }
-      }
-      let paramDossierMark = {
-        headers: {
-          groupId: state.api.groupId
-        },
-        params: {
-          type: 1
+        let paramDossierMark = {
+          headers: {
+            groupId: state.api.groupId
+          },
+          params: {
+            type: 1
+          }
         }
-      }
-      axios.all([axios.get(state.api.dossierTemplatesApi + '/' + data.dossierTemplateNo, param), axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/marks', paramDossierMark)])
-      .then(axios.spread(function (resDossierTemplates, resDossierMarks) {
-        let dossierTemplateItems = resDossierTemplates.data.dossierParts.filter((item, index) => {
-          return item.partType === 1
-        })
-        let dossierMarkItems = resDossierMarks.data.data
-        if (dossierMarkItems) {
-          dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
-            if (itemTemplate.hasForm) {
-              itemTemplate.count = 1
-            } else {
-              itemTemplate.count = 0
-            }
-            let itemMarkFinded = dossierMarkItems.find(itemMark => {
-              return itemMark && itemMark.partNo === itemTemplate.partNo
+        axios.all([axios.get(state.api.dossierTemplatesApi + '/' + data.dossierTemplateNo, param), axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/marks', paramDossierMark)])
+        .then(axios.spread(function (resDossierTemplates, resDossierMarks) {
+          let dossierTemplateItems = resDossierTemplates.data.dossierParts.filter((item, index) => {
+            return item.partType === 1
+          })
+          let dossierMarkItems = resDossierMarks.data.data
+          if (dossierMarkItems) {
+            dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
+              if (itemTemplate.hasForm) {
+                itemTemplate.count = 1
+              } else {
+                itemTemplate.count = 0
+              }
+              let itemMarkFinded = dossierMarkItems.find(itemMark => {
+                return itemMark && itemMark.partNo === itemTemplate.partNo
+              })
+              if (itemMarkFinded) {
+                itemTemplate.fileType = itemMarkFinded.fileType
+                itemTemplate.fileCheck = itemMarkFinded.fileCheck
+              } else {
+                itemTemplate.fileType = 0
+                itemTemplate.fileCheck = false
+              }
+              return itemTemplate
             })
-            if (itemMarkFinded) {
-              itemTemplate.fileType = itemMarkFinded.fileType
-              itemTemplate.fileCheck = itemMarkFinded.fileCheck
-            } else {
+          } else {
+            dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
+              if (itemTemplate.hasForm) {
+                itemTemplate.count = 1
+              } else {
+                itemTemplate.count = 0
+              }
               itemTemplate.fileType = 0
               itemTemplate.fileCheck = false
-            }
-            return itemTemplate
-          })
-        } else {
-          dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
-            if (itemTemplate.hasForm) {
-              itemTemplate.count = 1
-            } else {
-              itemTemplate.count = 0
-            }
-            itemTemplate.fileType = 0
-            itemTemplate.fileCheck = false
-            return itemTemplate
-          })
-        }
-        console.log(dossierTemplateItems)
-        commit('setDossierTemplates', dossierTemplateItems)
-        state.thanhPhanHoSo.dossierTemplates = dossierTemplateItems
-        state.thanhPhanHoSo.dossierTemplateId = resDossierTemplates.dossierTemplateId
-      })).catch(function (xhr) {
-        console.log(xhr)
+              return itemTemplate
+            })
+          }
+          resolve(dossierTemplateItems)
+          console.log(dossierTemplateItems)
+          commit('setDossierTemplates', dossierTemplateItems)
+          state.thanhPhanHoSo.dossierTemplates = dossierTemplateItems
+          state.thanhPhanHoSo.dossierTemplateId = resDossierTemplates.dossierTemplateId
+        })).catch(function (xhr) {
+          reject(xhr)
+          console.log(xhr)
+        })
       })
     },
     deleteAttackFiles ({ commit, state }, data) {
@@ -672,9 +674,6 @@ export const store = new Vuex.Store({
         dataPutdossier.append('delegateDistrictCode', data.delegateDistrictCode)
         dataPutdossier.append('delegateWardCode', data.delegateWardCode)
         dataPutdossier.append('applicantNote', data.applicantNote)
-        dataPutdossier.append('paymentFee', data.fee)
-        dataPutdossier.append('paymentFeeNote', data.feeNote)
-        dataPutdossier.append('dossierActionId', data.dossierActionId)
         if (data.viaPostal) {
           dataPutdossier.append('viaPostal', data.viaPostal ? 1 : 0)
           dataPutdossier.append('postalServiceCode', data.postalServiceCode)
@@ -903,29 +902,6 @@ export const store = new Vuex.Store({
     },
     setDefaultCityCode ({commit, state}, data) {
       state.thongTinChuHoSo.cityCode = data
-    },
-    loadPayment ({commit, state}, data) {
-      return new Promise((resolve, reject) => {
-        let param = {
-          headers: {
-            groupId: state.api.groupId
-          },
-          params: {
-            serviceCode: data.serviceCode,
-            govAgencyCode: data.govAgencyCode,
-            dossierTemplateNo: data.dossierTemplateNo,
-            dossierActionId: data.dossierActionId
-          }
-        }
-        axios.get('/o/rest/v2/onegate/' + data.dossierId + '/serviceProcess', param).then(function (response) {
-          state.lePhi.fee = response.data.paymentFeeTotal
-          state.lePhi.request = response.data.paymentFeeRequest
-          resolve(response.data)
-        }).catch(function (xhr) {
-          reject(xhr)
-          console.log(xhr)
-        })
-      })
     }
   },
   mutations: {
@@ -989,11 +965,6 @@ export const store = new Vuex.Store({
       state.thongTinNguoiNopHoSo = Object.assign(state.thongTinNguoiNopHoSo, payload)
     },
     setDichVuChuyenPhatKetQua (state, payload) {
-      if (payload.viaPostal === 0) {
-        payload.viaPostal = false
-      } else {
-        payload.viaPostal = true
-      }
       let tempData = {
         viaPostal: payload.viaPostal,
         postalServiceCode: payload.postalServiceCode,
@@ -1025,8 +996,7 @@ export const store = new Vuex.Store({
         dossierId: payload.dossierId,
         dossierStatus: payload.dossierStatus,
         dossierNo: payload.dossierNo,
-        govAgencyName: payload.govAgencyName,
-        dossierActionId: payload.dossierActionId
+        govAgencyName: payload.govAgencyName
       }
       state.thongTinChungHoSo = thongTinChungHoSoPayLoad
     },
@@ -1080,6 +1050,9 @@ export const store = new Vuex.Store({
     },
     setSameUser2 (state, payload) {
       state.sameUser2 = payload
+    },
+    setPrintPH (state, payload) {
+      state.printPH = payload
     }
   },
   getters: {
@@ -1091,6 +1064,9 @@ export const store = new Vuex.Store({
     },
     error (state) {
       return state.error
+    },
+    printPH (state) {
+      return state.printPH
     },
     index (state) {
       return state.index

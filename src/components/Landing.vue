@@ -85,7 +85,7 @@
               <span>Xem hồ sơ</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('send')">
-              <v-btn slot="activator" icon class="mx-0 my-0" :disabled="checkPrint(props.item)">
+              <v-btn slot="activator" @click="toDetailPhieuHen(index, props.item.dossierId)" icon class="mx-0 my-0" :disabled="checkPrint(props.item)">
                 <v-icon size="16" class="mx-0">print</v-icon>
               </v-btn>
               <span>In phiếu hẹn</span>
@@ -147,6 +147,7 @@
 
 <script>
 import * as utils from '../store/onegate_utils'
+import printJS from 'print-js/dist/print.min.js'
 export default {
   props: ['index'],
   data: () => ({
@@ -442,6 +443,14 @@ export default {
     toDetailDossier (index, dossierId) {
       let url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + dossierId
       window.location.href = url
+    },
+    toDetailPhieuHen (index, dossierId) {
+      var vm = this
+      vm.$store.commit('setPrintPH', true)
+      console.log(vm.$store.getters.printPH)
+      let url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + dossierId + '/phieu-hen'
+      // window.location.href = url
+      window.open(url, '_blank')
     }
   }
 }
