@@ -23,13 +23,17 @@
     <le-phi ref="lephi"></le-phi>
     <dich-vu-chuyen-phat-ket-qua ref="dichvuchuyenphatketqua"></dich-vu-chuyen-phat-ket-qua>
     <div class="text-center mt-2">
-      <v-btn color="primary" v-on:click.native="tiepNhanHoSo" v-if="thongTinChungHoSo.dossierStatus !== 'waiting'">
+      <v-btn color="primary" v-on:click.native="tiepNhanHoSo" v-if="thongTinChungHoSo.dossierStatus === 'new'">
         Tiếp nhận &nbsp;
         <v-icon>save</v-icon>
       </v-btn>
       <v-btn color="primary" v-on:click.native="boSungHoSo" v-if="thongTinChungHoSo.dossierStatus === 'waiting'">
         Bổ sung &nbsp;
         <v-icon>save</v-icon>
+      </v-btn>
+      <v-btn color="primary" v-on:click.native="tiepNhanHoSo" v-if="thongTinChungHoSo.dossierStatus === 'releasing'">
+        Trả kết quả &nbsp;
+        <v-icon>send</v-icon>
       </v-btn>
       <v-btn color="primary" :to="'/danh-sach-ho-so/' + index">
         Quay lại &nbsp;
