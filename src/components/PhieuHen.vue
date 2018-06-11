@@ -168,7 +168,7 @@ export default {
       router.push('/danh-sach-ho-so/0')
     },
     printContent () {
-      var printContents = document.getElementById('printContent').innerHTML
+      // var printContents = document.getElementById('printContent').innerHTML
       // var originalContents = document.body.innerHTML
       // document.body.innerHTML = printContents
       // window.print()
