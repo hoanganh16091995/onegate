@@ -221,6 +221,7 @@
               router.push('/danh-sach-ho-so/' + vm.$store.getters.index + '/tiep-nhan-ho-so/' + result.dossierId)
               vm.$store.dispatch('loadDossierFiles')
               vm.$store.dispatch('loadDossierTemplates', result)
+              vm.$store.dispatch('loadPayment', result)
             })
           }
         },

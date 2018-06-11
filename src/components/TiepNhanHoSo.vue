@@ -79,7 +79,7 @@ export default {
       let thongtinchuhoso = this.$store.getters.thongTinChuHoSo
       let thongtinnguoinophoso = this.$store.getters.thongTinNguoiNopHoSo
       let thanhphanhoso = this.$store.getters.thanhPhanHoSo
-      let lephi = this.$store.getters.thongTinChungHoSo
+      let lephi = this.$store.getters.lePhi
       let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
       console.log('thongtinchung:', thongtinchung)
       console.log('thongtinchuhoso:', thongtinchuhoso)

@@ -27,7 +27,7 @@
                   @focus="toCurrency = true"
                 >{{amount|currency}}</v-text-field> -->
               </v-flex>
-              <v-flex xs12 sm6 class="hidden-xs-and-down"></v-flex>
+              <v-flex xs12 sm6 class="hidden-xs-and-down">Hạn mức :{{lePhi.request}} đ</v-flex>
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
