@@ -43,11 +43,11 @@
 </template>
 
 <script>
-import router from '@/router'
+// import router from '@/router'
 export default {
   props: ['index', 'id'],
   data: () => ({
-    validTNHS: false
+    dossierTemplatesResult: []
   }),
   computed: {
     loading () {
@@ -60,10 +60,24 @@ export default {
   created () {
     var vm = this
     vm.$nextTick(function () {
-      console.log(router)
+      console.log('thongTinChungHoSo-RE====================', vm.thongTinChungHoSo)
+      vm.$store.dispatch('setThongTinNguoiNopHoSo', vm.thongTinChungHoSo.dossierTemplateNo).then(function (result) {
+        console.log('dossierTemplatesResult============', result)
+        vm.dossierTemplatesResult = result
+      }).catch(function (xhr) {
+        vm.dossierTemplatesResult = []
+      })
     })
   },
   methods: {
+    traKetQua () {
+      var vm = this
+      let param = {
+        dossierId: vm.thongTinChungHoSo.dossierId,
+        actionCode: 30000
+      }
+      vm.$store.dispatch('postAction', param)
+    }
   }
 }
 </script>
