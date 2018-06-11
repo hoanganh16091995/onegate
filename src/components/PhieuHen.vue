@@ -116,6 +116,19 @@ export default {
     'dich-vu-chuyen-phat-ket-qua': DichVuChuyenPhatKetQua
   },
   data: () => ({}),
+  created () {
+    var vm = this
+    vm.$nextTick(function () {
+      console.log(vm.$store.getters.printPH)
+      setTimeout(function () {
+        if (vm.$store.getters.printPH) {
+          console.log('run print')
+          vm.printContent()
+          vm.$store.commit('setPrintPH', false)
+        }
+      }, 100)
+    })
+  },
   computed: {
     loading () {
       return this.$store.getters.loading
@@ -176,7 +189,7 @@ export default {
       printJS({
         printable: 'printContent',
         type: 'html',
-        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.c950577a0829a5013671843dacdbb9c4.css'
+        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.8944bd0f519fdcccc81f45838019a3f1.css'
       })
     },
     receiveDateText () {
