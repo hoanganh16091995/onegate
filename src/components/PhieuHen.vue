@@ -201,7 +201,7 @@ export default {
       printJS({
         printable: 'printContent',
         type: 'html',
-        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.821f144134076de72e275e22e8eb16a1.css'
+        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.31113ad5d5bcd9e648b096c99aeba76c.css'
       })
     },
     receiveDateText () {
@@ -210,8 +210,7 @@ export default {
       return `Phú Thọ, Ngày ${date.getDate().toString().padStart(2, '0')} tháng ${(date.getMonth() + 1).toString().padStart(2, '0')} năm ${date.getFullYear()}`
     },
     quayLai (index) {
-      var vm = this
-      window.location.href = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + vm.thongTinChungHoSo.dossierId
+      window.history.back()
     }
   },
   filters: {
