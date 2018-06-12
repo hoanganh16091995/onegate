@@ -57,12 +57,29 @@
                 </v-subheader>
               </v-flex>
               <v-flex xs12></v-flex>
+              <!--  -->
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0" >
-                  Mã tiếp nhận * : 
+                  Mã hồ sơ: 
+                </v-subheader>
+              </v-flex>
+              <v-flex xs12 sm4>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.dossierIdCTN}}</i></v-subheader>
+              </v-flex>
+              <v-flex xs12></v-flex>
+              <!--  -->
+              <v-flex xs12 sm2>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else class="pl-0" >
+                  Mã tiếp nhận: 
                 </v-subheader>
               </v-flex>
               <v-flex xs12 sm4>
@@ -71,6 +88,7 @@
                 </content-placeholders>
                 <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.dossierNo}}</i></v-subheader>
               </v-flex>
+              <!--  -->
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
@@ -81,14 +99,13 @@
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <!-- <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.durationDate}} ngày làm việc</i></v-subheader> -->
-                <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.durationDate}}</i></v-subheader>
+                <v-subheader v-if="!loading&&thongTinChungHoSo.durationDate" style="float:left"><i>{{thongTinChungHoSo.durationDate}} làm việc</i></v-subheader>
               </v-flex>
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader v-else class="pl-0">Ngày giờ tiếp nhận * : </v-subheader>
+                <v-subheader v-else class="pl-0">Ngày giờ tiếp nhận: </v-subheader>
               </v-flex>
               <v-flex xs12 sm4>
                 <content-placeholders class="mt-1" v-if="loading">
@@ -100,7 +117,7 @@
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader v-else class="pl-0">Ngày hẹn trả * : </v-subheader>
+                <v-subheader v-else class="pl-0">Ngày hẹn trả: </v-subheader>
               </v-flex>
               <v-flex xs12 sm4>
                 <content-placeholders class="mt-1" v-if="loading">

@@ -53,6 +53,7 @@ export const store = new Vuex.Store({
       dueDate: (new Date()).toString(),
       durationDate: '',
       dossierId: '',
+      dossierIdCTN: '',
       dossierStatus: ''
     },
     vnpostCodeItems: [],
@@ -377,10 +378,13 @@ export const store = new Vuex.Store({
         serviceOption: '',
         receiveDate: new Date(),
         dueDate: (new Date()).toString(),
-        durationDate: 1,
+        durationDate: '',
         dossierId: '',
         dossierNo: '',
-        govAgencyName: ''
+        govAgencyName: '',
+        dossierIdCTN: '',
+        processBlock: '',
+        processUnit: ''
       }
       commit('setThongTinChungHoSo', data)
     },
@@ -1028,6 +1032,12 @@ export const store = new Vuex.Store({
       state.serviceConfigObj = payload
     },
     setThongTinChungHoSo (state, payload) {
+      var processUnit
+      if (payload.processUnit === 0) {
+        processUnit = 'giờ'
+      } else if (payload.processUnit === 1) {
+        processUnit = 'ngày'
+      }
       let thongTinChungHoSoPayLoad = {
         dossierTemplateNo: payload.dossierTemplateNo,
         dossierTemplateName: payload.dossierTemplateName,
@@ -1036,8 +1046,9 @@ export const store = new Vuex.Store({
         serviceOption: payload.dossierTemplateNo,
         receiveDate: new Date(payload.receiveDate),
         dueDate: (new Date(payload.dueDate)).toString(),
-        durationDate: '',
+        durationDate: payload.processBlock?(payload.processBlock + ' ' + processUnit):'',
         dossierId: payload.dossierId,
+        dossierIdCTN: payload.dossierIdCTN,
         dossierStatus: payload.dossierStatus,
         dossierNo: payload.dossierNo,
         govAgencyName: payload.govAgencyName

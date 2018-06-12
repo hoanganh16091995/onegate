@@ -35,10 +35,15 @@
         Trả kết quả &nbsp;
         <v-icon>send</v-icon>
       </v-btn>
-      <v-btn color="primary" :to="'/danh-sach-ho-so/' + index + '/tra-ket-qua/' + thongTinChungHoSo.dossierId">
+      <!-- <v-btn color="primary" :to="'/danh-sach-ho-so/' + index + '/tra-ket-qua/' + thongTinChungHoSo.dossierId">
+        Quay lại &nbsp;
+        <v-icon>undo</v-icon>
+      </v-btn> -->
+      <v-btn color="primary" :to="'/danh-sach-ho-so/' + index">
         Quay lại &nbsp;
         <v-icon>undo</v-icon>
       </v-btn>
+      
     </div>
   </v-form>
 </template>
