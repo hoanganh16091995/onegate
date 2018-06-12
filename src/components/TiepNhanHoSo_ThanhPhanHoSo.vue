@@ -42,9 +42,9 @@
                 <v-flex style="width: 300px;" class="layout wrap">
                   <v-checkbox light color="secondary" class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-checkbox>
                   <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox">
-                    <v-radio value="2"></v-radio>
-                    <v-radio value="0"></v-radio>
-                    <v-radio value="1"></v-radio>
+                    <v-radio :value="2" :disabled="!thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-radio>
+                    <v-radio :value="0" :disabled="!thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-radio>
+                    <v-radio :value="1" :disabled="!thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-radio>
                   </v-radio-group>
                 </v-flex>
                 <v-flex style="width: 120px;" class="text-right">
@@ -69,7 +69,7 @@
                     <span>Xem</span>
                   </v-tooltip>
                   <v-tooltip top>
-                    <v-btn slot="activator" @click="deleteAttackFiles(item)" icon class="mx-0 my-0">
+                    <v-btn slot="activator" @click="onDeleteAttackFiles(item)" icon class="mx-0 my-0">
                       <v-icon size="18" class="mx-0" color="red darken-3">delete</v-icon>
                     </v-btn>
                     <span>Xóa</span>
@@ -140,12 +140,18 @@ export default {
     })
   },
   methods: {
-    deleteAttackFiles (item) {
+    onDeleteAttackFiles (item) {
       var vm = this
-      vm.$store.dispatch('deleteAttackFiles', item).then(function (result) {
-        utils.showMessageToastr('success', 'Xóa thành công')
+      console.log('delete')
+      vm.$root.$confirm.open('Xóa', 'Bạn có muốn xoá thành phần hồ sơ này?', { color: 'red' }).then((confirm) => {
+        vm.$store.dispatch('deleteAttackFiles', item).then(function (result) {
+          vm.$store.dispatch('resetCounterTemplate', item)
+          utils.showMessageToastr('success', 'Xóa thành công')
+        }).catch(function (xhr) {
+          utils.showMessageToastr('error', 'Xóa thất bại')
+        })
       }).catch(function (xhr) {
-        utils.showMessageToastr('error', 'Xóa thất bại')
+        console.log('kkk')
       })
     },
     pickFile (item) {

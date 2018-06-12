@@ -195,6 +195,7 @@ export default {
       // vm.dichVuChuyenPhatKetQua.postalCityCode = vm.$store.getters.getCityVal
       // vm.dichVuChuyenPhatKetQua.postalDistrictCode = vm.$store.getters.getDistrictVal
       // vm.dichVuChuyenPhatKetQua.postalWardCode = vm.$store.getters.getWardVal
+      console.log('dichVuChuyenPhatKetQua---------------', vm.dichVuChuyenPhatKetQua)
       var filter = {
         collectionCode: 'ADMINISTRATIVE_REGION',
         level: 0,

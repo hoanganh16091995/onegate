@@ -4,6 +4,7 @@ import Router from 'vue-router'
 
 const routerOptions = [
   { path: '/danh-sach-ho-so/:index', component: 'Landing', props: true },
+  { path: '/tra-cuu-ho-so/:index', component: 'LandingTraCuu', props: true },
   { path: '/danh-sach-ho-so/:index/tiep-nhan-ho-so',
     component: 'TiepNhanHoSo',
     props: true,
@@ -26,8 +27,8 @@ const routerOptions = [
       store.commit('setIsDetail', true)
       let promise = store.dispatch('getDetailDossier', to.params.id)
       promise.then(function (result) {
-        store.dispatch('loadDossierFiles')
         store.dispatch('loadDossierTemplates', result)
+        store.dispatch('loadDossierFiles')
       })
       next()
     }
