@@ -31,7 +31,7 @@
         Bổ sung &nbsp;
         <v-icon>save</v-icon>
       </v-btn>
-      <v-btn color="primary" v-on:click.native="tiepNhanHoSo" v-if="thongTinChungHoSo.dossierStatus === 'releasing'" :to="'/danh-sach-ho-so/' + index">
+      <v-btn color="primary" v-if="thongTinChungHoSo.dossierStatus === 'releasing'" :to="'/danh-sach-ho-so/' + index + '/tra-ket-qua/' + id">
         Trả kết quả &nbsp;
         <v-icon>send</v-icon>
       </v-btn>

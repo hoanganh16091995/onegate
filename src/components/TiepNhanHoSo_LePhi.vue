@@ -20,7 +20,7 @@
                   v-else
                   v-model.lazy="lePhi.fee"
                   v-money="money"
-                >{{lePhi.fee}}</v-text-field>
+                ></v-text-field>
               </v-flex>
               <v-flex xs12 sm6 class="pl-4 pt-2 hidden-xs-and-down">Hạn mức: {{lePhi.request|currency}} đ</v-flex>
               <v-flex xs12 sm2>

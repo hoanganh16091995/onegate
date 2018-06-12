@@ -41,7 +41,6 @@ const routerOptions = [
       let promise = store.dispatch('getDetailDossier', to.params.id)
       promise.then(function (result) {
         store.dispatch('loadDossierFiles')
-        store.dispatch('loadAllDossierTemplates', result)
       })
       next()
     }

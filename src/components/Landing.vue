@@ -103,7 +103,7 @@
               <span>Phiếu kiểm soát</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('result')">
-              <v-btn slot="activator" icon class="mx-0 my-0" @click="traKetQua(props.item)" style="color:#1976d2">
+              <v-btn slot="activator" icon class="mx-0 my-0" to="'/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + props.item.dossierId" style="color:#1976d2">
                 <v-icon size="16" class="mx-0">send</v-icon>
               </v-btn>
               <span>Trả kết quả</span>
@@ -129,7 +129,7 @@
             <v-icon size="16">send</v-icon>
             Chuyển hồ sơ vào xử lý
           </v-btn>
-          <v-btn outline color="indigo" class="my-0 mx-0 mr-2" @click="moveRelease" v-if="trangThaiHoSoList[index].id === 'release'">
+          <v-btn outline color="indigo" class="my-0 mx-0 mr-2" to="'/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id" v-if="trangThaiHoSoList[index].id === 'release'">
             <v-icon size="16">send</v-icon>
             Trả kết quả
           </v-btn>
@@ -147,7 +147,7 @@
 
 <script>
 import * as utils from '../store/onegate_utils'
-import printJS from 'print-js/dist/print.min.js'
+// import printJS from 'print-js/dist/print.min.js'
 export default {
   props: ['index'],
   data: () => ({
