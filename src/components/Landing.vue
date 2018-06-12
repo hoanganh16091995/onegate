@@ -76,35 +76,35 @@
           </td>
           <td class="text-xs-left" >{{ props.item.address}}</td>
           <td class="text-xs-left" >{{ props.item.dueDate }}</td>
-          <td class="text-xs-left" >{{ props.item.durationText }}</td>
+          <td class="text-xs-left" >{{ props.item.processBlock}} {{props.item.processUnit|processUnit}} <span v-if="props.item.processBlock">làm việc</span></td>
           <td class="text-xs-center px-0">
             <v-tooltip top>
-              <v-btn slot="activator" icon class="mx-0 my-0" @click="toDetailDossier(index, props.item.dossierId)">
+              <v-btn style="width:30px;height:30px" slot="activator" icon class="mx-0 my-0" @click="toDetailDossier(index, props.item.dossierId)">
                 <v-icon size="16" class="mx-0" style="color:#1976d2">visibility</v-icon>
               </v-btn>
               <span>Xem hồ sơ</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('send')">
-              <v-btn slot="activator" @click="toDetailPhieuHen(index, props.item.dossierId)" icon class="mx-0 my-0" :disabled="checkPrint(props.item)">
+              <v-btn style="width:30px;height:30px" slot="activator" @click="toDetailPhieuHen(index, props.item.dossierId)" icon class="mx-0 my-0" :disabled="checkPrint(props.item)">
                 <v-icon size="16" class="mx-0" style="color:#1976d2">print</v-icon>
               </v-btn>
               <span>In phiếu hẹn</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('send')">
-              <v-btn slot="activator" icon class="mx-0 my-0" @click="chuyenXuLy(props.item)" :disabled="checkPrint(props.item)">
+              <v-btn style="width:30px;height:30px" slot="activator" icon class="mx-0 my-0" @click="chuyenXuLy(props.item)" :disabled="checkPrint(props.item)">
                 <v-icon size="16" class="mx-0" style="color:#1976d2">send</v-icon>
               </v-btn>
               <span>Chuyển hồ sơ vào xử lý</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('ticket')">
-              <v-btn slot="activator" icon class="mx-0 my-0">
+              <v-btn style="width:30px;height:30px" slot="activator" icon class="mx-0 my-0">
                 <v-icon size="16" class="mx-0" style="color:#1976d2">description</v-icon>
               </v-btn>
               <span>Phiếu kiểm soát</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('result')">
-              <v-btn slot="activator" icon class="mx-0 my-0" :to="'/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + props.item.dossierId" style="color:#1976d2">
-                <v-icon size="16" class="mx-0">send</v-icon>
+              <v-btn style="width:30px;height:30px" slot="activator" icon class="mx-0 my-0" :to="'/danh-sach-ho-so/' + index + '/tra-ket-qua/' + props.item.dossierId">
+                <v-icon size="16" class="mx-0" style="color:#1976d2">send</v-icon>
               </v-btn>
               <span>Trả kết quả</span>
             </v-tooltip>
@@ -115,7 +115,7 @@
               <span>Xem danh sách giấy tờ cần trả</span>
             </v-tooltip> -->
             <v-tooltip top v-if="checkAction(trangThaiHoSoList[index].id).includes('delete')">
-              <v-btn slot="activator" icon class="mx-0 my-0" @click="deleteDosier(props.item.dossierId, props.index)">
+              <v-btn style="width:30px;height:30px" slot="activator" icon class="mx-0 my-0" @click="deleteDosier(props.item.dossierId, props.index)">
                 <v-icon size="16" class="mx-0" color="red darken-3">delete</v-icon>
               </v-btn>
               <span>Xoá</span>
@@ -451,6 +451,15 @@ export default {
       let url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + dossierId + '/phieu-hen'
       // window.location.href = url
       window.open(url, '_blank')
+    }
+  },
+  filters: {
+    processUnit (arg) {
+      if (arg === 0) {
+        return 'giờ'
+      } else if (arg === 1) {
+        return 'ngày'
+      }
     }
   }
 }

@@ -31,8 +31,8 @@
         
           <div class="row title">
             <h4 class="text-uppercase">GIẤY TIẾP NHẬN HỒ SƠ VÀ HẸN TRẢ KẾT QUẢ</h4>
-            <p><span class="text-bold">Mã hồ sơ:</span> {{thongTinChungHoSo.dossierId}}</p>
-            <p><i>(Liên 1: Lưu)</i></p>
+            <p><span class="text-bold">Mã hồ sơ:</span> {{thongTinChungHoSo.dossierIdCTN}}</p>
+            <p><i>(Liên: Lưu/giao khách hàng)</i></p>
           </div>
           <div class="row">
             <p>Bộ phận tiếp nhận và trả kết quả: {{thongTinChungHoSo.govAgencyName}}</p>
@@ -49,7 +49,7 @@
                 </p>
               </li>
               <li><p>2. Số bộ hồ sơ: ………… (bộ)</p></li>
-              <li><p>3. Thời gian giải quyết hồ sơ theo quy định là: {{ thongTinChungHoSo.durationDate }} ngày</p></li>
+              <li><p>3. Thời gian giải quyết hồ sơ theo quy định là: <span v-if="thongTinChungHoSo.durationDate">{{ thongTinChungHoSo.durationDate }} làm việc</span></p></li>
               <li><p>4. Thời gian nhận hồ sơ: {{thongTinChungHoSo.receiveDate|dateTimeView}} </p></li>
               <li><p>5. Thời gian trả kết quả giải quyết hồ sơ: {{ thongTinChungHoSo.dueDate|dateTimeView }}</p></li>
               <li><p>6. Đăng ký nhận kết quả tại: {{dichVuChuyenPhatKetQua.postalAddress}}</p></li>
@@ -213,7 +213,6 @@ export default {
       var vm = this
       window.location.href = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + vm.thongTinChungHoSo.dossierId
     }
-    // {{thongTinChungHoSo.receiveDate|dateTimeView}}
   },
   filters: {
     dateTimeView (arg) {
