@@ -644,6 +644,7 @@ export const store = new Vuex.Store({
           commit('setDossier', response.data)
           commit('setThongTinChuHoSo', response.data)
           commit('setThongTinChungHoSo', response.data)
+          commit('setDichVuChuyenPhatKetQua', response.data)
           resolve(response.data)
         }).catch(function (error) {
           utils.showMessageByAPICode(error.response.status)
@@ -688,6 +689,8 @@ export const store = new Vuex.Store({
         dataPutdossier.append('delegateDistrictCode', data.delegateDistrictCode)
         dataPutdossier.append('delegateWardCode', data.delegateWardCode)
         dataPutdossier.append('applicantNote', data.applicantNote)
+        dataPutdossier.append('paymentFee', data.fee)
+        dataPutdossier.append('paymentFeeNote', data.feeNote)
         if (data.viaPostal) {
           dataPutdossier.append('viaPostal', data.viaPostal ? 1 : 0)
           dataPutdossier.append('postalServiceCode', data.postalServiceCode)
