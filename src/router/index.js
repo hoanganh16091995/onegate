@@ -27,8 +27,9 @@ const routerOptions = [
       store.commit('setIsDetail', true)
       let promise = store.dispatch('getDetailDossier', to.params.id)
       promise.then(function (result) {
-        store.dispatch('loadDossierTemplates', result)
-        store.dispatch('loadDossierFiles')
+        store.dispatch('loadDossierTemplates', result).then(function (result) {
+          store.dispatch('loadDossierFiles')
+        })
       })
       next()
     }

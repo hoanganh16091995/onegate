@@ -146,6 +146,7 @@ export default {
       vm.$root.$confirm.open('Xóa', 'Bạn có muốn xoá thành phần hồ sơ này?', { color: 'red' }).then((confirm) => {
         vm.$store.dispatch('deleteAttackFiles', item).then(function (result) {
           vm.$store.dispatch('resetCounterTemplate', item)
+          vm.$store.dispatch('loadDossierFiles')
           utils.showMessageToastr('success', 'Xóa thành công')
         }).catch(function (xhr) {
           utils.showMessageToastr('error', 'Xóa thất bại')
