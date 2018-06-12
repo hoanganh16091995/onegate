@@ -61,18 +61,21 @@ export default {
   computed: {
     loading () {
       return this.$store.getters.loading
+    },
+    thongTinChungHoSo () {
+      return this.$store.getters.thongTinChungHoSo
     }
   },
   created () {
     var vm = this
     vm.$nextTick(function () {
       console.log('thongTinChungHoSo-RE====================', vm.thongTinChungHoSo)
-      vm.$store.dispatch('setThongTinNguoiNopHoSo', vm.thongTinChungHoSo.dossierTemplateNo).then(function (result) {
+      vm.$store.dispatch('loadAllDossierTemplates', vm.thongTinChungHoSo).then(function (result) {
         console.log('dossierTemplatesResult============', result)
         var mainItemsTemplatePart = result.filter((val, index) => {
           return val.partType === 1
         })
-        vm.mainItems2 = mainItemsTemplatePart
+        vm.mainItems = mainItemsTemplatePart
         var mainItems2TemplatePart = result.filter((val, index) => {
           return val.partType === 2
         })
@@ -93,7 +96,9 @@ export default {
           dossierId: vm.thongTinChungHoSo.dossierId,
           actionCode: 30000
         }
-        vm.$store.dispatch('postAction', param)
+        vm.$store.dispatch('postAction', param).then(function (result) {
+          vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
+        })
       }).catch(function (xhr) {})
     },
     redirectBack () {
