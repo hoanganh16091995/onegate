@@ -210,8 +210,7 @@ export default {
       return `Phú Thọ, Ngày ${date.getDate().toString().padStart(2, '0')} tháng ${(date.getMonth() + 1).toString().padStart(2, '0')} năm ${date.getFullYear()}`
     },
     quayLai (index) {
-      var vm = this
-      window.location.href = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + vm.thongTinChungHoSo.dossierId
+      window.history.back()
     }
   },
   filters: {
