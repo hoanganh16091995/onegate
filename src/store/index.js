@@ -298,6 +298,13 @@ export const store = new Vuex.Store({
         action: 'folder',
         action_active: 'play_arrow',
         link: '/'
+      },
+      {
+        title: 'Hồ sơ đã trả kết quả',
+        id: 'done',
+        action: 'folder',
+        action_active: 'play_arrow',
+        link: '/'
       }
       ]
       commit('setLoading', false)
