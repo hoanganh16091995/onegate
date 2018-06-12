@@ -18,16 +18,11 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  v-model="lePhi.fee"
-                  v-on:keyup.native="clearTotalMoney"
-                ></v-text-field>
-                <!-- <v-text-field
-                  v-else
-                  @blur="toCurrency= false"
-                  @focus="toCurrency = true"
-                >{{amount|currency}}</v-text-field> -->
+                  v-model.lazy="lePhi.fee"
+                  v-money="money"
+                >{{lePhi.fee}}</v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 class="hidden-xs-and-down">Hạn mức :{{lePhi.request}} đ</v-flex>
+              <v-flex xs12 sm6 class="pl-4 pt-2 hidden-xs-and-down">Hạn mức: {{lePhi.request|currency}} đ</v-flex>
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
@@ -55,18 +50,20 @@
 </template>
 
 <script>
-// import * as utils from '../store/onegate_utils'
+import * as utils from '../store/onegate_utils'
+import {VMoney} from 'v-money'
 export default {
   data: () => ({
-    rules: {
-      number: (value) => {
-        const pattern = /^\d+$/
-        return pattern.test(value) || 'Sai định dạng kiểu dữ liệu số.'
-      }
-    },
-    toCurrency: '',
-    amount: 10000
+    money: {
+      decimal: '',
+      thousands: '.',
+      prefix: '',
+      suffix: '',
+      precision: 0,
+      masked: false
+    }
   }),
+  directives: {money: VMoney},
   computed: {
     loading () {
       return this.$store.getters.loading
@@ -80,22 +77,14 @@ export default {
   },
   methods: {
     clearTotalMoney () {
-      if (this.lePhi.fee === '') {
-        this.lePhi.fee = 0
-      } else {
-        this.lePhi.fee = parseInt(this.lePhi.fee)
-        console.log(this.lePhi.fee)
-      }
+      var vm = this
+      console.log(vm.lePhi.fee)
+    }
+  },
+  filters: {
+    currency (val) {
+      return utils.currency(val)
     }
   }
-  // filters: {
-  //   currency (val) {
-  //     var vm = this
-  //     if (vm.toCurrency) {
-  //       return utils.currency(val)
-  //     }
-  //     return val
-  //   }
-  // }
 }
 </script>
