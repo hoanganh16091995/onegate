@@ -11,6 +11,10 @@
             <v-icon size="16">send</v-icon>
             Trả kết quả
           </v-btn>
+          <v-btn flat class="my-0 mx-0 btn-border-left" @click="redirectBack">
+            <v-icon size="16">undo</v-icon>
+            Quay lại
+          </v-btn>
         </div>
       </div>
     </div>
@@ -21,7 +25,7 @@
           <v-list-tile-content style="font-size: 14px;">
             <v-list-tile-title style="display: flex;align-items: center;height: auto;white-space:normal">
               <span class="text-bold mr-2">{{index + 1}}.</span>
-              <span>{{item.text}}</span>
+              <span>{{item.partName}}</span>
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -34,7 +38,7 @@
           <v-list-tile-content style="font-size: 14px;">
             <v-list-tile-title style="display: flex;align-items: center;height: auto;white-space:normal">
               <span class="text-bold mr-2">{{index + 1}}.</span>
-              <span>{{item.text}}</span>
+              <span>{{item.partName}}</span>
             </v-list-tile-title>
           </v-list-tile-content>
         </v-list-tile>
@@ -44,29 +48,43 @@
 </template>
 
 <script>
-import router from '@/router'
+// import router from '@/router'
 export default {
   props: ['index', 'id'],
   data: () => ({
     validTNHS: false,
     mainItems: [
-      {'value': true, 'text': 'Hồ sơ '},
-      {'value': true, 'text': 'Hồ sơ 1'}
     ],
     mainItems2: [
-      {'value': true, 'text': 'Hồ sơ '},
-      {'value': true, 'text': 'Hồ sơ 1'}
     ]
   }),
   computed: {
     loading () {
       return this.$store.getters.loading
+    },
+    thongTinChungHoSo () {
+      return this.$store.getters.thongTinChungHoSo
     }
   },
   created () {
     var vm = this
     vm.$nextTick(function () {
-      console.log(router)
+      console.log('thongTinChungHoSo-RE====================', vm.thongTinChungHoSo)
+      vm.$store.dispatch('loadAllDossierTemplates', vm.thongTinChungHoSo).then(function (result) {
+        console.log('dossierTemplatesResult============', result)
+        var mainItemsTemplatePart = result.filter((val, index) => {
+          return val.partType === 1
+        })
+        vm.mainItems = mainItemsTemplatePart
+        var mainItems2TemplatePart = result.filter((val, index) => {
+          return val.partType === 2
+        })
+        vm.mainItems2 = mainItems2TemplatePart
+        console.log('mainItemsTemplatePart===========', mainItemsTemplatePart)
+        console.log('mainItems2TemplatePart===========', mainItems2TemplatePart)
+      }).catch(function (xhr) {
+        console.log(xhr)
+      })
     })
   },
   methods: {
@@ -74,7 +92,17 @@ export default {
       var vm = this
       vm.$root.$confirm.open('Thông báo', 'Bạn chắc chắn muốn thực hiện thao tác này?', { color: 'blue darken-4' }).then((confirm) => {
         console.log('run')
+        let param = {
+          dossierId: vm.thongTinChungHoSo.dossierId,
+          actionCode: 30000
+        }
+        vm.$store.dispatch('postAction', param).then(function (result) {
+          vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
+        })
       }).catch(function (xhr) {})
+    },
+    redirectBack () {
+      window.history.back()
     }
   }
 }

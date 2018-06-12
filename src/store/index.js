@@ -35,7 +35,8 @@ export const store = new Vuex.Store({
     index: 0,
     lePhi: {
       fee: '',
-      feeNote: ''
+      feeNote: '',
+      request: ''
     },
     dossier: {
       applicantIdNo: 'ccc'
@@ -270,10 +271,8 @@ export const store = new Vuex.Store({
         }
         axios.delete(state.api.dossierApi + '/' + arg, param).then(function (response) {
           resolve(response)
-          utils.showMessageToastr('success', 'Xóa hồ sơ thành công')
         }).catch(function (error) {
           reject(error)
-          utils.showMessageByAPICode(error.response.status)
         })
       })
     },
@@ -912,6 +911,29 @@ export const store = new Vuex.Store({
         }).catch(function (xhr) {
           reject(xhr)
           commit('setLoading', false)
+        })
+      })
+    },
+    loadPayment ({commit, state}, data) {
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            groupId: state.api.groupId
+          },
+          params: {
+            serviceCode: data.serviceCode,
+            govAgencyCode: data.govAgencyCode,
+            dossierTemplateNo: data.dossierTemplateNo,
+            dossierActionId: data.dossierActionId
+          }
+        }
+        axios.get('/o/rest/v2/onegate/' + data.dossierId + '/serviceProcess', param).then(function (response) {
+          state.lePhi.fee = response.data.paymentFeeTotal
+          state.lePhi.request = response.data.paymentFeeRequest
+          resolve(response.data)
+        }).catch(function (xhr) {
+          reject(xhr)
+          console.log(xhr)
         })
       })
     },

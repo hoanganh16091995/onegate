@@ -18,14 +18,10 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  v-model="lePhi.fee"
+                  v-model.lazy="lePhi.fee"
+                  v-money="money"
                   v-on:keyup.native="clearTotalMoney"
-                ></v-text-field>
-                <!-- <v-text-field
-                  v-else
-                  @blur="toCurrency= false"
-                  @focus="toCurrency = true"
-                >{{amount|currency}}</v-text-field> -->
+                >{{lePhi.fee}}</v-text-field>
               </v-flex>
               <v-flex xs12 sm6 class="hidden-xs-and-down">Hạn mức :{{lePhi.request}} đ</v-flex>
               <v-flex xs12 sm2>
@@ -56,17 +52,19 @@
 
 <script>
 // import * as utils from '../store/onegate_utils'
+import {VMoney} from 'v-money'
 export default {
   data: () => ({
-    rules: {
-      number: (value) => {
-        const pattern = /^\d+$/
-        return pattern.test(value) || 'Sai định dạng kiểu dữ liệu số.'
-      }
-    },
-    toCurrency: '',
-    amount: 10000
+    money: {
+      decimal: '',
+      thousands: '.',
+      prefix: '',
+      suffix: '',
+      precision: 0,
+      masked: false
+    }
   }),
+  directives: {money: VMoney},
   computed: {
     loading () {
       return this.$store.getters.loading

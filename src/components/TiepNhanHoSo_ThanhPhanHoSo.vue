@@ -26,7 +26,7 @@
                   <v-card-text>
                     <v-layout wrap>
                       <v-flex xs12 class="text-xs-right">
-                        <div :id="'formAlpaca'+item.partNo">
+                        <div :id="'formAlpaca' + item.partNo">
                         </div>
                       </v-flex>
                     </v-layout>
@@ -132,9 +132,11 @@ export default {
     var vm = this
     vm.page = 1
     vm.$nextTick(function () {
-      vm.dossierTemplates.forEach(val => {
-        vm.$store.dispatch('loadAlpcaForm', val)
-      })
+      setTimeout(function (argument) {
+        vm.dossierTemplates.forEach(val => {
+          vm.$store.dispatch('loadAlpcaForm', val)
+        })
+      }, 500)
     })
   },
   methods: {
