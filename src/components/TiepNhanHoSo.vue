@@ -10,7 +10,7 @@
           
         </div> 
         <div class="flex text-right" style="margin-left: auto;">
-          <v-btn flat class="my-0 mx-0 btn-border-left" :to="'/danh-sach-ho-so/' + index" active-class="temp_active">
+          <v-btn flat class="my-0 mx-0 btn-border-left" @click="goBack" active-class="temp_active">
             Quay lại &nbsp;
             <v-icon size="16">undo</v-icon>
           </v-btn>
@@ -35,7 +35,7 @@
         Trả kết quả &nbsp;
         <v-icon>send</v-icon>
       </v-btn>
-      <v-btn color="primary" :to="'/danh-sach-ho-so/' + index">
+      <v-btn color="primary" @click="goBack">
         Quay lại &nbsp;
         <v-icon>undo</v-icon>
       </v-btn>
@@ -206,6 +206,9 @@ export default {
           vm.$store.dispatch('showMessageToastr', ['error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ'])
         })
       }
+    },
+    goBack () {
+      window.history.back()
     }
   }
 }
