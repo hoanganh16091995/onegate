@@ -187,6 +187,9 @@
       },
       serviceOptionItems () {
         return this.$store.getters.serviceOptionItems
+      },
+      dossierTemplates () {
+        return this.$store.getters.dossierTemplates
       }
     },
     watch: {},
@@ -237,7 +240,14 @@
               console.log('result', result)
               router.push('/danh-sach-ho-so/' + vm.$store.getters.index + '/tiep-nhan-ho-so/' + result.dossierId)
               vm.$store.dispatch('loadDossierFiles')
-              vm.$store.dispatch('loadDossierTemplates', result)
+              vm.$store.dispatch('loadDossierTemplates', result).then(function (result) {
+                setTimeout(function (argument) {
+                  console.log('result dossierTemplates=-------', result)
+                  result.forEach(val => {
+                    vm.$store.dispatch('loadAlpcaForm', val)
+                  })
+                }, 500)
+              })
               vm.$store.dispatch('loadPayment', result)
             })
           }
