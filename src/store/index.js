@@ -284,7 +284,8 @@ export const store = new Vuex.Store({
         id: 'new',
         action: 'folder',
         action_active: 'play_arrow',
-        link: '/'
+        link: '/',
+        active: true
       },
       {
         title: 'Hồ sơ chờ bổ sung',
@@ -1058,9 +1059,9 @@ export const store = new Vuex.Store({
     },
     setThongTinChungHoSo (state, payload) {
       var processUnit
-      if (payload.processUnit === 0) {
+      if (payload.processUnit === 1) {
         processUnit = 'giờ'
-      } else if (payload.processUnit === 1) {
+      } else if (payload.processUnit === 0) {
         processUnit = 'ngày'
       }
       let thongTinChungHoSoPayLoad = {

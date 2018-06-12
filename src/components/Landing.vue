@@ -455,9 +455,9 @@ export default {
   },
   filters: {
     processUnit (arg) {
-      if (arg === 0) {
+      if (arg === 1) {
         return 'giờ'
-      } else if (arg === 1) {
+      } else if (arg === 0) {
         return 'ngày'
       }
     }
