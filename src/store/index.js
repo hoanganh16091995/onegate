@@ -75,7 +75,7 @@ export const store = new Vuex.Store({
         'esign': false,
         'fileTemplateNo': '',
         'hasForm': true,
-        'fileType': ''
+        'fileType': 0
       },
       {
         'partNo': '2',
@@ -87,7 +87,7 @@ export const store = new Vuex.Store({
         'esign': false,
         'fileTemplateNo': '',
         'hasForm': true,
-        'fileType': ''
+        'fileType': 0
       },
       {
         'partNo': '2',
@@ -99,7 +99,7 @@ export const store = new Vuex.Store({
         'esign': false,
         'fileTemplateNo': '',
         'hasForm': true,
-        'fileType': ''
+        'fileType': 0
       },
       {
         'partNo': '2',
@@ -111,7 +111,7 @@ export const store = new Vuex.Store({
         'esign': false,
         'fileTemplateNo': '',
         'hasForm': true,
-        'fileType': ''
+        'fileType': 0
       },
       {
         'partNo': '2',
@@ -123,7 +123,7 @@ export const store = new Vuex.Store({
         'esign': false,
         'fileTemplateNo': '',
         'hasForm': true,
-        'fileType': ''
+        'fileType': 0
       }
       ]
     },
@@ -305,6 +305,13 @@ export const store = new Vuex.Store({
         action: 'folder',
         action_active: 'play_arrow',
         link: '/'
+      },
+      {
+        title: 'Tra cứu hồ sơ',
+        id: 'all',
+        action: 'folder',
+        action_active: 'play_arrow',
+        link: '/'
       }
       ]
       commit('setLoading', false)
@@ -445,7 +452,7 @@ export const store = new Vuex.Store({
                 itemTemplate.count = 0
               }
               let itemMarkFinded = dossierMarkItems.find(itemMark => {
-                return itemMark && itemMark.partNo === itemTemplate.partNo
+                return itemMark && itemMark.dossierPartNo === itemTemplate.partNo
               })
               if (itemMarkFinded) {
                 itemTemplate.fileType = itemMarkFinded.fileType
@@ -468,11 +475,11 @@ export const store = new Vuex.Store({
               return itemTemplate
             })
           }
-          resolve(dossierTemplateItems)
           console.log(dossierTemplateItems)
           commit('setDossierTemplates', dossierTemplateItems)
           state.thanhPhanHoSo.dossierTemplates = dossierTemplateItems
           state.thanhPhanHoSo.dossierTemplateId = resDossierTemplates.dossierTemplateId
+          resolve(dossierTemplateItems)
         })).catch(function (xhr) {
           reject(xhr)
           console.log(xhr)
@@ -501,10 +508,13 @@ export const store = new Vuex.Store({
             groupId: state.api.groupId
           }
         }
+        console.log('data -delete-----', data)
+        console.log('data-- dossier file-------', state.dossierFiles)
+        var dataPut = new URLSearchParams()
         if (data.hasForm) {
           state.dossierFiles.forEach(item => {
-            if (item.partNo === data.partNo) {
-              axios.put(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + data.referenceUid + '/resetformdata', {}, param).then(function (response) {
+            if (item.dossierPartNo === data.partNo) {
+              axios.put(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/files/' + item.referenceUid + '/resetformdata', dataPut, param).then(function (response) {
                 console.log('success')
                 resolve(response)
               }).catch(function (xhr) {
@@ -521,6 +531,17 @@ export const store = new Vuex.Store({
             console.log(xhr)
             reject(xhr)
           })
+        }
+      })
+    },
+    resetCounterTemplate ({commit, state}, data) {
+      state.dossierTemplates.forEach(val => {
+        if (val.partNo === data.partNo) {
+          if (val.hasForm) {
+            val.count = 1
+          } else {
+            val.count = 0
+          }
         }
       })
     },
@@ -577,6 +598,7 @@ export const store = new Vuex.Store({
           axios.get(state.api.postDossierApi + '/' + data, param).then(function (response) {
             commit('setDossier', response.data)
             commit('setThongTinChuHoSo', response.data)
+            commit('setLePhi', response.data)
             commit('setThongTinChungHoSo', response.data)
             commit('setDichVuChuyenPhatKetQua', response.data)
             resolve(response.data)
@@ -980,8 +1002,8 @@ export const store = new Vuex.Store({
       state.isDetail = payload
     },
     setLePhi (state, payload) {
-      state.lePhi.fee = payload.fee
-      state.lePhi.feeNote = payload.feeNote
+      state.lePhi.fee = payload.paymentFee
+      state.lePhi.feeNote = payload.paymentFeeNote
     },
     setThanhPhanHoso (state, payload) {
       state.thanhPhanHoSo = payload

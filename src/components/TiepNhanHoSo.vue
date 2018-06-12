@@ -35,7 +35,7 @@
         Trả kết quả &nbsp;
         <v-icon>send</v-icon>
       </v-btn>
-      <v-btn color="primary" :to="'/danh-sach-ho-so/' + index + '/tra-ket-qua/' + thongTinChungHoSo.dossierId">
+      <v-btn color="primary" :to="'/danh-sach-ho-so/' + index">
         Quay lại &nbsp;
         <v-icon>undo</v-icon>
       </v-btn>
@@ -84,7 +84,7 @@ export default {
       let thongtinchuhoso = this.$store.getters.thongTinChuHoSo
       let thongtinnguoinophoso = this.$store.getters.thongTinNguoiNopHoSo
       let thanhphanhoso = this.$store.getters.thanhPhanHoSo
-      let lephi = this.$store.getters.thongTinChungHoSo
+      let lephi = this.$store.getters.lePhi
       let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
       console.log('thongtinchung:', thongtinchung)
       console.log('thongtinchuhoso:', thongtinchuhoso)
@@ -141,7 +141,14 @@ export default {
           })
         }).catch(reject => {
           console.log('reject=============', reject)
-          utils.showMessageToastr('error', 'Vui lòng kiểm tra lại Form thành phần hồ sơ')
+          let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
+          vm.$store.dispatch('putDossier', tempData).then(function (result) {
+            let index = vm.$store.getters.index
+            let id = result.dossierId
+            utils.showMessageToastr('success', 'Lưu hồ sơ thành công')
+            router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + id + '/phieu-hen')
+          })
+          utils.showMessageToastr('error', 'Lưu Form lỗi')
         })
       }
     },
@@ -151,7 +158,7 @@ export default {
       let thongtinchuhoso = this.$store.getters.thongTinChuHoSo
       let thongtinnguoinophoso = this.$store.getters.thongTinNguoiNopHoSo
       let thanhphanhoso = this.$store.getters.thanhPhanHoSo
-      let lephi = this.$store.getters.thongTinChungHoSo
+      let lephi = this.$store.getters.lePhi
       let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
       console.log('thongtinchung:', thongtinchung)
       console.log('thongtinchuhoso:', thongtinchuhoso)
