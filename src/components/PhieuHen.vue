@@ -44,7 +44,7 @@
             <ul>
               <li>
                 <p>1. Thành phần hồ sơ nộp gồm:</p>
-                <p class="ml-3" v-for="(item, index) in thanhPhanHoSo.dossierTemplates" v-bind:key="item.partNo">
+                <p class="ml-3" v-for="(item, index) in dossierTemplateFiles" v-bind:key="item.partNo">
                   ({{index+1}}) &nbsp;{{item.partName}}
                 </p>
               </li>
@@ -101,7 +101,7 @@
             <ul>
               <li>
                 <p>1. Thành phần hồ sơ nộp gồm:</p>
-                <p class="ml-3" v-for="(item, index) in thanhPhanHoSo.dossierTemplates" v-bind:key="item.partNo">
+                <p class="ml-3" v-for="(item, index) in dossierTemplateFiles" v-bind:key="item.partNo">
                   ({{index+1}}) &nbsp;{{item.partName}}
                 </p>
               </li>
@@ -172,7 +172,9 @@ export default {
     'le-phi': LePhi,
     'dich-vu-chuyen-phat-ket-qua': DichVuChuyenPhatKetQua
   },
-  data: () => ({}),
+  data: () => ({
+    dossierTemplateFiles: []
+  }),
   created () {
     var vm = this
     vm.$nextTick(function () {
@@ -196,6 +198,13 @@ export default {
           // }, 500)
         }
       }, 100)
+      vm.$store.dispatch('loadDossierFiles').then(function (result) {
+        setTimeout(function () {
+          vm.$store.dispatch('getDossierTemplateEdit').then(function (resultTemp) {
+            vm.dossierTemplateFiles = resultTemp
+          })
+        }, 200)
+      })
     })
   },
   computed: {
@@ -235,6 +244,7 @@ export default {
           actionCode: 10000
         }
         vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
+          router.push('/danh-sach-ho-so/3')
           utils.showMessageToastr('success', 'Lưu thành công')
         })
       }).catch(function (xhr) {
@@ -247,7 +257,7 @@ export default {
       router.push('/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so')
     },
     hoanThanh () {
-      router.push('/danh-sach-ho-so/0')
+      router.push('/danh-sach-ho-so/3')
     },
     printContent () {
       // var printContents = document.getElementById('printContent').innerHTML
@@ -258,7 +268,7 @@ export default {
       printJS({
         printable: 'printContent',
         type: 'html',
-        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.31113ad5d5bcd9e648b096c99aeba76c.css'
+        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.f0e8fa9a723d2d729ce6fb8503d39e2b.css'
       })
     },
     receiveDateText () {

@@ -12,33 +12,33 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     printPH: true,
-    // api: {
-    //   apiLocal: true,
-    //   serviceInfoApi: '/o/rest/v2/serviceinfos',
-    //   serviceConfigApi: '/o/rest/v2/onegate/serviceconfigs/processes',
-    //   regionApi: '/o/rest/v2/dictcollections',
-    //   serviceOptionApi: '/o/rest/v2/serviceconfigs/301/processes',
-    //   postDossierApi: '/o/rest/v2/onegate',
-    //   dossierApi: '/o/rest/v2/dossiers',
-    //   dossierTemplatesApi: '/o/rest/v2/dossiertemplates',
-    //   applicantApi: '/o/rest/v2/applicant',
-    //   govAgency: 'abc',
-    //   user: {},
-    //   groupId: 55301
-    // },
     api: {
-      serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
-      serviceConfigApi: 'http://127.0.0.1:8081/api/onegate/serviceconfigs/processes',
-      regionApi: 'http://127.0.0.1:8081/api/dictcollections',
-      serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
-      postDossierApi: 'http://127.0.0.1:8081/api/onegate',
-      dossierApi: 'http://127.0.0.1:8081/api/dossiers',
-      dossierTemplatesApi: 'http://127.0.0.1:8081/api/dossiertemplates',
+      apiLocal: true,
+      serviceInfoApi: '/o/rest/v2/serviceinfos',
+      serviceConfigApi: '/o/rest/v2/onegate/serviceconfigs/processes',
+      regionApi: '/o/rest/v2/dictcollections',
+      serviceOptionApi: '/o/rest/v2/serviceconfigs/301/processes',
+      postDossierApi: '/o/rest/v2/onegate',
+      dossierApi: '/o/rest/v2/dossiers',
+      dossierTemplatesApi: '/o/rest/v2/dossiertemplates',
       applicantApi: '/o/rest/v2/applicant',
       govAgency: 'abc',
       user: {},
-      groupId: 0
+      groupId: 55301
     },
+    // api: {
+    //   serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
+    //   serviceConfigApi: 'http://127.0.0.1:8081/api/onegate/serviceconfigs/processes',
+    //   regionApi: 'http://127.0.0.1:8081/api/dictcollections',
+    //   serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
+    //   postDossierApi: 'http://127.0.0.1:8081/api/onegate',
+    //   dossierApi: 'http://127.0.0.1:8081/api/dossiers',
+    //   dossierTemplatesApi: 'http://127.0.0.1:8081/api/dossiertemplates',
+    //   applicantApi: '/o/rest/v2/applicant',
+    //   govAgency: 'abc',
+    //   user: {},
+    //   groupId: 0
+    // },
     dataDetailDossier: {},
     isDetail: false,
     loading: false,
@@ -618,6 +618,7 @@ export const store = new Vuex.Store({
             commit('setDossier', response.data)
             commit('setThongTinChuHoSo', response.data)
             commit('setLePhi', response.data)
+            commit('setThongTinNguoiNopHoSo', response.data)
             commit('setThongTinChungHoSo', response.data)
             commit('setDichVuChuyenPhatKetQua', response.data)
             resolve(response.data)
@@ -986,6 +987,35 @@ export const store = new Vuex.Store({
           reject(xhr)
           console.log(xhr)
         })
+      })
+    },
+    getDossierTemplateEdit ({commit, state}) {
+      return new Promise((resolve, reject) => {
+        var dossierTemplatesTemp = state.dossierTemplates
+        var resultTemp = []
+        try {
+          state.dossierFiles.forEach(itemFile => {
+            dossierTemplatesTemp.forEach(itemTemplate => {
+              if (itemFile.dossierPartNo === itemTemplate.partNo) {
+                resultTemp.push({
+                  partName: itemTemplate.partName,
+                  partNo: itemTemplate.partNo,
+                  displayName: itemFile.displayName,
+                  dossierFileId: itemFile.dossierFileId,
+                  partType: itemTemplate.partType,
+                  hasForm: itemTemplate.hasForm,
+                  fileType: itemFile.fileType,
+                  referenceUid: itemFile.referenceUid
+                })
+              }
+            })
+          })
+          resolve(resultTemp)
+          console.log(resultTemp)
+        } catch (e) {
+          console.log(e)
+          reject([])
+        }
       })
     },
     setDefaultCityCode ({commit, state}, data) {

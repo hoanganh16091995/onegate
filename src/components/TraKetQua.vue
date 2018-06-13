@@ -48,7 +48,7 @@
 </template>
 
 <script>
-// import router from '@/router'
+import router from '@/router'
 export default {
   props: ['index', 'id'],
   data: () => ({
@@ -66,25 +66,27 @@ export default {
       return this.$store.getters.thongTinChungHoSo
     }
   },
-  created () {
+  mounted () {
     var vm = this
     vm.$nextTick(function () {
-      console.log('thongTinChungHoSo-RE====================', vm.thongTinChungHoSo)
-      vm.$store.dispatch('loadAllDossierTemplates', vm.thongTinChungHoSo).then(function (result) {
-        console.log('dossierTemplatesResult============', result)
-        var mainItemsTemplatePart = result.filter((val, index) => {
-          return val.partType === 1
+      console.log('thongTinChungHoSo-RE====================', vm.$store.getters.thongTinChungHoSo)
+      setTimeout(function () {
+        vm.$store.dispatch('loadAllDossierTemplates', vm.$store.getters.thongTinChungHoSo).then(function (result) {
+          console.log('dossierTemplatesResult============', result)
+          var mainItemsTemplatePart = result.filter((val, index) => {
+            return val.partType === 1
+          })
+          vm.mainItems = mainItemsTemplatePart
+          var mainItems2TemplatePart = result.filter((val, index) => {
+            return val.partType === 2
+          })
+          vm.mainItems2 = mainItems2TemplatePart
+          console.log('mainItemsTemplatePart===========', mainItemsTemplatePart)
+          console.log('mainItems2TemplatePart===========', mainItems2TemplatePart)
+        }).catch(function (xhr) {
+          console.log(xhr)
         })
-        vm.mainItems = mainItemsTemplatePart
-        var mainItems2TemplatePart = result.filter((val, index) => {
-          return val.partType === 2
-        })
-        vm.mainItems2 = mainItems2TemplatePart
-        console.log('mainItemsTemplatePart===========', mainItemsTemplatePart)
-        console.log('mainItems2TemplatePart===========', mainItems2TemplatePart)
-      }).catch(function (xhr) {
-        console.log(xhr)
-      })
+      }, 300)
     })
   },
   methods: {
@@ -98,6 +100,7 @@ export default {
         }
         vm.$store.dispatch('postAction', param).then(function (result) {
           vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
+          router.push('/danh-sach-ho-so/3')
         })
       }).catch(function (xhr) {})
     },

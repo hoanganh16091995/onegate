@@ -494,7 +494,7 @@ body .input-group--select .input-group__selections__comma {
 
 .table-landing table.datatable--select-all thead th:nth-child(9), 
 .table-landing table.datatable--select-all tbody td:nth-child(9){
-    min-width: 0px !important;
+    min-width: 140px !important;
     width: 13% !important;
 }
 .table-landing table.datatable--select-all tbody td:nth-child(5) a:hover {
