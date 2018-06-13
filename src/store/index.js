@@ -12,19 +12,32 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     printPH: true,
+    // api: {
+    //   apiLocal: true,
+    //   serviceInfoApi: '/o/rest/v2/serviceinfos',
+    //   serviceConfigApi: '/o/rest/v2/onegate/serviceconfigs/processes',
+    //   regionApi: '/o/rest/v2/dictcollections',
+    //   serviceOptionApi: '/o/rest/v2/serviceconfigs/301/processes',
+    //   postDossierApi: '/o/rest/v2/onegate',
+    //   dossierApi: '/o/rest/v2/dossiers',
+    //   dossierTemplatesApi: '/o/rest/v2/dossiertemplates',
+    //   applicantApi: '/o/rest/v2/applicant',
+    //   govAgency: 'abc',
+    //   user: {},
+    //   groupId: 55301
+    // },
     api: {
-      apiLocal: true,
-      serviceInfoApi: '/o/rest/v2/serviceinfos',
-      serviceConfigApi: '/o/rest/v2/onegate/serviceconfigs/processes',
-      regionApi: '/o/rest/v2/dictcollections',
-      serviceOptionApi: '/o/rest/v2/serviceconfigs/301/processes',
-      postDossierApi: '/o/rest/v2/onegate',
-      dossierApi: '/o/rest/v2/dossiers',
-      dossierTemplatesApi: '/o/rest/v2/dossiertemplates',
+      serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
+      serviceConfigApi: 'http://127.0.0.1:8081/api/onegate/serviceconfigs/processes',
+      regionApi: 'http://127.0.0.1:8081/api/dictcollections',
+      serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
+      postDossierApi: 'http://127.0.0.1:8081/api/onegate',
+      dossierApi: 'http://127.0.0.1:8081/api/dossiers',
+      dossierTemplatesApi: 'http://127.0.0.1:8081/api/dossiertemplates',
       applicantApi: '/o/rest/v2/applicant',
       govAgency: 'abc',
       user: {},
-      groupId: 55301
+      groupId: 0
     },
     dataDetailDossier: {},
     isDetail: false,
@@ -286,7 +299,7 @@ export const store = new Vuex.Store({
         action: 'folder',
         action_active: 'play_arrow',
         link: '/',
-        active: true
+        active: false
       },
       {
         title: 'Hồ sơ chờ bổ sung',
@@ -1089,11 +1102,20 @@ export const store = new Vuex.Store({
       state.serviceConfigObj = payload
     },
     setThongTinChungHoSo (state, payload) {
-      var processUnit
-      if (payload.processUnit === 1) {
-        processUnit = 'giờ'
+      var durationText
+      if (payload.processUnit === 1 && payload.processBlock > 23) {
+        let day = Math.floor(payload.processBlock/24) + ' ngày'
+        let hours
+        if (payload.processBlock%24 !== 0) {
+          hours = (payload.processBlock%24)/10*24 + ' giờ'
+        } else {
+          hours = ''
+        }
+        durationText = `${day} ${hours}`
       } else if (payload.processUnit === 0) {
-        processUnit = 'ngày'
+        durationText = payload.processBlock + ' ngày'
+      } else if (payload.processUnit === 1 && payload.processBlock <= 23) {
+        durationText = payload.processBlock + ' giờ'
       }
       let thongTinChungHoSoPayLoad = {
         dossierTemplateNo: payload.dossierTemplateNo,
@@ -1103,7 +1125,7 @@ export const store = new Vuex.Store({
         serviceOption: payload.dossierTemplateNo,
         receiveDate: new Date(payload.receiveDate),
         dueDate: (new Date(payload.dueDate)).toString(),
-        durationDate: payload.processBlock?(payload.processBlock + ' ' + processUnit):'',
+        durationDate: durationText,
         dossierId: payload.dossierId,
         dossierIdCTN: payload.dossierIdCTN,
         dossierStatus: payload.dossierStatus,

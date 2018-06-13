@@ -165,8 +165,8 @@
           </td>
           <td class="text-xs-left" >{{ props.item.address}}</td>
           <td class="text-xs-left" >{{ props.item.dueDate }}</td>
-          <td class="text-xs-left" >{{ props.item.processBlock}} {{props.item.processUnit|processUnit}} <span v-if="props.item.processBlock">làm việc</span></td>
-          <td class="text-xs-center px-0">
+          <td class="text-xs-left" >{{durationText(props.item.processBlock, props.item.processUnit)}} <span v-if="props.item.processBlock">làm việc</span></td>
+          <td class="text-xs-left px-0">
             <v-tooltip top>
               <v-btn style="width:30px;height:30px" slot="activator" icon class="mx-0 my-0" @click="toDetailDossier(index, props.item.dossierId)">
                 <v-icon size="16" class="mx-0" style="color:#1976d2">visibility</v-icon>
@@ -547,6 +547,24 @@ export default {
       let url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + dossierId + '/phieu-hen'
       // window.location.href = url
       window.open(url, '_blank')
+    },
+    durationText (block, unit) {
+      var durationText
+      if (unit === 1 && block > 23) {
+        let day = Math.floor(block / 24) + ' ngày'
+        let hours
+        if (block % 24 !== 0) {
+          hours = (block % 24) / 10 * 24 + ' giờ'
+        } else {
+          hours = ''
+        }
+        durationText = `${day} ${hours}`
+      } else if (unit === 0) {
+        durationText = block + ' ngày'
+      } else if (unit === 1 && block <= 23) {
+        durationText = block + ' giờ'
+      }
+      return durationText
     }
   },
   filters: {
