@@ -605,6 +605,7 @@ export const store = new Vuex.Store({
             commit('setDossier', response.data)
             commit('setThongTinChuHoSo', response.data)
             commit('setLePhi', response.data)
+            commit('setThongTinNguoiNopHoSo', response.data)
             commit('setThongTinChungHoSo', response.data)
             commit('setDichVuChuyenPhatKetQua', response.data)
             resolve(response.data)
@@ -973,6 +974,35 @@ export const store = new Vuex.Store({
           reject(xhr)
           console.log(xhr)
         })
+      })
+    },
+    getDossierTemplateEdit ({commit, state}) {
+      return new Promise((resolve, reject) => {
+        var dossierTemplatesTemp = state.dossierTemplates
+        var resultTemp = []
+        try {
+          state.dossierFiles.forEach(itemFile => {
+            dossierTemplatesTemp.forEach(itemTemplate => {
+              if (itemFile.dossierPartNo === itemTemplate.partNo) {
+                resultTemp.push({
+                  partName: itemTemplate.partName,
+                  partNo: itemTemplate.partNo,
+                  displayName: itemFile.displayName,
+                  dossierFileId: itemFile.dossierFileId,
+                  partType: itemTemplate.partType,
+                  hasForm: itemTemplate.hasForm,
+                  fileType: itemFile.fileType,
+                  referenceUid: itemFile.referenceUid
+                })
+              }
+            })
+          })
+          resolve(resultTemp)
+          console.log(resultTemp)
+        } catch (e) {
+          console.log(e)
+          reject([])
+        }
       })
     },
     setDefaultCityCode ({commit, state}, data) {
