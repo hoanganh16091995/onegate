@@ -14,7 +14,7 @@
     </div>
     <div style="background-color: white;">
       <div id='printContent'>
-        <div class="receipt-wrapper">
+        <div class="receipt-wrapper" style="width: 21cm;height: 29.7cm">
           <div class="row head">
             <div class="left">
               <p class="text-uppercase text-bold">{{thongTinChungHoSo.govAgencyName}}</p>
@@ -32,7 +32,64 @@
           <div class="row title">
             <h4 class="text-uppercase">GIẤY TIẾP NHẬN HỒ SƠ VÀ HẸN TRẢ KẾT QUẢ</h4>
             <p><span class="text-bold">Mã hồ sơ:</span> {{thongTinChungHoSo.dossierIdCTN}}</p>
-            <p><i>(Liên: Lưu/giao khách hàng)</i></p>
+            <p><i>(Liên 1: Lưu)</i></p>
+          </div>
+          <div class="row">
+            <p>Bộ phận tiếp nhận và trả kết quả: {{thongTinChungHoSo.govAgencyName}}</p>
+            <p>Tiếp nhận hồ sơ của: {{ thongTinChuHoSo.applicantName }}</p>
+            <p>Địa chỉ: {{ thongTinChuHoSo.address }}</p>
+            <p>Số điện thoại: {{ thongTinChuHoSo.contactTelNo}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Email: {{ thongTinChuHoSo.contactEmail }}</p>
+            <!-- <p>Lệ phí tạm thu: {{ lePhi.fee }} đồng</p> -->
+            <p>Nội dung yêu cầu giải quyết: {{thongTinChungHoSo.serviceName}}</p>
+            <ul>
+              <li>
+                <p>1. Thành phần hồ sơ nộp gồm:</p>
+                <p class="ml-3" v-for="(item, index) in thanhPhanHoSo.dossierTemplates" v-bind:key="item.partNo">
+                  ({{index+1}}) &nbsp;{{item.partName}}
+                </p>
+              </li>
+              <li><p>2. Số bộ hồ sơ: ………… (bộ)</p></li>
+              <li><p>3. Thời gian giải quyết hồ sơ theo quy định là: <span v-if="thongTinChungHoSo.durationDate">{{ thongTinChungHoSo.durationDate }} làm việc</span></p></li>
+              <li><p>4. Thời gian nhận hồ sơ: {{thongTinChungHoSo.receiveDate|dateTimeView}} </p></li>
+              <li><p>5. Thời gian trả kết quả giải quyết hồ sơ: {{ thongTinChungHoSo.dueDate|dateTimeView }}</p></li>
+              <li><p>6. Đăng ký nhận kết quả tại: {{dichVuChuyenPhatKetQua.postalAddress}}</p></li>
+            </ul>
+            <p>Vào Sổ theo dõi hồ sơ, Quyển số:……………… Số thứ tự……………</p>
+            <p class="note text-bold"><i>Ghi chú:</i></p>
+            <p>- Giấy tiếp nhận và hẹn trả kết quả được lập thành 2 liên; một liên chuyển kèm theo Phiếu kiểm soát quá trình giải quyết hồ sơ và được lưu tại Bộ phận tiếp nhận và trả kết quả; một liên giao cho cá nhân, tổ chức nộp hồ sơ;</p>
+            <p>- Cá nhân, tổ chức có thể đăng ký nhận kết quả tại Bộ phận tiếp nhận và trả kết quả hoặc tại nhà (trụ sở tổ chức) qua dịch vụ bưu chính.</p>
+          </div>
+          <div class="row">
+            <div class="submit left">
+              <p class="text-bold">NGƯỜI NỘP HỒ SƠ</p>
+              <p><i>(Ký và ghi rõ họ tên)</i></p>
+            </div>
+            <div class="reciever right">
+              <p class="text-bold">NGƯỜI TIẾP NHẬN HỒ SƠ</p>
+              <p><i>(Ký và ghi rõ họ tên)</i></p>
+            </div>
+          </div>
+        </div>
+        <!--  -->
+        <div class="receipt-wrapper pt-0">
+          <div class="row head">
+            <div class="left">
+              <p class="text-uppercase text-bold">{{thongTinChungHoSo.govAgencyName}}</p>
+              <span class="text-bold">BỘ PHẬN TIẾP NHẬN VÀ TRẢ KẾT QUẢ</span>
+              <p>==================</p>
+            </div>
+            <div class="right">
+              <p class="text-uppercase text-bold">CỘNG HÒA XÃ HỘI CHỦ NGHĨA VIỆT NAM</p>
+              <p class="text-bold">Độc lập - Tự do - Hạnh phúc</p>
+              <p>==================</p>
+              <p><i>{{receiveDateText()}}</i></p>
+            </div>
+          </div>
+        
+          <div class="row title">
+            <h4 class="text-uppercase">GIẤY TIẾP NHẬN HỒ SƠ VÀ HẸN TRẢ KẾT QUẢ</h4>
+            <p><span class="text-bold">Mã hồ sơ:</span> {{thongTinChungHoSo.dossierIdCTN}}</p>
+            <p><i>(Liên 2: Giao khách hàng)</i></p>
           </div>
           <div class="row">
             <p>Bộ phận tiếp nhận và trả kết quả: {{thongTinChungHoSo.govAgencyName}}</p>
