@@ -366,6 +366,7 @@ export default {
     thongTinChuHoSo () {
       var vm = this
       var thongTinChuHoSoTemp = this.$store.getters.thongTinChuHoSo
+      console.log('thongTinChuHoSoTemp------------', thongTinChuHoSoTemp)
       var filter = {
         collectionCode: 'ADMINISTRATIVE_REGION',
         level: 0,
@@ -389,7 +390,8 @@ export default {
     },
     thongTinNguoiNopHoSo () {
       var vm = this
-      var thongTinNguoiNopHoSoTemp = this.$store.getters.thongTinNguoiNopHoSo
+      var thongTinNguoiNopHoSoTemp = vm.$store.getters.thongTinNguoiNopHoSo
+      console.log('thongTinNguoiNopHoSoTemp------------', thongTinNguoiNopHoSoTemp)
       var filter = {
         collectionCode: 'ADMINISTRATIVE_REGION',
         level: 0,

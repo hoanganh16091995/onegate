@@ -44,7 +44,7 @@
             <ul>
               <li>
                 <p>1. Thành phần hồ sơ nộp gồm:</p>
-                <p class="ml-3" v-for="(item, index) in thanhPhanHoSo.dossierTemplates" v-bind:key="item.partNo">
+                <p class="ml-3" v-for="(item, index) in dossierTemplateFiles" v-bind:key="item.partNo">
                   ({{index+1}}) &nbsp;{{item.partName}}
                 </p>
               </li>
@@ -268,7 +268,7 @@ export default {
       printJS({
         printable: 'printContent',
         type: 'html',
-        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.31113ad5d5bcd9e648b096c99aeba76c.css'
+        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.f0e8fa9a723d2d729ce6fb8503d39e2b.css'
       })
     },
     receiveDateText () {
