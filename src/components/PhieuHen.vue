@@ -243,6 +243,11 @@ export default {
           dossierId: vm.thongTinChungHoSo.dossierId,
           actionCode: 10000
         }
+        // var thongTinChungHoSoTemp = vm.thongTinChungHoSo
+        // if (thongTinChungHoSoTemp.dossierStatus === 'waiting') {
+        //   dataPostAction.actionCode = 20000
+        //   console.log('dataPostAction--------', dataPostAction)
+        // }
         vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
           router.push('/danh-sach-ho-so/3')
           utils.showMessageToastr('success', 'Lưu thành công')
