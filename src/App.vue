@@ -12,7 +12,7 @@
         <content-placeholders-text :lines="7" />
         </content-placeholders>
       <v-list v-else class="py-0 nav_trang_thai_ho_so">
-        <v-list-tile v-for="(item, index) in trangThaiHoSoList" :key="item.id" @click="changeList(item, index)">
+        <v-list-tile v-for="(item, index) in trangThaiHoSoList" :key="item.id" :to="changeList(item, index)">
           <v-list-tile-action>
             <v-icon v-if="index == currentIndex">{{item.action_active}}</v-icon>
             <v-icon v-else>{{item.action}}</v-icon>
@@ -32,7 +32,7 @@
 </template>
 
 <script>
-  import router from '@/router'
+  // import router from '@/router'
   import Confirm from './components/Confirm.vue'
   export default {
     components: {
@@ -58,10 +58,10 @@
         if (item.id === 'all') {
           console.log('all')
           let url = '/tra-cuu-ho-so/' + index
-          router.push(url)
+          return url
         } else {
           let url = '/danh-sach-ho-so/' + index
-          router.push(url)
+          return url
         }
       }
     },

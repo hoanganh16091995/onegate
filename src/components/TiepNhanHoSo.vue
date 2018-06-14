@@ -199,6 +199,7 @@ export default {
             }
             vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
               vm.$store.dispatch('showMessageToastr', ['success', 'Lưu thành công'])
+              router.push('/danh-sach-ho-so/3')
             })
           })
         }).catch(reject => {
