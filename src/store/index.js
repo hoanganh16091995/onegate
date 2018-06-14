@@ -1128,7 +1128,7 @@ export const store = new Vuex.Store({
         dueDate: (new Date(payload.dueDate)).toString(),
         durationDate: durationText,
         dossierId: payload.dossierId,
-        dossierIdCTN: payload.dosierIdCTN,
+        dossierIdCTN: payload.dossierIdCTN,
         dossierStatus: payload.dossierStatus,
         dossierNo: payload.dossierNo,
         govAgencyName: payload.govAgencyName
