@@ -71,7 +71,7 @@
           </div>
         </div>
         <!--  -->
-        <div class="receipt-wrapper pt-0">
+        <div class="receipt-wrapper pt-0" style="margin-top: -50px">
           <div class="row head">
             <div class="left">
               <p class="text-uppercase text-bold">{{thongTinChungHoSo.govAgencyName}}</p>

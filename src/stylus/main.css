@@ -500,6 +500,10 @@ body .input-group--select .input-group__selections__comma {
 .table-landing table.datatable--select-all tbody td:nth-child(5) a:hover {
     color: #1976d2 !important;
 }
+/*  */
+.nav_trang_thai_ho_so .list__tile--link {
+    padding: 0 8px !important
+}
 
 
 

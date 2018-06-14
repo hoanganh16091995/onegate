@@ -348,7 +348,7 @@ export default {
       } else if (status === 'waiting') {
         return 'view,ticket'
       } else if (status === 'receiving') {
-        return 'view,ticket'
+        return 'view,result'
       } else if (status === 'correcting') {
         return 'view,ticket'
       } else if (status === 'processing') {

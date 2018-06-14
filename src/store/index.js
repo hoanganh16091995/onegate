@@ -10,7 +10,6 @@ Vue.use(toastr)
 Vue.use(Vuex)
 
 export const store = new Vuex.Store({
-  strict: true,
   state: {
     printPH: true,
     api: {
@@ -255,17 +254,22 @@ export const store = new Vuex.Store({
     loadDanhSachHoSo ({ commit, state }, filter) {
       return new Promise((resolve, reject) => {
         commit('setLoadingTable', true)
+        var paramsGet = {
+          status: filter.status.id,
+          keyword: filter.keywords,
+          start: filter.start,
+          end: filter.end,
+          online: false
+        }
+        if (filter.status.id === 'receiving') {
+          paramsGet.online = null
+          paramsGet.substatus = 'receiving_5'
+        }
         let param = {
           headers: {
             groupId: state.api.groupId
           },
-          params: {
-            status: filter.status.id,
-            keyword: filter.keywords,
-            start: filter.start,
-            end: filter.end,
-            online: false
-          }
+          params: paramsGet
         }
         axios.get(state.api.dossierApi, param).then(function (response) {
           let serializable = response.data
@@ -319,6 +323,13 @@ export const store = new Vuex.Store({
       {
         title: 'Hồ sơ đã trả kết quả',
         id: 'done',
+        action: 'folder',
+        action_active: 'play_arrow',
+        link: '/'
+      },
+      {
+        title: 'Hồ sơ chờ tiếp nhận online',
+        id: 'receiving',
         action: 'folder',
         action_active: 'play_arrow',
         link: '/'
@@ -1128,7 +1139,7 @@ export const store = new Vuex.Store({
         dueDate: (new Date(payload.dueDate)).toString(),
         durationDate: durationText,
         dossierId: payload.dossierId,
-        dossierIdCTN: payload.dosierIdCTN,
+        dossierIdCTN: payload.dossierIdCTN,
         dossierStatus: payload.dossierStatus,
         dossierNo: payload.dossierNo,
         govAgencyName: payload.govAgencyName
