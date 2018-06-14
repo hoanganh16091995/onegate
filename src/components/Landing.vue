@@ -453,22 +453,22 @@ export default {
       window.open(url, '_blank')
     },
     durationText (block, unit) {
-      var durationText
-      if (unit === 1 && block > 23) {
-        let day = Math.floor(block / 24) + ' ngày'
+      var duration
+      if (unit === 1 && block > 8) {
+        let day = Math.floor(block / 8) + ' ngày'
         let hours
-        if (block % 24 !== 0) {
-          hours = (block % 24) / 10 * 24 + ' giờ'
+        if (block % 8 !== 0) {
+          hours = ((block / 8) - Math.floor(block / 8)) * 8 + ' giờ'
         } else {
           hours = ''
         }
-        durationText = `${day} ${hours}`
+        duration = `${day} ${hours}`
       } else if (unit === 0) {
-        durationText = block + ' ngày'
-      } else if (unit === 1 && block <= 23) {
-        durationText = block + ' giờ'
+        duration = block + ' ngày'
+      } else if (unit === 1 && block <= 8) {
+        duration = block + ' giờ'
       }
-      return durationText
+      return duration
     }
   }
 }
