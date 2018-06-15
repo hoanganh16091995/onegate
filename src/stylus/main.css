@@ -504,6 +504,38 @@ body .input-group--select .input-group__selections__comma {
 .nav_trang_thai_ho_so .list__tile--link {
     padding: 0 8px !important
 }
+.header-text-field {
+    float:left !important;
+    height: 100%;
+}
+.text-ellipsis {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis; 
+}
+.row-blue {
+    align-items: center;
+}
+.hover-pointer {
+    cursor: pointer;
+}
+.hover-pointer-download:hover {
+    cursor: pointer;
+    font-weight: bold
+}
+.tabs {
+    border: 1px solid #e1e2e1;
+}
+.form-chitiet .tabs .tabs__bar, .form-chitiet .expansion-pl .expansion-panel__header {
+    background-color: #dae8e8
+}
+.tabs__container {
+    height: 38px;
+    border-bottom: 1px solid #e1e2e1;
+}
+.list_history_style {
+    border-bottom: 1px solid #e1e2e1;
+}
 
 
 
