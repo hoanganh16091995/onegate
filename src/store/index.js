@@ -490,9 +490,7 @@ export const store = new Vuex.Store({
         }
         axios.all([axios.get(state.api.dossierTemplatesApi + '/' + data.dossierTemplateNo, param), axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/marks', paramDossierMark)])
         .then(axios.spread(function (resDossierTemplates, resDossierMarks) {
-          let dossierTemplateItems = resDossierTemplates.data.dossierParts.filter((item, index) => {
-            return item.partType === 1
-          })
+          let dossierTemplateItems = resDossierTemplates.data.dossierParts
           let dossierMarkItems = resDossierMarks.data.data
           if (dossierMarkItems) {
             dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {

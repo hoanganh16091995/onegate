@@ -7,12 +7,6 @@ const routerOptions = [
     component: 'Landing',
     props: true,
     beforeEnter: function (to, from, next) {
-      console.log(to.params.index)
-      if (to.params.index === '2') {
-        store.commit('setSubStatusNew', true)
-      } else {
-        store.commit('setSubStatusNew', false)
-      }
       next()
     }
   },

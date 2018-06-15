@@ -14,7 +14,7 @@
           </div>
         </div>
         <v-card>
-          <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
+          <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-if="item.partType === 1" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
                 <div slot="header" class="pl-2 py-1">

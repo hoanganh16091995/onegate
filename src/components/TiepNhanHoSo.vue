@@ -23,7 +23,11 @@
     <le-phi ref="lephi" v-if="subStatusNew === false"></le-phi>
     <dich-vu-chuyen-phat-ket-qua ref="dichvuchuyenphatketqua" v-if="subStatusNew === false"></dich-vu-chuyen-phat-ket-qua>
     <div class="text-center mt-2">
-      <v-btn color="primary" v-on:click.native="tiepNhanHoSo" v-if="thongTinChungHoSo.dossierStatus === 'new'">
+      <v-btn color="primary" v-on:click.native="luuHoSo" v-if="thongTinChungHoSo.dossierStatus === 'new' && !subStatusNew">
+        Lưu &nbsp;
+        <v-icon>save</v-icon>
+      </v-btn>
+      <v-btn color="primary" v-on:click.native="tiepNhanHoSo" v-if="thongTinChungHoSo.dossierStatus === 'new' && subStatusNew">
         Tiếp nhận &nbsp;
         <v-icon>save</v-icon>
       </v-btn>
@@ -78,10 +82,28 @@ export default {
   },
   created () {
     var vm = this
-    vm.$nextTick(function () {})
+    vm.$nextTick(function () {
+      console.log(vm.index)
+      if (vm.index === '2') {
+        vm.$store.commit('setSubStatusNew', true)
+      } else {
+        vm.$store.commit('setSubStatusNew', false)
+      }
+    })
+  },
+  watch: {
+    index (val) {
+      var vm = this
+      console.log(vm.index)
+      if (vm.index === '2') {
+        vm.$store.commit('setSubStatusNew', true)
+      } else {
+        vm.$store.commit('setSubStatusNew', false)
+      }
+    }
   },
   methods: {
-    tiepNhanHoSo () {
+    luuHoSo () {
       var vm = this
       vm.$store.commit('setPrintPH', false)
       let thongtinchung = this.$store.getters.thongTinChungHoSo
@@ -155,6 +177,34 @@ export default {
           utils.showMessageToastr('error', 'Lưu Form lỗi')
         })
       }
+    },
+    tiepNhanHoSo () {
+      var vm = this
+      vm.$store.commit('setPrintPH', false)
+      let thongtinchung = this.$store.getters.thongTinChungHoSo
+      let thongtinchuhoso = this.$store.getters.thongTinChuHoSo
+      let thongtinnguoinophoso = this.$store.getters.thongTinNguoiNopHoSo
+      let thanhphanhoso = this.$store.getters.thanhPhanHoSo
+      let lephi = this.$store.getters.lePhi
+      let dichvuchuyenphatketqua = this.$store.getters.dichVuChuyenPhatKetQua
+      console.log('thongtinchung:', thongtinchung)
+      console.log('thongtinchuhoso:', thongtinchuhoso)
+      console.log('thongtinnguoinophoso:', thongtinnguoinophoso)
+      console.log('thanhphanhoso:', thanhphanhoso)
+      console.log('lephi:', lephi)
+      console.log('dichvuchuyenphatketqua:', dichvuchuyenphatketqua)
+      // Save dossier mark and save Alpaca
+      console.log('validate TNHS formThongtinchuhoso.validate()', vm.$refs.formTiepNhanHoSo.validate())
+      let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)
+      console.log('tempData------------', tempData)
+      let dataPostAction = {
+        dossierId: vm.thongTinChungHoSo.dossierId,
+        actionCode: 10000
+      }
+      vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
+        utils.showMessageToastr('success', 'Gửi hồ sơ thành công')
+        router.push('/danh-sach-ho-so/2')
+      })
     },
     boSungHoSo () {
       var vm = this
