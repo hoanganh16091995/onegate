@@ -20,8 +20,8 @@
     <thong-tin-chung ref="thongtinchung"></thong-tin-chung>
     <thong-tin-chu-ho-so ref="thongtinchuhoso"></thong-tin-chu-ho-so>
     <thanh-phan-ho-so ref="thanhphanhoso"></thanh-phan-ho-so>
-    <le-phi ref="lephi"></le-phi>
-    <dich-vu-chuyen-phat-ket-qua ref="dichvuchuyenphatketqua"></dich-vu-chuyen-phat-ket-qua>
+    <le-phi ref="lephi" v-if="subStatusNew === false"></le-phi>
+    <dich-vu-chuyen-phat-ket-qua ref="dichvuchuyenphatketqua" v-if="subStatusNew === false"></dich-vu-chuyen-phat-ket-qua>
     <div class="text-center mt-2">
       <v-btn color="primary" v-on:click.native="tiepNhanHoSo" v-if="thongTinChungHoSo.dossierStatus === 'new'">
         Tiếp nhận &nbsp;
@@ -71,6 +71,9 @@ export default {
     },
     thongTinChungHoSo () {
       return this.$store.getters.thongTinChungHoSo
+    },
+    subStatusNew () {
+      return this.$store.getters.subStatusNew
     }
   },
   created () {

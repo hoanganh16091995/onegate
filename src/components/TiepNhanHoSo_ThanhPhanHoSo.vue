@@ -3,7 +3,8 @@
     <v-expansion-panel class="expansion-pl">
       <v-expansion-panel-content hide-actions value="1">
         <div slot="header">
-          <div class="background-triangle-small"> IV.</div>
+          <div class="background-triangle-small" v-if="subStatusNew === false"> IV.</div>
+          <div class="background-triangle-small" v-else> III.</div>
           THÀNH PHẦN HỒ SƠ &nbsp;&nbsp;&nbsp;&nbsp; 
          <!--  <i><span style="color: red">(*)</span> Những thành phần bắt buộc</i> -->
           <div class="absolute-lable">
