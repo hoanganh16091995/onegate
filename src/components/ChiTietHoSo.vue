@@ -33,7 +33,7 @@
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader v-else class="pl-0 header-text-field"> {{thongTinChuHoSo.applicantName}}</v-subheader>
+                <v-subheader v-else class="pl-0 header-text-field"> {{thongTinChungHoSo.applicantName}}</v-subheader>
               </v-flex>
               <!--  -->
               <v-flex xs12 sm2>
@@ -113,7 +113,7 @@
                 </content-placeholders>
                 <v-subheader v-else class="pl-0 header-text-field"></v-subheader>
               </v-flex> -->
-              <!--  -->
+              
               <!--  -->
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-1" v-if="loading">
@@ -134,6 +134,7 @@
                   </span>
                 </v-subheader>
               </v-flex>
+              <!--  -->
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
