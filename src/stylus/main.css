@@ -519,10 +519,21 @@ body .input-group--select .input-group__selections__comma {
 .hover-pointer {
     cursor: pointer;
 }
+.hover-pointer-download:hover {
+    cursor: pointer;
+    font-weight: bold
+}
+.tabs {
+    border: 1px solid #e1e2e1;
+}
+.form-chitiet .tabs .tabs__bar, .form-chitiet .expansion-pl .expansion-panel__header {
+    background-color: #e1e2e1
+}
 .tabs__container {
     height: 38px;
-    border-left: 1px solid #e1e2e1;
-    border-right: 1px solid #e1e2e1;
+    border-bottom: 1px solid #e1e2e1;
+}
+.list_history_style {
     border-bottom: 1px solid #e1e2e1;
 }
 

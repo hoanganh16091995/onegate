@@ -1,9 +1,9 @@
 <template>
-  <div>
+  <div class="form-chitiet">
     <content-placeholders class="mt-3" v-if="loading">
       <content-placeholders-text :lines="1" />
     </content-placeholders>
-    <div v-else class="row-header" style="margin-top: 6px;">
+    <div v-else class="row-header mb-2" style="margin-top: 6px;">
       <div class="background-triangle-big"> <span>CHI TIẾT HỒ SƠ</span> </div>
       <div class="layout row wrap header_tools row-blue">
         <div class="flex xs8 sm10 pl-3 text-ellipsis text-bold" :title="thongTinChungHoSo.serviceName">
@@ -201,7 +201,7 @@
         </v-tab>
         <!--  -->
         <v-tab-item key="1" reverse-transition="slide-y-transition" transition="slide-y-transition">
-          <v-expansion-panel expand class="my-0">
+          <v-expansion-panel expand class="my-0" style="border: none">
             <v-expansion-panel-content v-bind:value="true">
               <div slot="header" class="text-bold"> <span>I. </span>Tài liệu nộp</div>
               <div v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
@@ -222,34 +222,37 @@
               </div>
             </v-expansion-panel-content>
           </v-expansion-panel>
-          <v-expansion-panel expand class="my-0">
+          <v-expansion-panel expand class="my-0" style="border: none">
             <v-expansion-panel-content v-bind:value="true">
             <div slot="header" class="text-bold"> <span>II. </span>Kết quả</div>
             <div class="opencps_list_border_style"></div> 
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-tab-item>
+        <!--  -->
         <v-tab-item key="2" reverse-transition="slide-y-transition" transition="slide-y-transition">
           
         </v-tab-item>
-        <v-tab-item key="3" reverse-transition="slide-y-transition" transition="slide-y-transition">
-          <div v-for="(item, index) in listHistoryProcessingItems" v-bind:key="item.dossierLogId">
-            <td style="padding-top: 15px;">{{ index + 1 }}</td>
-            <td style="padding-top: 15px;" class="text-xs-left">
-              <p> Ông/bà <b>{{ item.author }}</b> 
-              <span class="text-blue">( {{ item.payload.stepName }} )</span>
-              <br/>
-              <span class="text-light-gray">{{ item.createDate | datetime }}</span>
+        <!--  -->
+        <v-tab-item key="3" reverse-transition="slide-y-transition" transition="slide-y-transition" style="background: #ffff;">
+          <div v-for="(item, index) in listHistoryProcessing" v-bind:key="item.dossierLogId" class="list_history_style">
+            <td style="padding-top: 5px;" class="px-2 text-bold">{{ index + 1 }}.</td>
+            <td style="padding-top: 5px;" class="text-xs-left">
+              <p class="mb-2"> Ông/bà <b>{{ item.author }}</b> 
+                <span style="color: #0b72ba">( {{ item.payload.stepName }} )</span>
+                <br/>
+                <span style="color: #939393">{{ item.createDate | dateTimeView }}</span>
               </p>
               Ý kiến: <span v-html="item.content"></span> <br>
-              <p	
-                class="history__download__link"
+              <p
+                class="history__download__link hover-pointer-download"
+                title="Tải file"
                 v-for="file in item.payload.files"
                 :key="file.dossierFileId"
-                @click.prevent.stop="downloadFile(file.dossierFileId)"
+                @click.prevent.stop="downloadFileLogs(file.dossierFileId)"
               >
                 <v-icon>file_download</v-icon> 
-                {{file.fileName}}
+                <span>{{file.fileName}}</span>
               </p>
 
             </td>
@@ -272,7 +275,8 @@ export default {
   props: ['index', 'id'],
   data: () => ({
     dossierTemplateFiles: [],
-    showContactDetail: false
+    showContactDetail: false,
+    listHistoryProcessing: []
   }),
   computed: {
     loading () {
@@ -316,6 +320,10 @@ export default {
           }, 200)
         })
       })
+      let promise2 = vm.$store.dispatch('getListHistoryProcessingItems', vm.id)
+      promise2.then(function (result) {
+        vm.listHistoryProcessing = result
+      })
     })
   },
   methods: {
@@ -324,6 +332,14 @@ export default {
     },
     viewFile (data) {
       this.$store.dispatch('viewFile', data)
+    },
+    downloadFileLogs (data) {
+      var vm = this
+      let dataCommit = {
+        fileAttachId: data,
+        dossierId: vm.id
+      }
+      this.$store.dispatch('downloadFile', dataCommit)
     }
   },
   filters: {

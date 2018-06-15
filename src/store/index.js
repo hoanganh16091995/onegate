@@ -35,7 +35,7 @@ export const store = new Vuex.Store({
       dossierApi: 'http://127.0.0.1:8081/api/dossiers',
       dossierTemplatesApi: 'http://127.0.0.1:8081/api/dossiertemplates',
       applicantApi: '/o/rest/v2/applicant',
-      dossierlogsApi: 'http://127.0.0.1:8081/api/dossierlogs',
+      dossierlogsApi: 'http://127.0.0.1:8081/api/dossiers/dossierlogs',
       govAgency: 'abc',
       user: {},
       groupId: 0
@@ -1039,8 +1039,8 @@ export const store = new Vuex.Store({
     setDefaultCityCode ({commit, state}, data) {
       state.thongTinChuHoSo.cityCode = data
     },
-    getListHistoryProcessingItems({commit, state}, data){		
-      var vm = this;
+    getListHistoryProcessingItems({commit, state}, id){		
+      var vm = this
       return new Promise((resolve, reject) => {
         let param = {
           headers: {
@@ -1048,19 +1048,17 @@ export const store = new Vuex.Store({
           },
           params: {}
         }
-        state.listHistoryProcessingItems = [];
-        axios.get(state.api.dossierlogsApi + '/' + data.dossierId + '/logs', param).then(function (response) {
-          var serializable = response.data;
+        var listHistoryProcessing = []
+        axios.get(state.api.dossierlogsApi + '/' + id + '/logs', param).then(function (response) {
+          var serializable = response.data
           for (var key in serializable.data) {
             if (serializable.data[key].notificationType === 'PROCESS_TYPE') {
-              serializable.data[key].createDate = vm.parseDateUtc(serializable.data[key].createDate);
-              state.listHistoryProcessingItems.push(serializable.data[key]);
+              listHistoryProcessing.push(serializable.data[key])
             }
           }
-          resolve(response.data)
+          resolve(listHistoryProcessing)
         })
         .catch(function (error) {
-          console.log(error);
           reject(error)
         })
       })
@@ -1073,7 +1071,7 @@ export const store = new Vuex.Store({
         },
         responseType: 'blob'
       }
-      axios.get(state.api.dossierApi + data.dossierId + "/files/" + data.fileAttachId, pram).then(function (response) {
+      axios.get(state.api.dossierApi + data.dossierId + "/files/" + data.fileAttachId, param).then(function (response) {
         var url = window.URL.createObjectURL(response.data);
         window.open(url)
       })
@@ -1249,7 +1247,10 @@ export const store = new Vuex.Store({
     },
     setPrintPH (state, payload) {
       state.printPH = payload
-    }
+    },
+    setlistHistoryProcessingItems (state, payload) {
+      state.listHistoryProcessingItems = payload
+    },
   },
   getters: {
     loading (state) {
@@ -1364,6 +1365,9 @@ export const store = new Vuex.Store({
       } else {
         return state.api
       }
-    }
+    },
+    listHistoryProcessingItems (state) {
+      return state.listHistoryProcessingItems
+    },
   }
 })
