@@ -268,8 +268,8 @@
 </template>
 
 <script>
-import router from '@/router'
-import * as utils from '../store/onegate_utils'
+// import router from '@/router'
+// import * as utils from '../store/onegate_utils'
 // import printJS from 'print-js/dist/print.min.js'
 export default {
   props: ['index', 'id'],

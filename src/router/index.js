@@ -35,11 +35,11 @@ const routerOptions = [
       store.commit('setIsDetail', true)
       let promise = store.dispatch('getDetailDossier', to.params.id)
       promise.then(function (result) {
+        next()
         store.dispatch('loadDossierTemplates', result).then(function (result) {
           store.dispatch('loadDossierFiles')
         })
       })
-      next()
     }
   },
   { path: '/danh-sach-ho-so/:index/tra-ket-qua/:id',

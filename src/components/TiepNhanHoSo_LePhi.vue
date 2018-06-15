@@ -22,7 +22,10 @@
                   v-money="money"
                 ></v-text-field>
               </v-flex>
-              <v-flex xs12 sm6 class="pl-4 pt-2 hidden-xs-and-down">Hạn mức: {{lePhi.request|currency}} đ</v-flex>
+              <v-flex xs12 sm6>
+
+              </v-flex>
+              <!-- <v-flex xs12 sm6 class="pl-4 pt-2 hidden-xs-and-down">Hạn mức: {{lePhi.request|currency}} đ</v-flex> -->
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />

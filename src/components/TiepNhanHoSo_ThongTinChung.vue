@@ -248,7 +248,6 @@
                   })
                 }, 500)
               })
-              vm.$store.dispatch('loadPayment', result)
             })
           }
         },
