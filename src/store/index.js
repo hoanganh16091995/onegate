@@ -12,33 +12,34 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     printPH: true,
-    api: {
-      apiLocal: true,
-      serviceInfoApi: '/o/rest/v2/serviceinfos',
-      serviceConfigApi: '/o/rest/v2/onegate/serviceconfigs/processes',
-      regionApi: '/o/rest/v2/dictcollections',
-      serviceOptionApi: '/o/rest/v2/serviceconfigs/301/processes',
-      postDossierApi: '/o/rest/v2/onegate',
-      dossierApi: '/o/rest/v2/dossiers',
-      dossierTemplatesApi: '/o/rest/v2/dossiertemplates',
-      applicantApi: '/o/rest/v2/applicant',
-      govAgency: 'abc',
-      user: {},
-      groupId: 55301
-    },
     // api: {
-    //   serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
-    //   serviceConfigApi: 'http://127.0.0.1:8081/api/onegate/serviceconfigs/processes',
-    //   regionApi: 'http://127.0.0.1:8081/api/dictcollections',
-    //   serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
-    //   postDossierApi: 'http://127.0.0.1:8081/api/onegate',
-    //   dossierApi: 'http://127.0.0.1:8081/api/dossiers',
-    //   dossierTemplatesApi: 'http://127.0.0.1:8081/api/dossiertemplates',
+    //   apiLocal: true,
+    //   serviceInfoApi: '/o/rest/v2/serviceinfos',
+    //   serviceConfigApi: '/o/rest/v2/onegate/serviceconfigs/processes',
+    //   regionApi: '/o/rest/v2/dictcollections',
+    //   serviceOptionApi: '/o/rest/v2/serviceconfigs/301/processes',
+    //   postDossierApi: '/o/rest/v2/onegate',
+    //   dossierApi: '/o/rest/v2/dossiers',
+    //   dossierTemplatesApi: '/o/rest/v2/dossiertemplates',
     //   applicantApi: '/o/rest/v2/applicant',
     //   govAgency: 'abc',
     //   user: {},
-    //   groupId: 0
+    //   groupId: 55301
     // },
+    api: {
+      serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
+      serviceConfigApi: 'http://127.0.0.1:8081/api/onegate/serviceconfigs/processes',
+      regionApi: 'http://127.0.0.1:8081/api/dictcollections',
+      serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
+      postDossierApi: 'http://127.0.0.1:8081/api/onegate',
+      dossierApi: 'http://127.0.0.1:8081/api/dossiers',
+      dossierTemplatesApi: 'http://127.0.0.1:8081/api/dossiertemplates',
+      applicantApi: '/o/rest/v2/applicant',
+      dossierlogsApi: 'http://127.0.0.1:8081/api/dossierlogs',
+      govAgency: 'abc',
+      user: {},
+      groupId: 0
+    },
     dataDetailDossier: {},
     isDetail: false,
     loading: false,
@@ -68,7 +69,8 @@ export const store = new Vuex.Store({
       durationDate: '',
       dossierId: '',
       dossierIdCTN: '',
-      dossierStatus: ''
+      dossierStatus: '',
+      dossierStatusText: ''
     },
     vnpostCodeItems: [],
     serviceConfigItems: null,
@@ -79,6 +81,7 @@ export const store = new Vuex.Store({
     wardVal: null,
     resultServices: null,
     dossierFiles: [],
+    listHistoryProcessingItems: [],
     thanhPhanHoSo: {
       dossierTemplates: [{
         'partNo': '2',
@@ -418,7 +421,10 @@ export const store = new Vuex.Store({
         govAgencyName: '',
         dossierIdCTN: '',
         processBlock: '',
-        processUnit: ''
+        processUnit: '',
+        dossierStatus: '',
+        dossierStatusText: '',
+        submitDate: ''
       }
       commit('setThongTinChungHoSo', data)
     },
@@ -1032,6 +1038,48 @@ export const store = new Vuex.Store({
     },
     setDefaultCityCode ({commit, state}, data) {
       state.thongTinChuHoSo.cityCode = data
+    },
+    getListHistoryProcessingItems({commit, state}, data){		
+      var vm = this;
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            groupId: state.api.groupId
+          },
+          params: {}
+        }
+        state.listHistoryProcessingItems = [];
+        axios.get(state.api.dossierlogsApi + '/' + data.dossierId + '/logs', param).then(function (response) {
+          var serializable = response.data;
+          for (var key in serializable.data) {
+            if (serializable.data[key].notificationType === 'PROCESS_TYPE') {
+              serializable.data[key].createDate = vm.parseDateUtc(serializable.data[key].createDate);
+              state.listHistoryProcessingItems.push(serializable.data[key]);
+            }
+          }
+          resolve(response.data)
+        })
+        .catch(function (error) {
+          console.log(error);
+          reject(error)
+        })
+      })
+    },
+    downloadFile({commit, state}, data){
+      var vm = this;
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        responseType: 'blob'
+      }
+      axios.get(state.api.dossierApi + data.dossierId + "/files/" + data.fileAttachId, pram).then(function (response) {
+        var url = window.URL.createObjectURL(response.data);
+        window.open(url)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
     }
   },
   mutations: {
@@ -1142,7 +1190,9 @@ export const store = new Vuex.Store({
         dossierIdCTN: payload.dossierIdCTN,
         dossierStatus: payload.dossierStatus,
         dossierNo: payload.dossierNo,
-        govAgencyName: payload.govAgencyName
+        govAgencyName: payload.govAgencyName,
+        dossierStatusText: payload.dossierStatusText,
+        submitDate: payload.submitDate
       }
       state.thongTinChungHoSo = thongTinChungHoSoPayLoad
     },

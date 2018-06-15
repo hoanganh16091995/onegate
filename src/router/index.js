@@ -5,6 +5,14 @@ import Router from 'vue-router'
 const routerOptions = [
   { path: '/danh-sach-ho-so/:index', component: 'Landing', props: true },
   { path: '/tra-cuu-ho-so/:index', component: 'LandingTraCuu', props: true },
+  { path: '/danh-sach-ho-so/:index/chi-tiet-ho-so/:id',
+    component: 'ChiTietHoSo',
+    props: true,
+    beforeEnter: function (to, from, next) {
+      console.log('run active component chi tiết hồ sơ')
+      next()
+    }
+  },
   { path: '/danh-sach-ho-so/:index/tiep-nhan-ho-so',
     component: 'TiepNhanHoSo',
     props: true,

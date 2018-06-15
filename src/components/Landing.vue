@@ -441,7 +441,10 @@ export default {
       console.log(vm.selected)
     },
     toDetailDossier (index, dossierId) {
-      let url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + dossierId
+      var url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + dossierId
+      if (index === '3') {
+        url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/chi-tiet-ho-so/' + dossierId
+      }
       window.location.href = url
     },
     toDetailPhieuHen (index, dossierId) {
