@@ -317,6 +317,12 @@ export default {
         start: vm.page * vm.itemperpage - vm.itemperpage,
         end: vm.page * vm.itemperpage
       }
+      console.log(vm.index)
+      if (vm.index === '2') {
+        vm.$store.commit('setSubStatusNew', true)
+      } else {
+        vm.$store.commit('setSubStatusNew', false)
+      }
       vm.$store.getters.danhSachHoSo(filter).then(function (result) {
         vm.danhSachHoSoTables = result.data
         vm.total = result.total
@@ -382,6 +388,12 @@ export default {
         status: '',
         start: vm.page * vm.itemperpage - vm.itemperpage,
         end: vm.page * vm.itemperpage
+      }
+      console.log(vm.index)
+      if (vm.index === '2') {
+        vm.$store.commit('setSubStatusNew', true)
+      } else {
+        vm.$store.commit('setSubStatusNew', false)
       }
       vm.$store.getters.danhSachHoSo(filter).then(function (result) {
         vm.danhSachHoSoTables = result.data

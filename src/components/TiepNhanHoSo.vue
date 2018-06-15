@@ -82,7 +82,25 @@ export default {
   },
   created () {
     var vm = this
-    vm.$nextTick(function () {})
+    vm.$nextTick(function () {
+      console.log(vm.index)
+      if (vm.index === '2') {
+        vm.$store.commit('setSubStatusNew', true)
+      } else {
+        vm.$store.commit('setSubStatusNew', false)
+      }
+    })
+  },
+  watch: {
+    index (val) {
+      var vm = this
+      console.log(vm.index)
+      if (vm.index === '2') {
+        vm.$store.commit('setSubStatusNew', true)
+      } else {
+        vm.$store.commit('setSubStatusNew', false)
+      }
+    }
   },
   methods: {
     luuHoSo () {
@@ -184,7 +202,7 @@ export default {
         actionCode: 10000
       }
       vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
-        utils.showMessageToastr('success', 'Lưu thành công')
+        utils.showMessageToastr('success', 'Gửi hồ sơ thành công')
         router.push('/danh-sach-ho-so/2')
       })
     },

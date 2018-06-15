@@ -218,16 +218,17 @@ export default {
       vm.selected = []
       vm.keywords = ''
       vm.page = 1
-      if (val === '2') {
-        vm.$store.commit('setSubStatusNew', true)
-      } else {
-        vm.$store.commit('setSubStatusNew', false)
-      }
       let filter = {
         keywords: vm.keywords,
         status: vm.trangThaiHoSoList[val],
         start: vm.page * vm.itemperpage - vm.itemperpage,
         end: vm.page * vm.itemperpage
+      }
+      console.log(vm.index)
+      if (vm.index === '2') {
+        vm.$store.commit('setSubStatusNew', true)
+      } else {
+        vm.$store.commit('setSubStatusNew', false)
       }
       vm.$store.getters.danhSachHoSo(filter).then(function (result) {
         vm.danhSachHoSoTables = result.data
@@ -291,6 +292,12 @@ export default {
         status: vm.trangThaiHoSoList[vm.index],
         start: vm.page * vm.itemperpage - vm.itemperpage,
         end: vm.page * vm.itemperpage
+      }
+      console.log(vm.index)
+      if (vm.index === '2') {
+        vm.$store.commit('setSubStatusNew', true)
+      } else {
+        vm.$store.commit('setSubStatusNew', false)
       }
       vm.$store.getters.danhSachHoSo(filter).then(function (result) {
         vm.danhSachHoSoTables = result.data
