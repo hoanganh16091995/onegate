@@ -70,7 +70,7 @@
           <td class="text-xs-left" >{{ props.item.dossierIdCTN }}</td>
           <td class="text-xs-left" >{{ props.item.applicantName }}</td>
           <td class="text-xs-left" >
-            <a title="Chi tiết hồ sơ" :href="'/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/'+index+'/tiep-nhan-ho-so/'+props.item.dossierId">
+            <a title="Chi tiết hồ sơ" :href="viewChitiet(props.item, index)">
               <span>{{ props.item.serviceName }}</span>
             </a>
           </td>
@@ -218,6 +218,11 @@ export default {
       vm.selected = []
       vm.keywords = ''
       vm.page = 1
+      if (val === '2') {
+        vm.$store.commit('setSubStatusNew', true)
+      } else {
+        vm.$store.commit('setSubStatusNew', false)
+      }
       let filter = {
         keywords: vm.keywords,
         status: vm.trangThaiHoSoList[val],
@@ -440,9 +445,16 @@ export default {
       })
       console.log(vm.selected)
     },
+    viewChitiet (item, index) {
+      if (item.dossierStatus === 'done') {
+        return '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/chi-tiet-ho-so/' + item.dossierId
+      } else {
+        return '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + item.dossierId
+      }
+    },
     toDetailDossier (index, dossierId) {
       var url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + dossierId
-      if (index === '3') {
+      if (index === '4') {
         url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/chi-tiet-ho-so/' + dossierId
       }
       window.location.href = url

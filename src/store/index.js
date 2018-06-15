@@ -243,6 +243,7 @@ export const store = new Vuex.Store({
       postalTelNo: '',
       vnPostCode: ''
     },
+    subStatusNew: true,
     danhSachHoSo: null
   },
   actions: {
@@ -264,8 +265,11 @@ export const store = new Vuex.Store({
           end: filter.end,
           online: false
         }
+        if (state.subStatusNew) {
+          paramsGet.online = true
+        }
         if (filter.status.id === 'receiving') {
-          paramsGet.online = null
+          paramsGet.online = true
           paramsGet.substatus = 'receiving_5'
         }
         let param = {
@@ -312,6 +316,13 @@ export const store = new Vuex.Store({
       {
         title: 'Hồ sơ chờ bổ sung',
         id: 'waiting',
+        action: 'folder',
+        action_active: 'play_arrow',
+        link: '/'
+      },
+      {
+        title: 'Hồ sơ mới',
+        id: 'new',
         action: 'folder',
         action_active: 'play_arrow',
         link: '/'
@@ -1083,6 +1094,9 @@ export const store = new Vuex.Store({
   mutations: {
     setLoading (state, payload) {
       state.loading = payload
+    },
+    setSubStatusNew (state, payload) {
+      state.subStatusNew = payload
     },
     setVnpostCodeItems (state, payload) {
       state.vnpostCodeItems = payload
