@@ -76,6 +76,9 @@ export default {
     },
     dossier () {
       return this.$store.getters.dossier
+    },
+    subStatusNew () {
+      return this.$store.getters.subStatusNew
     }
   },
   methods: {

@@ -3,7 +3,19 @@ import { store } from '../store'
 import Router from 'vue-router'
 
 const routerOptions = [
-  { path: '/danh-sach-ho-so/:index', component: 'Landing', props: true },
+  { path: '/danh-sach-ho-so/:index',
+    component: 'Landing',
+    props: true,
+    beforeEnter: function (to, from, next) {
+      console.log(to.params.index)
+      if (to.params.index === '2') {
+        store.commit('setSubStatusNew', true)
+      } else {
+        store.commit('setSubStatusNew', false)
+      }
+      next()
+    }
+  },
   { path: '/tra-cuu-ho-so/:index', component: 'LandingTraCuu', props: true },
   { path: '/danh-sach-ho-so/:index/chi-tiet-ho-so/:id',
     component: 'ChiTietHoSo',

@@ -74,7 +74,7 @@
               </v-flex>
               <v-flex xs12></v-flex>
               <!--  -->
-              <v-flex xs12 sm2>
+              <v-flex xs12 sm2 v-if="subStatusNew === false">
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
@@ -82,44 +82,44 @@
                   Mã tiếp nhận: 
                 </v-subheader>
               </v-flex>
-              <v-flex xs12 sm4>
+              <v-flex xs12 sm4 v-if="subStatusNew === false">
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.dossierNo}}</i></v-subheader>
               </v-flex>
               <!--  -->
-              <v-flex xs12 sm2>
+              <v-flex xs12 sm2 v-if="subStatusNew === false">
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Thời gian giải quyết: </v-subheader>
               </v-flex>
-              <v-flex xs12 sm4>
+              <v-flex xs12 sm4 v-if="subStatusNew === false">
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-if="!loading&&thongTinChungHoSo.durationDate" style="float:left"><i>{{thongTinChungHoSo.durationDate}} làm việc</i></v-subheader>
               </v-flex>
-              <v-flex xs12 sm2>
+              <v-flex xs12 sm2 v-if="subStatusNew === false">
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Ngày giờ tiếp nhận: </v-subheader>
               </v-flex>
-              <v-flex xs12 sm4>
+              <v-flex xs12 sm4 v-if="subStatusNew === false">
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else style="float:left"><i>{{thongTinChungHoSo.receiveDate|dateTimeView}}</i></v-subheader>
               </v-flex>
-              <v-flex xs12 sm2>
+              <v-flex xs12 sm2 v-if="subStatusNew === false">
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0">Ngày hẹn trả: </v-subheader>
               </v-flex>
-              <v-flex xs12 sm4>
+              <v-flex xs12 sm4 v-if="subStatusNew === false">
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
@@ -190,6 +190,9 @@
       },
       dossierTemplates () {
         return this.$store.getters.dossierTemplates
+      },
+      subStatusNew () {
+        return this.$store.getters.subStatusNew
       }
     },
     watch: {},
