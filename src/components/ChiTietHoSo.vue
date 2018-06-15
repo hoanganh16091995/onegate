@@ -111,7 +111,7 @@
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader v-else class="pl-0 header-text-field"> Chưa có</v-subheader>
+                <v-subheader v-else class="pl-0 header-text-field"></v-subheader>
               </v-flex>
               <!--  -->
               <v-flex xs12 sm2>
@@ -131,7 +131,7 @@
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader title="Chi tiết liên hệ" v-else class="pl-0 hover-pointer" @click.prevent.stop="showContactDetail = !showContactDetail">
+                <v-subheader :title="!showContactDetail?'Chi tiết liên hệ':'Thu gọn'" v-else class="pl-0 hover-pointer" @click.prevent.stop="showContactDetail = !showContactDetail">
                   Thông tin liên hệ:
                 </v-subheader>
               </v-flex>
@@ -140,7 +140,7 @@
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0 header-text-field hover-pointer"> 
-                  <span title="Chi tiết liên hệ" @click.prevent.stop="showContactDetail = !showContactDetail">
+                  <span :title="!showContactDetail?'Chi tiết liên hệ':'Thu gọn'" @click.prevent.stop="showContactDetail = !showContactDetail">
                     <v-icon color="primary" v-if="!showContactDetail">keyboard_arrow_down</v-icon>
                     <v-icon color="primary" v-if="showContactDetail">keyboard_arrow_up</v-icon>
                   </span>
