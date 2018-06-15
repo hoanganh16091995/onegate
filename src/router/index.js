@@ -3,7 +3,13 @@ import { store } from '../store'
 import Router from 'vue-router'
 
 const routerOptions = [
-  { path: '/danh-sach-ho-so/:index', component: 'Landing', props: true },
+  { path: '/danh-sach-ho-so/:index',
+    component: 'Landing',
+    props: true,
+    beforeEnter: function (to, from, next) {
+      next()
+    }
+  },
   { path: '/tra-cuu-ho-so/:index', component: 'LandingTraCuu', props: true },
   { path: '/danh-sach-ho-so/:index/chi-tiet-ho-so/:id',
     component: 'ChiTietHoSo',

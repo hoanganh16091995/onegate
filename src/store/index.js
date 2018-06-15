@@ -323,7 +323,7 @@ export const store = new Vuex.Store({
         link: '/'
       },
       {
-        title: 'Hồ sơ mới',
+        title: 'Hồ sơ chờ tiếp nhận online',
         id: 'new',
         action: 'folder',
         action_active: 'play_arrow',
@@ -343,13 +343,13 @@ export const store = new Vuex.Store({
         action_active: 'play_arrow',
         link: '/'
       },
-      {
-        title: 'Hồ sơ chờ tiếp nhận online',
-        id: 'receiving',
-        action: 'folder',
-        action_active: 'play_arrow',
-        link: '/'
-      },
+      // {
+      //   title: 'Hồ sơ chờ tiếp nhận online',
+      //   id: 'receiving',
+      //   action: 'folder',
+      //   action_active: 'play_arrow',
+      //   link: '/'
+      // },
       {
         title: 'Tra cứu hồ sơ',
         id: 'all',
@@ -490,9 +490,7 @@ export const store = new Vuex.Store({
         }
         axios.all([axios.get(state.api.dossierTemplatesApi + '/' + data.dossierTemplateNo, param), axios.get(state.api.dossierApi + '/' + state.thongTinChungHoSo.dossierId + '/marks', paramDossierMark)])
         .then(axios.spread(function (resDossierTemplates, resDossierMarks) {
-          let dossierTemplateItems = resDossierTemplates.data.dossierParts.filter((item, index) => {
-            return item.partType === 1
-          })
+          let dossierTemplateItems = resDossierTemplates.data.dossierParts
           let dossierMarkItems = resDossierMarks.data.data
           if (dossierMarkItems) {
             dossierTemplateItems = dossierTemplateItems.map(itemTemplate => {
@@ -1120,7 +1118,7 @@ export const store = new Vuex.Store({
         },
         responseType: 'blob'
       }
-      axios.get(state.api.dossierApi + data.dossierId + "/files/" + data.fileAttachId, param).then(function (response) {
+      axios.get(state.api.dossierApi + '/' + data.dossierId + "/files/" + data.fileAttachId, param).then(function (response) {
         var url = window.URL.createObjectURL(response.data);
         window.open(url)
       })
@@ -1426,6 +1424,9 @@ export const store = new Vuex.Store({
     },
     listHistoryProcessingItems (state) {
       return state.listHistoryProcessingItems
+    },
+    subStatusNew (state) {
+      return state.subStatusNew
     }
   }
 })

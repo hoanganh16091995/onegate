@@ -101,7 +101,7 @@
                 <v-subheader v-else class="pl-0 header-text-field"> <i>{{thongTinChungHoSo.durationDate}} làm việc</i> </v-subheader>
               </v-flex>
               <!--  -->
-              <v-flex xs12 sm2>
+              <!-- <v-flex xs12 sm2>
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
@@ -112,20 +112,8 @@
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
                 <v-subheader v-else class="pl-0 header-text-field"></v-subheader>
-              </v-flex>
+              </v-flex> -->
               <!--  -->
-              <v-flex xs12 sm2>
-                <content-placeholders class="mt-1" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-subheader v-else class="pl-0">Trạng thái: </v-subheader>
-              </v-flex>
-              <v-flex xs12 sm4>
-                <content-placeholders class="mt-1" v-if="loading">
-                  <content-placeholders-text :lines="1" />
-                </content-placeholders>
-                <v-subheader v-else class="pl-0 header-text-field"> {{thongTinChungHoSo.dossierStatusText}} </v-subheader>
-              </v-flex>
               <!--  -->
               <v-flex xs12 sm2>
                 <content-placeholders class="mt-1" v-if="loading">
@@ -145,6 +133,18 @@
                     <v-icon color="primary" v-if="showContactDetail">keyboard_arrow_up</v-icon>
                   </span>
                 </v-subheader>
+              </v-flex>
+              <v-flex xs12 sm2>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else class="pl-0">Trạng thái: </v-subheader>
+              </v-flex>
+              <v-flex xs12 sm4>
+                <content-placeholders class="mt-1" v-if="loading">
+                  <content-placeholders-text :lines="1" />
+                </content-placeholders>
+                <v-subheader v-else class="pl-0 header-text-field"> {{thongTinChungHoSo.dossierStatusText}} </v-subheader>
               </v-flex>
               <v-flex xs12 sm12>
                 <v-slide-y-transition>
@@ -204,7 +204,7 @@
           <v-expansion-panel expand class="my-0" style="border: none">
             <v-expansion-panel-content v-bind:value="true">
               <div slot="header" class="text-bold"> <span>I. </span>Tài liệu nộp</div>
-              <div v-for="(item, index) in dossierTemplates" v-bind:key="item.partNo">
+              <div v-for="(item, index) in dossierTemplates" v-if="item.partType === 1" v-bind:key="item.partNo">
                 <v-layout wrap class="px-4 align-center row-list-style"> 
                   <v-flex xs11>
                     <span class="text-bold" style="position: absolute;">{{index + 1}}.</span> 
@@ -225,7 +225,22 @@
           <v-expansion-panel expand class="my-0" style="border: none">
             <v-expansion-panel-content v-bind:value="true">
             <div slot="header" class="text-bold"> <span>II. </span>Kết quả</div>
-            <div class="opencps_list_border_style"></div> 
+            <div v-for="(item, index) in dossierTemplates" v-if="item.partType === 2" v-bind:key="item.partNo">
+                <v-layout wrap class="px-4 align-center row-list-style"> 
+                  <v-flex xs11>
+                    <span class="text-bold" style="position: absolute;">{{index + 1}}.</span> 
+                    <div style="margin-left: 30px;">{{item.partName}}</div>
+                  </v-flex>
+                  <v-flex xs1 class="text-right">
+                    <v-tooltip top>
+                      <v-btn slot="activator" class="mx-0" fab dark small color="primary" @click="viewFile(item)" style="height:25px;width:25px">
+                        {{item.count}}
+                      </v-btn>
+                      <span>Xem</span>
+                    </v-tooltip>
+                  </v-flex>
+                </v-layout>
+              </div>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-tab-item>
