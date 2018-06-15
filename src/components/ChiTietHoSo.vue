@@ -190,15 +190,15 @@
         <v-tab key="1" class="mr-2">
         THÀNH PHẦN HỒ SƠ
         </v-tab>
-        <v-tab key="2" class="mr-2">
+        <!-- <v-tab key="2" class="mr-2">
         THỤ LÝ HỒ SƠ
-        </v-tab>
-        <v-tab key="3" class="mr-2">
+        </v-tab> -->
+        <v-tab key="2" class="mr-2">
         TIẾN TRÌNH XỬ LÝ
         </v-tab>
-        <v-tab key="4" class="mr-2">
+        <!-- <v-tab key="4" class="mr-2">
         TRAO ĐỔI THÔNG TIN
-        </v-tab>
+        </v-tab> -->
         <!--  -->
         <v-tab-item key="1" reverse-transition="slide-y-transition" transition="slide-y-transition">
           <v-expansion-panel expand class="my-0" style="border: none">
@@ -230,11 +230,11 @@
           </v-expansion-panel>
         </v-tab-item>
         <!--  -->
-        <v-tab-item key="2" reverse-transition="slide-y-transition" transition="slide-y-transition">
+        <!-- <v-tab-item key="2" reverse-transition="slide-y-transition" transition="slide-y-transition">
           
-        </v-tab-item>
+        </v-tab-item> -->
         <!--  -->
-        <v-tab-item key="3" reverse-transition="slide-y-transition" transition="slide-y-transition" style="background: #ffff;">
+        <v-tab-item key="2" reverse-transition="slide-y-transition" transition="slide-y-transition" style="background: #ffff;">
           <div v-for="(item, index) in listHistoryProcessing" v-bind:key="item.dossierLogId" class="list_history_style">
             <td style="padding-top: 5px;" class="px-2 text-bold">{{ index + 1 }}.</td>
             <td style="padding-top: 5px;" class="text-xs-left">
@@ -258,9 +258,9 @@
             </td>
           </div>
         </v-tab-item>
-        <v-tab-item key="4" reverse-transition="slide-y-transition" transition="slide-y-transition">
+        <!-- <v-tab-item key="4" reverse-transition="slide-y-transition" transition="slide-y-transition">
           
-        </v-tab-item>
+        </v-tab-item> -->
       </v-tabs>
     </div>
     
