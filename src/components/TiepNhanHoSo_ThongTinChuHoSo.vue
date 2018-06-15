@@ -364,54 +364,10 @@ export default {
       return this.$store.getters.loading
     },
     thongTinChuHoSo () {
-      var vm = this
-      var thongTinChuHoSoTemp = this.$store.getters.thongTinChuHoSo
-      console.log('thongTinChuHoSoTemp------------', thongTinChuHoSoTemp)
-      var filter = {
-        collectionCode: 'ADMINISTRATIVE_REGION',
-        level: 0,
-        parent: 0
-      }
-      if (thongTinChuHoSoTemp.cityCode) {
-        filter.parent = thongTinChuHoSoTemp.cityCode
-        filter.level = 1
-        vm.$store.getters.getDictItems(filter).then(function (result) {
-          vm.districts = result.data
-        })
-      }
-      if (thongTinChuHoSoTemp.districtCode) {
-        filter.parent = thongTinChuHoSoTemp.districtCode
-        filter.level = 1
-        vm.$store.getters.getDictItems(filter).then(function (result) {
-          vm.wards = result.data
-        })
-      }
-      return thongTinChuHoSoTemp
+      return this.$store.getters.thongTinChuHoSo
     },
     thongTinNguoiNopHoSo () {
-      var vm = this
-      var thongTinNguoiNopHoSoTemp = vm.$store.getters.thongTinNguoiNopHoSo
-      console.log('thongTinNguoiNopHoSoTemp------------', thongTinNguoiNopHoSoTemp)
-      var filter = {
-        collectionCode: 'ADMINISTRATIVE_REGION',
-        level: 0,
-        parent: 0
-      }
-      if (thongTinNguoiNopHoSoTemp.delegateCityCode) {
-        filter.parent = thongTinNguoiNopHoSoTemp.delegateCityCode
-        filter.level = 1
-        vm.$store.getters.getDictItems(filter).then(function (result) {
-          vm.delegateDistricts = result.data
-        })
-      }
-      if (thongTinNguoiNopHoSoTemp.delegateDistrictCode) {
-        filter.parent = thongTinNguoiNopHoSoTemp.delegateDistrictCode
-        filter.level = 1
-        vm.$store.getters.getDictItems(filter).then(function (result) {
-          vm.delegateWards = result.data
-        })
-      }
-      return thongTinNguoiNopHoSoTemp
+      return this.$store.getters.thongTinNguoiNopHoSo
     }
   },
   created () {
@@ -425,6 +381,40 @@ export default {
       vm.$store.getters.getDictItems(filter).then(function (result) {
         vm.citys = result.data
       })
+      setTimeout(function () {
+        var thongTinChuHoSoTemp = vm.$store.getters.thongTinChuHoSo
+        console.log('thongTinChuHoSoTemp------------', thongTinChuHoSoTemp)
+        if (thongTinChuHoSoTemp.cityCode) {
+          filter.parent = thongTinChuHoSoTemp.cityCode
+          filter.level = 1
+          vm.$store.getters.getDictItems(filter).then(function (result) {
+            vm.districts = result.data
+          })
+        }
+        if (thongTinChuHoSoTemp.districtCode) {
+          filter.parent = thongTinChuHoSoTemp.districtCode
+          filter.level = 1
+          vm.$store.getters.getDictItems(filter).then(function (result) {
+            vm.wards = result.data
+          })
+        }
+        var thongTinNguoiNopHoSoTemp = vm.$store.getters.thongTinNguoiNopHoSo
+        console.log('thongTinNguoiNopHoSoTemp------------', thongTinNguoiNopHoSoTemp)
+        if (thongTinNguoiNopHoSoTemp.delegateCityCode) {
+          filter.parent = thongTinNguoiNopHoSoTemp.delegateCityCode
+          filter.level = 1
+          vm.$store.getters.getDictItems(filter).then(function (result) {
+            vm.delegateDistricts = result.data
+          })
+        }
+        if (thongTinNguoiNopHoSoTemp.delegateDistrictCode) {
+          filter.parent = thongTinNguoiNopHoSoTemp.delegateDistrictCode
+          filter.level = 1
+          vm.$store.getters.getDictItems(filter).then(function (result) {
+            vm.delegateWards = result.data
+          })
+        }
+      }, 200)
     })
   },
   watch: {

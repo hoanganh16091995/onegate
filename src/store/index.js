@@ -23,6 +23,7 @@ export const store = new Vuex.Store({
       dossierTemplatesApi: '/o/rest/v2/dossiertemplates',
       applicantApi: '/o/rest/v2/applicant',
       govAgency: 'abc',
+      dossierlogsApi: '/o/rest/v2/dossierlogs',
       user: {},
       groupId: 55301
     },
@@ -35,6 +36,7 @@ export const store = new Vuex.Store({
     //   dossierApi: 'http://127.0.0.1:8081/api/dossiers',
     //   dossierTemplatesApi: 'http://127.0.0.1:8081/api/dossiertemplates',
     //   applicantApi: '/o/rest/v2/applicant',
+    //   dossierlogsApi: 'http://127.0.0.1:8081/api/dossiers/dossierlogs',
     //   govAgency: 'abc',
     //   user: {},
     //   groupId: 0
@@ -68,7 +70,8 @@ export const store = new Vuex.Store({
       durationDate: '',
       dossierId: '',
       dossierIdCTN: '',
-      dossierStatus: ''
+      dossierStatus: '',
+      dossierStatusText: ''
     },
     vnpostCodeItems: [],
     serviceConfigItems: null,
@@ -79,6 +82,7 @@ export const store = new Vuex.Store({
     wardVal: null,
     resultServices: null,
     dossierFiles: [],
+    listHistoryProcessingItems: [],
     thanhPhanHoSo: {
       dossierTemplates: [{
         'partNo': '2',
@@ -240,8 +244,9 @@ export const store = new Vuex.Store({
       postalTelNo: '',
       vnPostCode: ''
     },
-    danhSachHoSo: null,
-    processSteps: []
+    processSteps: [],
+    subStatusNew: true,
+    danhSachHoSo: null
   },
   actions: {
     clearError ({ commit }) {
@@ -262,8 +267,11 @@ export const store = new Vuex.Store({
           end: filter.end,
           online: false
         }
+        if (state.subStatusNew) {
+          paramsGet.online = true
+        }
         if (filter.status.id === 'receiving') {
-          paramsGet.online = null
+          paramsGet.online = true
           paramsGet.substatus = 'receiving_5'
         }
         let param = {
@@ -310,6 +318,13 @@ export const store = new Vuex.Store({
       {
         title: 'Hồ sơ chờ bổ sung',
         id: 'waiting',
+        action: 'folder',
+        action_active: 'play_arrow',
+        link: '/'
+      },
+      {
+        title: 'Hồ sơ mới',
+        id: 'new',
         action: 'folder',
         action_active: 'play_arrow',
         link: '/'
@@ -419,7 +434,10 @@ export const store = new Vuex.Store({
         govAgencyName: '',
         dossierIdCTN: '',
         processBlock: '',
-        processUnit: ''
+        processUnit: '',
+        dossierStatus: '',
+        dossierStatusText: '',
+        submitDate: ''
       }
       commit('setThongTinChungHoSo', data)
     },
@@ -1069,11 +1087,54 @@ export const store = new Vuex.Store({
       })).catch(function (error) {
         console.log(error)
       })
+    },
+    getListHistoryProcessingItems({commit, state}, id){		
+      var vm = this
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            groupId: state.api.groupId
+          },
+          params: {}
+        }
+        var listHistoryProcessing = []
+        axios.get(state.api.dossierlogsApi + '/' + id + '/logs', param).then(function (response) {
+          var serializable = response.data
+          for (var key in serializable.data) {
+            if (serializable.data[key].notificationType === 'PROCESS_TYPE') {
+              listHistoryProcessing.push(serializable.data[key])
+            }
+          }
+          resolve(listHistoryProcessing)
+        })
+        .catch(function (error) {
+          reject(error)
+        })
+      })
+    },
+    downloadFile({commit, state}, data){
+      var vm = this;
+      let param = {
+        headers: {
+          groupId: state.api.groupId
+        },
+        responseType: 'blob'
+      }
+      axios.get(state.api.dossierApi + data.dossierId + "/files/" + data.fileAttachId, param).then(function (response) {
+        var url = window.URL.createObjectURL(response.data);
+        window.open(url)
+      })
+      .catch(function (error) {
+        console.log(error)
+      })
     }
   },
   mutations: {
     setLoading (state, payload) {
       state.loading = payload
+    },
+    setSubStatusNew (state, payload) {
+      state.subStatusNew = payload
     },
     setVnpostCodeItems (state, payload) {
       state.vnpostCodeItems = payload
@@ -1179,7 +1240,9 @@ export const store = new Vuex.Store({
         dossierIdCTN: payload.dossierIdCTN,
         dossierStatus: payload.dossierStatus,
         dossierNo: payload.dossierNo,
-        govAgencyName: payload.govAgencyName
+        govAgencyName: payload.govAgencyName,
+        dossierStatusText: payload.dossierStatusText,
+        submitDate: payload.submitDate
       }
       state.thongTinChungHoSo = thongTinChungHoSoPayLoad
     },
@@ -1239,6 +1302,9 @@ export const store = new Vuex.Store({
     },
     setProcessStep (state, payload) {
       state.processSteps = payload
+    },
+    setlistHistoryProcessingItems (state, payload) {
+      state.listHistoryProcessingItems = payload
     }
   },
   getters: {
@@ -1357,6 +1423,9 @@ export const store = new Vuex.Store({
     },
     processSteps (state) {
       return processSteps
+    },
+    listHistoryProcessingItems (state) {
+      return state.listHistoryProcessingItems
     }
   }
 })

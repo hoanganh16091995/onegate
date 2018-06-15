@@ -159,7 +159,7 @@
           <td class="text-xs-left" >{{ props.item.dossierIdCTN }}</td>
           <td class="text-xs-left" >{{ props.item.applicantName }}</td>
           <td class="text-xs-left" >
-            <a title="Chi tiết hồ sơ" :href="'/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/'+index+'/tiep-nhan-ho-so/'+props.item.dossierId">
+            <a title="Chi tiết hồ sơ" :href="viewChitiet(props.item, index)">
               <span>{{ props.item.serviceName }}</span>
             </a>
           </td>
@@ -537,7 +537,10 @@ export default {
       console.log(vm.selected)
     },
     toDetailDossier (index, dossierId) {
-      let url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + dossierId
+      var url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + dossierId
+      if (index === '4') {
+        url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/chi-tiet-ho-so/' + dossierId
+      }
       window.location.href = url
     },
     toDetailPhieuHen (index, dossierId) {
@@ -565,6 +568,13 @@ export default {
         duration = block + ' giờ'
       }
       return duration
+    },
+    viewChitiet (item, index) {
+      if (item.dossierStatus === 'done') {
+        return '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/chi-tiet-ho-so/' + item.dossierId
+      } else {
+        return '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + item.dossierId
+      }
     }
   },
   filters: {
