@@ -4,7 +4,7 @@
       <v-expansion-panel-content hide-actions value="1">
         <div slot="header">
           <div class="background-triangle-small" v-if="subStatusNew === false"> IV.</div>
-          <div class="background-triangle-small" v-else> III.</div>
+          <div class="background-triangle-small" v-if="subStatusNew === true"> III.</div>
           THÀNH PHẦN HỒ SƠ &nbsp;&nbsp;&nbsp;&nbsp; 
          <!--  <i><span style="color: red">(*)</span> Những thành phần bắt buộc</i> -->
           <div class="absolute-lable">
@@ -127,6 +127,9 @@ export default {
     },
     dossierFiles () {
       return this.$store.getters.dossierFiles
+    },
+    subStatusNew () {
+      return this.$store.getters.subStatusNew
     }
   },
   mounted () {
