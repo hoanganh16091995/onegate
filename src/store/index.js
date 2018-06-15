@@ -240,7 +240,8 @@ export const store = new Vuex.Store({
       postalTelNo: '',
       vnPostCode: ''
     },
-    danhSachHoSo: null
+    danhSachHoSo: null,
+    processSteps: []
   },
   actions: {
     clearError ({ commit }) {
@@ -704,6 +705,7 @@ export const store = new Vuex.Store({
           commit('setLoading', false)
           commit('setDossier', response.data)
           commit('setThongTinChuHoSo', response.data)
+          commit('setLePhi', response.data)
           commit('setThongTinChungHoSo', response.data)
           commit('setDichVuChuyenPhatKetQua', response.data)
           resolve(response.data)
@@ -978,29 +980,6 @@ export const store = new Vuex.Store({
         })
       })
     },
-    loadPayment ({commit, state}, data) {
-      return new Promise((resolve, reject) => {
-        let param = {
-          headers: {
-            groupId: state.api.groupId
-          },
-          params: {
-            serviceCode: data.serviceCode,
-            govAgencyCode: data.govAgencyCode,
-            dossierTemplateNo: data.dossierTemplateNo,
-            dossierActionId: data.dossierActionId
-          }
-        }
-        axios.get('/o/rest/v2/onegate/' + data.dossierId + '/serviceProcess', param).then(function (response) {
-          state.lePhi.fee = response.data.paymentFeeTotal
-          state.lePhi.request = response.data.paymentFeeRequest
-          resolve(response.data)
-        }).catch(function (xhr) {
-          reject(xhr)
-          console.log(xhr)
-        })
-      })
-    },
     getDossierTemplateEdit ({commit, state}) {
       return new Promise((resolve, reject) => {
         var dossierTemplatesTemp = state.dossierTemplates
@@ -1030,8 +1009,66 @@ export const store = new Vuex.Store({
         }
       })
     },
+    changeProcessStep ({commit, state}, item) {
+      if (item.type === 1) {
+        if (item.hasOwnProperty('createFiles') && !(item.createFiles instanceof Array)) {
+          var createFileTemp = item.createFiles
+          item.createFiles = []
+          item.createFiles.push(createFileTemp)
+        }
+        if (item.autoEvent !== 'submit' && item.autoEvent !== 'timer') {
+        }
+      } else {
+        var urlPluginFormData = '/o/rest/v2/dossiers/' + state.thongTinChungHoSo.dossierId + '/plugins/' + item.processActionId + '/formdata'
+        var urlPluginFormScript = '/o/rest/v2/dossiers/' + state.thongTinChungHoSo.dossierId + '/plugins/' + item.processActionId + '/formscript'
+      }
+    },
     setDefaultCityCode ({commit, state}, data) {
       state.thongTinChuHoSo.cityCode = data
+    },
+    loadProcessStep ({commit, state}, data) {
+      var url = '/o/rest/v2/dossiers/'+state.thongTinChungHoSo.dossierId+'/nextactions'
+      var urlPlugin = '/o/rest/v2/dossiers/'+state.thongTinChungHoSo.dossierId+'/plugins'
+      axios.all([axios.get(url, config), axios.get(urlPlugin, config)]).then(axios.spread(function (urlRespones, urlPluginsRespones) {
+        var serializable = urlRespones.data.data
+        var serializablePlugins = urlPluginsRespones.data.data
+        var serializablePluginsConvert = []
+        var serializableNextActionConvert = []
+        if(serializable){
+          for (var i = 0; i < serializable.length; i++) {
+            serializable[i].type = 1;
+            if(!serializable[i].autoEvent){
+              if(serializable[i].configNote){
+                var configNote = JSON.parse(serializable[i].configNote)
+                serializable[i].configNote = configNote
+              }
+              serializableNextActionConvert.push(serializable[i])
+            }
+          }
+        }else {
+          serializable = []
+          serializableNextActionConvert = []
+        }
+        if(serializablePlugins){
+          for (var i = 0; i < serializablePlugins.length; i++) {
+            var plugin = {
+              type : 2,
+              processActionId : serializablePlugins[i].processPluginId,
+              actionName : serializablePlugins[i].pluginName
+            };
+            serializablePluginsConvert.push(plugin)
+          }
+        }
+        var nextactions = serializableNextActionConvert
+        var plugins = serializablePluginsConvert
+        state.processSteps = $.merge(nextactions, plugins)
+        console.log(state.processSteps)
+        if(state.processSteps.length === 1){
+          state.changeProcessStep(state.processSteps[0])
+        }
+      })).catch(function (error) {
+        console.log(error)
+      })
     }
   },
   mutations: {
@@ -1199,6 +1236,9 @@ export const store = new Vuex.Store({
     },
     setPrintPH (state, payload) {
       state.printPH = payload
+    },
+    setProcessStep (state, payload) {
+      state.processSteps = payload
     }
   },
   getters: {
@@ -1314,6 +1354,9 @@ export const store = new Vuex.Store({
       } else {
         return state.api
       }
+    },
+    processSteps (state) {
+      return processSteps
     }
   }
 })
