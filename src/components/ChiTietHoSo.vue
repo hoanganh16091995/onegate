@@ -205,7 +205,7 @@
           <v-expansion-panel expand class="my-0" style="border: none">
             <v-expansion-panel-content v-bind:value="true">
               <div slot="header" class="text-bold"> <span>I. </span>Tài liệu nộp</div>
-              <div v-for="(item, index) in dossierTemplates" v-if="item.partType === 1" v-bind:key="item.partNo">
+              <div v-for="(item, index) in dossierTemplatesTN" v-bind:key="item.partNo">
                 <v-layout wrap class="px-4 align-center row-list-style"> 
                   <v-flex xs11>
                     <span class="text-bold" style="position: absolute;">{{index + 1}}.</span> 
@@ -226,7 +226,7 @@
           <v-expansion-panel expand class="my-0" style="border: none">
             <v-expansion-panel-content v-bind:value="true">
             <div slot="header" class="text-bold"> <span>II. </span>Kết quả</div>
-            <div v-for="(item, index) in dossierTemplates" v-if="item.partType === 2" v-bind:key="item.partNo">
+            <div v-for="(item, index) in dossierTemplatesKQ" v-bind:key="item.partNo">
                 <v-layout wrap class="px-4 align-center row-list-style"> 
                   <v-flex xs11>
                     <span class="text-bold" style="position: absolute;">{{index + 1}}.</span> 
@@ -292,7 +292,9 @@ export default {
   data: () => ({
     dossierTemplateFiles: [],
     showContactDetail: false,
-    listHistoryProcessing: []
+    listHistoryProcessing: [],
+    dossierTemplatesTN: [],
+    dossierTemplatesKQ: []
   }),
   computed: {
     loading () {
@@ -324,20 +326,30 @@ export default {
       let promise = vm.$store.dispatch('getDetailDossier', vm.id)
       promise.then(function (result) {
         vm.$store.dispatch('loadDossierTemplates', result)
-        console.log('thongtinchung', vm.thongTinChungHoSo)
-        console.log('thongtinchuhoso', vm.thongTinChuHoSo)
-        console.log('thongtinnguoinop', vm.thongTinNguoiNopHoSo)
+        console.log('dossierTemplates', vm.dossierTemplates)
+        vm.dossierTemplatesTN = []
+        vm.dossierTemplatesKQ = []
+        for (var key in vm.dossierTemplates) {
+          if (vm.dossierTemplates[key].partType === 1) {
+            vm.dossierTemplatesTN.push(vm.dossierTemplates[key])
+          } else if (vm.dossierTemplates[key].partType === 2) {
+            vm.dossierTemplatesKQ.push(vm.dossierTemplates[key])
+          }
+        }
+        console.log('dossierTemplatesTN', vm.dossierTemplatesTN)
+        console.log('dossierTemplatesKQ', vm.dossierTemplatesKQ)
         vm.$store.dispatch('loadDossierFiles').then(function (result) {
           setTimeout(function () {
             vm.$store.dispatch('getDossierTemplateEdit').then(function (resultTemp) {
               vm.dossierTemplateFiles = resultTemp
-              console.log(vm.dossierTemplateFiles)
+              console.log('dossierTemplateFiles', vm.dossierTemplateFiles)
             })
           }, 200)
         })
       })
       let promise2 = vm.$store.dispatch('getListHistoryProcessingItems', vm.id)
       promise2.then(function (result) {
+        vm.listHistoryProcessing = []
         vm.listHistoryProcessing = result
       })
     })
