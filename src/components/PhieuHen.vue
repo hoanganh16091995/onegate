@@ -71,7 +71,7 @@
           </div>
         </div>
         <!--  -->
-        <div class="receipt-wrapper pt-0" style="margin-top: -50px">
+        <div class="receipt-wrapper" style="padding-top: 50px">
           <div class="row head">
             <div class="left">
               <p class="text-uppercase text-bold">{{thongTinChungHoSo.govAgencyName}}</p>
@@ -197,6 +197,9 @@ export default {
     thongTinChuHoSo () {
       console.log('thongTinChuHoSo=============', ThongTinChuHoSo)
       return this.$store.getters.thongTinChuHoSo
+    },
+    dossierTemplates () {
+      return this.$store.getters.dossierTemplates
     }
   },
   created () {
@@ -209,6 +212,11 @@ export default {
           promise.then(function (result) {
             let promise2 = vm.$store.dispatch('loadDossierTemplates', result)
             promise2.then(function (result) {
+              console.log('loadDossierTemplates----Phieuhen-----', result)
+              vm.dossierTemplateFiles = result.filter(item => {
+                return item.partType === 1 && item.fileCheck
+              })
+              console.log('vm.dossierTemplateFiles----Phieuhen-----', vm.dossierTemplateFiles)
               setTimeout(function () {
                 vm.printContent()
                 vm.$store.commit('setPrintPH', false)
@@ -216,19 +224,32 @@ export default {
             })
             //
             console.log('thongtin chung ho so', vm.thongTinChungHoSo)
-            vm.$store.dispatch('loadDossierFiles').then(function (result) {
-              setTimeout(function () {
-                vm.$store.dispatch('getDossierTemplateEdit').then(function (resultTemp) {
-                  vm.dossierTemplateFiles = resultTemp
-                })
-              }, 200)
-            })
+            // vm.$store.dispatch('loadDossierFiles').then(function (result) {
+            //   setTimeout(function () {
+            //     vm.$store.dispatch('getDossierTemplateEdit').then(function (resultTemp) {
+            //       vm.dossierTemplateFiles = resultTemp
+            //     })
+            //   }, 200)
+            // })
           })
           // console.log('run print')
           // setTimeout(function () {
           //   vm.printContent()
           //   vm.$store.commit('setPrintPH', false)
           // }, 500)
+        } else {
+          let promise = vm.$store.dispatch('getDetailDossier', vm.id)
+          promise.then(function (result) {
+            let promise2 = vm.$store.dispatch('loadDossierTemplates', result)
+            promise2.then(function (result) {
+              console.log('loadDossierTemplates----Phieuhen-----', result)
+              vm.dossierTemplateFiles = result.filter(item => {
+                return item.partType === 1 && item.fileCheck
+              })
+              console.log('vm.dossierTemplateFiles----Phieuhen-----', vm.dossierTemplateFiles)
+            })
+            console.log('thongtin chung ho so', vm.thongTinChungHoSo)
+          })
         }
       }, 100)
     })
@@ -275,7 +296,7 @@ export default {
       printJS({
         printable: 'printContent',
         type: 'html',
-        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.d3f9b52c6230c1366867495bac7af304.css'
+        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.907e37d3ff62b7cc1a50b89ed8f69844.css'
       })
     },
     receiveDateText () {
