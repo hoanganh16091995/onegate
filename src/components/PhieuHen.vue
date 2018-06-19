@@ -198,13 +198,13 @@ export default {
           // }, 500)
         }
       }, 100)
-      vm.$store.dispatch('loadDossierFiles').then(function (result) {
-        setTimeout(function () {
-          vm.$store.dispatch('getDossierTemplateEdit').then(function (resultTemp) {
-            vm.dossierTemplateFiles = resultTemp
-          })
-        }, 200)
-      })
+      // vm.$store.dispatch('loadDossierFiles').then(function (result) {
+      //   setTimeout(function () {
+      //     vm.$store.dispatch('getDossierTemplateEdit').then(function (resultTemp) {
+      //       vm.dossierTemplateFiles = resultTemp
+      //     })
+      //   }, 200)
+      // })
     })
   },
   computed: {
