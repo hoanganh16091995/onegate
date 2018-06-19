@@ -14,7 +14,7 @@
           </div>
         </div>
         <v-card>
-          <div style="position: relative;" v-for="(item, index) in dossierTemplates" v-if="item.partType === 1" v-bind:key="item.partNo">
+          <div class="form_alpaca" style="position: relative;" v-for="(item, index) in dossierTemplates" v-if="item.partType === 1" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
                 <div slot="header" class="pl-2 py-1">
@@ -185,3 +185,15 @@ export default {
   }
 }
 </script>
+<style>
+  .form_alpaca .alpaca-message {
+    display: none!important;
+  }
+  .form_alpaca .card_text {
+    padding: 10px 0px !important;
+  }
+  .form_alpaca .text-xs-right {
+    text-align: left!important;
+  }
+</style>
+
