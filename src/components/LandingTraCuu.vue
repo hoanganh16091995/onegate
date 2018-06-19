@@ -351,6 +351,8 @@ export default {
         return 'result,ticket'
       } else if (status === 'done') {
         return 'view,ticket'
+      } else if (status === 'ended') {
+        return 'view,ticket'
       } else if (status === 'waiting') {
         return 'view,ticket'
       } else if (status === 'receiving') {
@@ -359,6 +361,8 @@ export default {
         return 'view,ticket'
       } else if (status === 'processing') {
         return 'view,ticket'
+      } else {
+        return 'delete'
       }
     },
     checkPrint (item, status) {
