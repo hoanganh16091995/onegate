@@ -33,7 +33,7 @@
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader v-else class="pl-0 header-text-field"> {{thongTinChungHoSo.applicantName}}</v-subheader>
+                <v-subheader v-else class="pl-0 header-text-field"> {{thongTinChuHoSo.applicantName}}</v-subheader>
               </v-flex>
               <!--  -->
               <v-flex xs12 sm2>
@@ -59,7 +59,7 @@
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader v-else class="pl-0 header-text-field"> {{thongTinChungHoSo.dossierNo}} </v-subheader>
+                <v-subheader v-else class="pl-0 header-text-field">  {{thongTinChungHoSo.dossierIdCTN}} </v-subheader>
               </v-flex>
               <!--  -->
               <v-flex xs12 sm2>
@@ -85,7 +85,7 @@
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader v-else class="pl-0 header-text-field"> {{thongTinChungHoSo.dossierIdCTN}} </v-subheader>
+                <v-subheader v-else class="pl-0 header-text-field"> {{thongTinChungHoSo.dossierNo}} </v-subheader>
               </v-flex>
               <!--  -->
               <v-flex xs12 sm2>
@@ -155,7 +155,7 @@
                         <v-subheader class="pl-0">Tên doanh nghiệp: </v-subheader>
                       </v-flex>
                       <v-flex xs12 sm4>
-                        <v-subheader class="pl-0 header-text-field"> {{thongTinChungHoSo.applicantName}} </v-subheader>
+                        <v-subheader class="pl-0 header-text-field"> {{thongTinChuHoSo.applicantName}} </v-subheader>
                       </v-flex>
                       <v-flex xs12 sm2>
                         <v-subheader class="pl-0">Địa chỉ Email: </v-subheader>
@@ -325,26 +325,30 @@ export default {
     vm.$nextTick(function () {
       let promise = vm.$store.dispatch('getDetailDossier', vm.id)
       promise.then(function (result) {
-        vm.$store.dispatch('loadDossierTemplates', result)
-        console.log('dossierTemplates', vm.dossierTemplates)
-        vm.dossierTemplatesTN = []
-        vm.dossierTemplatesKQ = []
-        for (var key in vm.dossierTemplates) {
-          if (vm.dossierTemplates[key].partType === 1) {
-            vm.dossierTemplatesTN.push(vm.dossierTemplates[key])
-          } else if (vm.dossierTemplates[key].partType === 2) {
-            vm.dossierTemplatesKQ.push(vm.dossierTemplates[key])
+        let promise_2 = vm.$store.dispatch('loadDossierTemplates', result)
+        promise_2.then(function (result) {
+          vm.dossierTemplates = []
+          vm.dossierTemplates = result
+          console.log('dossierTemplates', vm.dossierTemplates)
+          vm.dossierTemplatesTN = []
+          vm.dossierTemplatesKQ = []
+          for (var key in vm.dossierTemplates) {
+            if (vm.dossierTemplates[key].partType === 1) {
+              vm.dossierTemplatesTN.push(vm.dossierTemplates[key])
+            } else if (vm.dossierTemplates[key].partType === 2) {
+              vm.dossierTemplatesKQ.push(vm.dossierTemplates[key])
+            }
           }
-        }
-        console.log('dossierTemplatesTN', vm.dossierTemplatesTN)
-        console.log('dossierTemplatesKQ', vm.dossierTemplatesKQ)
-        vm.$store.dispatch('loadDossierFiles').then(function (result) {
-          setTimeout(function () {
-            vm.$store.dispatch('getDossierTemplateEdit').then(function (resultTemp) {
-              vm.dossierTemplateFiles = resultTemp
-              console.log('dossierTemplateFiles', vm.dossierTemplateFiles)
-            })
-          }, 200)
+          console.log('dossierTemplatesTN', vm.dossierTemplatesTN)
+          console.log('dossierTemplatesKQ', vm.dossierTemplatesKQ)
+          vm.$store.dispatch('loadDossierFiles').then(function (result) {
+            setTimeout(function () {
+              vm.$store.dispatch('getDossierTemplateEdit').then(function (resultTemp) {
+                vm.dossierTemplateFiles = resultTemp
+                console.log('dossierTemplateFiles', vm.dossierTemplateFiles)
+              })
+            }, 200)
+          })
         })
       })
       let promise2 = vm.$store.dispatch('getListHistoryProcessingItems', vm.id)
