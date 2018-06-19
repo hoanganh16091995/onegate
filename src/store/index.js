@@ -291,14 +291,15 @@ export const store = new Vuex.Store({
         })
       })
     },
-    deleteDossier ({ commit, state }, arg) {
+    deleteDossier ({ commit, state }, data) {
       return new Promise((resolve, reject) => {
         let param = {
           headers: {
-            groupId: state.api.groupId
+            groupId: state.api.groupId,
+            'cps_auth': data.cps_auth
           }
         }
-        axios.delete(state.api.dossierApi + '/' + arg, param).then(function (response) {
+        axios.delete(state.api.dossierApi + '/' + data.dossierId, param).then(function (response) {
           resolve(response)
         }).catch(function (error) {
           reject(error)
@@ -709,7 +710,8 @@ export const store = new Vuex.Store({
           headers: {
             'groupId': state.api.groupId,
             'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'cps_auth': data.cps_auth
           }
         }
         var dataPostdossier = new URLSearchParams()
@@ -739,7 +741,8 @@ export const store = new Vuex.Store({
           headers: {
             groupId: state.api.groupId,
             'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'cps_auth': data.cps_auth
           }
         }
         var applicantType = ''
@@ -840,7 +843,8 @@ export const store = new Vuex.Store({
           headers: {
             'groupId': state.api.groupId,
             'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'cps_auth': data.cps_auth
           }
         }
         var dataPostdossierMark = new URLSearchParams()
@@ -863,7 +867,8 @@ export const store = new Vuex.Store({
           headers: {
             'groupId': state.api.groupId,
             'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded'
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'cps_auth': data.cps_auth
           }
         }
         var dataPostActionDossier = new URLSearchParams()
@@ -939,7 +944,8 @@ export const store = new Vuex.Store({
       return new Promise((resolve, reject) => {
         let options = {
           headers: {
-            groupId: state.api.groupId
+            groupId: state.api.groupId,
+            cps_auth: data.cps_auth
           }
         }
         try {
@@ -1086,7 +1092,7 @@ export const store = new Vuex.Store({
         console.log(error)
       })
     },
-    getListHistoryProcessingItems({commit, state}, id){		
+    getListHistoryProcessingItems ({commit, state}, id){		
       var vm = this
       return new Promise((resolve, reject) => {
         let param = {
@@ -1110,7 +1116,7 @@ export const store = new Vuex.Store({
         })
       })
     },
-    downloadFile({commit, state}, data){
+    downloadFile ({commit, state}, data){
       var vm = this;
       let param = {
         headers: {
@@ -1124,6 +1130,23 @@ export const store = new Vuex.Store({
       })
       .catch(function (error) {
         console.log(error)
+      })
+    },
+    getCpsAuthen ({commit, state}) {
+      var vm = this
+      return new Promise((resolve, reject) => {
+        let param = {
+          headers: {
+            groupId: state.api.groupId
+          },
+          params: {}
+        }
+        axios.get('/o/rest/v2/onegate/token', param).then(function (response) {
+          resolve(response.data)
+        })
+        .catch(function (error) {
+          reject(error)
+        })
       })
     }
   },

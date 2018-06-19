@@ -192,7 +192,7 @@
               <span>Phiếu kiểm soát</span>
             </v-tooltip>
             <v-tooltip top v-if="checkAction(props.item.dossierStatus).includes('result')">
-              <v-btn style="width:30px;height:30px" slot="activator" icon class="mx-0 my-0" :to="'/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + props.item.dossierId">
+              <v-btn style="width:30px;height:30px" slot="activator" icon class="mx-0 my-0" :to="'/danh-sach-ho-so/' + index + '/tra-ket-qua/' + props.item.dossierId">
                 <v-icon size="16" style="color:#1976d2" class="mx-0">send</v-icon>
               </v-btn>
               <span>Trả kết quả</span>
@@ -403,16 +403,21 @@ export default {
     },
     chuyenXuLy (data) {
       var vm = this
-      let dataPost = {
-        dossierId: data.dossierId,
-        actionCode: 10000
-      }
       vm.$root.$confirm.open('Thông báo', 'Bạn chắc chắn muốn thực hiện thao tác này?', { color: 'blue darken-4' }).then((confirm) => {
-        vm.$store.dispatch('postAction', dataPost).then(function (result) {
-          utils.showMessageToastr('success', 'Xử lý thành công')
-          vm.loadDataTable()
-        }).catch(function (xhr) {
-          utils.showMessageToastr('error', 'Xử lý thất bại')
+        vm.$store.dispatch('getCpsAuthen').then(resultAuthen => {
+          let dataPost = {
+            dossierId: data.dossierId,
+            actionCode: 10000,
+            cps_auth: resultAuthen
+          }
+          vm.$store.dispatch('postAction', dataPost).then(function (result) {
+            utils.showMessageToastr('success', 'Xử lý thành công')
+            vm.loadDataTable()
+          }).catch(function (xhr) {
+            utils.showMessageToastr('error', 'Xử lý thất bại')
+          })
+        }).catch(reject => {
+          console.log(reject)
         })
       }).catch(function (xhr) {
         console.log('kkk')
@@ -420,16 +425,21 @@ export default {
     },
     traKetQua (data) {
       var vm = this
-      let dataPost = {
-        dossierId: data.dossierId,
-        actionCode: 30000
-      }
       vm.$root.$confirm.open('Thông báo', 'Bạn chắc chắn muốn thực hiện thao tác này?', { color: 'blue darken-4' }).then((confirm) => {
-        vm.$store.dispatch('postAction', dataPost).then(function (result) {
-          utils.showMessageToastr('success', 'Xử lý thành công')
-          vm.loadDataTable()
-        }).catch(function (xhr) {
-          utils.showMessageToastr('error', 'Xử lý thất bại')
+        vm.$store.dispatch('getCpsAuthen').then(resultAuthen => {
+          let dataPost = {
+            dossierId: data.dossierId,
+            actionCode: 30000,
+            cps_auth: resultAuthen
+          }
+          vm.$store.dispatch('postAction', dataPost).then(function (result) {
+            utils.showMessageToastr('success', 'Xử lý thành công')
+            vm.loadDataTable()
+          }).catch(function (xhr) {
+            utils.showMessageToastr('error', 'Xử lý thất bại')
+          })
+        }).catch(reject => {
+          console.log(reject)
         })
       }).catch(function (xhr) {
         console.log('kkk')
@@ -449,22 +459,27 @@ export default {
             return
           }
         }
-        vm.selected.forEach(val => {
-          let data = {
-            dossierId: val.dossierId,
-            actionCode: 10000
+        vm.$store.dispatch('getCpsAuthen').then(resultAuthen => {
+          vm.selected.forEach(val => {
+            let data = {
+              dossierId: val.dossierId,
+              actionCode: 10000,
+              cps_auth: resultAuthen
+            }
+            listPost.push(vm.$store.dispatch('postAction', data))
+          })
+          if (listPost.length === 0) {
+            utils.showMessageToastr('error', 'Bạn chưa chọn hồ sơ nào')
+            return
           }
-          listPost.push(vm.$store.dispatch('postAction', data))
-        })
-        if (listPost.length === 0) {
-          utils.showMessageToastr('error', 'Bạn chưa chọn hồ sơ nào')
-          return
-        }
-        Promise.all(listPost).then(function (ressult) {
-          utils.showMessageToastr('success', 'Xử lý thành công')
-          vm.loadDataTable()
-        }).catch(function (xhr) {
-          utils.showMessageToastr('error', 'Xử lý thất bại')
+          Promise.all(listPost).then(function (ressult) {
+            utils.showMessageToastr('success', 'Xử lý thành công')
+            vm.loadDataTable()
+          }).catch(function (xhr) {
+            utils.showMessageToastr('error', 'Xử lý thất bại')
+          })
+        }).catch(reject => {
+          console.log(reject)
         })
       }).catch(function (xhr) {
         console.log('kkk')
@@ -485,22 +500,27 @@ export default {
             return
           }
         }
-        vm.selected.forEach(val => {
-          let data = {
-            dossierId: val.dossierId,
-            actionCode: 30000
+        vm.$store.dispatch('getCpsAuthen').then(resultAuthen => {
+          vm.selected.forEach(val => {
+            let data = {
+              dossierId: val.dossierId,
+              actionCode: 30000,
+              cps_auth: resultAuthen
+            }
+            listPost.push(vm.$store.dispatch('postAction', data))
+          })
+          if (listPost.length === 0) {
+            utils.showMessageToastr('error', 'Bạn chưa chọn hồ sơ nào')
+            return
           }
-          listPost.push(vm.$store.dispatch('postAction', data))
-        })
-        if (listPost.length === 0) {
-          utils.showMessageToastr('error', 'Bạn chưa chọn hồ sơ nào')
-          return
-        }
-        Promise.all(listPost).then(function (ressult) {
-          utils.showMessageToastr('success', 'Xử lý thành công')
-          vm.loadDataTable()
-        }).catch(function (xhr) {
-          utils.showMessageToastr('error', 'Xử lý thất bại')
+          Promise.all(listPost).then(function (ressult) {
+            utils.showMessageToastr('success', 'Xử lý thành công')
+            vm.loadDataTable()
+          }).catch(function (xhr) {
+            utils.showMessageToastr('error', 'Xử lý thất bại')
+          })
+        }).catch(reject => {
+          console.log(reject)
         })
       }).catch(function (xhr) {
         console.log('kkk')
@@ -511,9 +531,17 @@ export default {
       var vm = this
       vm.$root.$confirm.open('Xóa', 'Bạn có muốn xoá hồ sơ này?', { color: 'red' }).then((confirm) => {
         if (dossierId) {
-          let promise = vm.$store.dispatch('deleteDossier', dossierId)
-          promise.then(function (ressult) {
-            vm.danhSachHoSoTables.splice(index, 1)
+          vm.$store.dispatch('getCpsAuthen').then(resultAuthen => {
+            let deleteData = {
+              dossierId: dossierId,
+              cps_auth: resultAuthen
+            }
+            let promise = vm.$store.dispatch('deleteDossier', deleteData)
+            promise.then(function (ressult) {
+              vm.danhSachHoSoTables.splice(index, 1)
+            })
+          }).catch(reject => {
+
           })
         }
       }).catch(function (xhr) {
@@ -524,25 +552,33 @@ export default {
     moveDelete () {
       var vm = this
       vm.$root.$confirm.open('Xóa', 'Bạn có chắc chắn muốn xoá các mục đã chọn?', { color: 'red' }).then((confirm) => {
-        var listDelete = []
-        vm.selected.forEach(val => {
-          listDelete.push(vm.$store.dispatch('deleteDossier', val.dossierId))
-        })
-        if (listDelete.length === 0) {
-          utils.showMessageToastr('error', 'Bạn chưa chọn hồ sơ nào')
-          return
-        }
-        Promise.all(listDelete).then(function (ressult) {
-          if (vm.selected) {
-            vm.selected.forEach(val => {
-              vm.danhSachHoSoTables.splice(vm.danhSachHoSoTables.findIndex(item => {
-                return val.dossierId === item.dossierId
-              }), 1)
-            })
+        vm.$store.dispatch('getCpsAuthen').then(resultAuthen => {
+          var listDelete = []
+          vm.selected.forEach(val => {
+            let deleteData = {
+              dossierId: val.dossierId,
+              cps_auth: resultAuthen
+            }
+            listDelete.push(vm.$store.dispatch('deleteDossier', deleteData))
+          })
+          if (listDelete.length === 0) {
+            utils.showMessageToastr('error', 'Bạn chưa chọn hồ sơ nào')
+            return
           }
-          utils.showMessageToastr('success', 'Xử lý thành công')
-        }).catch(function (xhr) {
-          utils.showMessageToastr('error', 'Xử lý thất bại')
+          Promise.all(listDelete).then(function (ressult) {
+            if (vm.selected) {
+              vm.selected.forEach(val => {
+                vm.danhSachHoSoTables.splice(vm.danhSachHoSoTables.findIndex(item => {
+                  return val.dossierId === item.dossierId
+                }), 1)
+              })
+            }
+            utils.showMessageToastr('success', 'Xử lý thành công')
+          }).catch(function (xhr) {
+            utils.showMessageToastr('error', 'Xử lý thất bại')
+          })
+        }).catch(reject => {
+          console.log(reject)
         })
       }).catch(function (xhr) {
       })
