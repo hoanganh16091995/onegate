@@ -23,7 +23,7 @@
       <v-list class="py-0">
         <v-list-tile v-for="(item, index) in mainItems" :key="item" style="height: auto;">
           <v-list-tile-content style="font-size: 14px;">
-            <v-list-tile-title style="display: flex;align-items: center;height: auto;white-space:normal">
+            <v-list-tile-title style="display: flex;height: auto;white-space:normal">
               <span class="text-bold mr-2">{{index + 1}}.</span>
               <span>{{item.partName}}</span>
             </v-list-tile-title>
@@ -115,4 +115,10 @@ export default {
   }
 }
 </script>
+<style>
+  .list-traketqua .list__tile {
+    height: 100% !important;
+  }
+</style>
+
 
