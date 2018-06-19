@@ -500,16 +500,22 @@ export const store = new Vuex.Store({
               } else {
                 itemTemplate.count = 0
               }
-              let itemMarkFinded = dossierMarkItems.find(itemMark => {
-                return itemMark && itemMark.dossierPartNo === itemTemplate.partNo
+              dossierMarkItems.forEach(function (val, index) {
+                if (val.dossierPartNo === itemTemplate.partNo) {
+                  itemTemplate.fileType = val.fileType
+                  itemTemplate.fileCheck = val.fileCheck
+                }
               })
-              if (itemMarkFinded) {
-                itemTemplate.fileType = itemMarkFinded.fileType
-                itemTemplate.fileCheck = itemMarkFinded.fileCheck
-              } else {
-                itemTemplate.fileType = 0
-                itemTemplate.fileCheck = false
-              }
+              // let itemMarkFinded = dossierMarkItems.find(itemMark => {
+              //   return itemMark && itemMark.dossierPartNo === itemTemplate.partNo
+              // })
+              // if (itemMarkFinded) {
+              //   itemTemplate.fileType = itemMarkFinded.fileType
+              //   itemTemplate.fileCheck = itemMarkFinded.fileCheck
+              // } else {
+              //   itemTemplate.fileType = 0
+              //   itemTemplate.fileCheck = false
+              // }
               return itemTemplate
             })
           } else {

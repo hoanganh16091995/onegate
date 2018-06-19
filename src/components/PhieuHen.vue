@@ -296,7 +296,7 @@ export default {
       printJS({
         printable: 'printContent',
         type: 'html',
-        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.907e37d3ff62b7cc1a50b89ed8f69844.css'
+        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.d3f9b52c6230c1366867495bac7af304.css'
       })
     },
     receiveDateText () {
