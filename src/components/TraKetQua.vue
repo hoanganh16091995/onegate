@@ -94,13 +94,18 @@ export default {
       var vm = this
       vm.$root.$confirm.open('Thông báo', 'Bạn chắc chắn muốn thực hiện thao tác này?', { color: 'blue darken-4' }).then((confirm) => {
         console.log('run')
-        let param = {
-          dossierId: vm.thongTinChungHoSo.dossierId,
-          actionCode: 30000
-        }
-        vm.$store.dispatch('postAction', param).then(function (result) {
-          vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
-          router.push('/danh-sach-ho-so/3')
+        vm.$store.dispatch('getCpsAuthen').then(resultAuthen => {
+          let param = {
+            dossierId: vm.thongTinChungHoSo.dossierId,
+            actionCode: 30000,
+            cps_auth: resultAuthen
+          }
+          vm.$store.dispatch('postAction', param).then(function (result) {
+            vm.$store.dispatch('showMessageToastr', ['success', 'Chuyển thành công'])
+            router.push('/danh-sach-ho-so/3')
+          })
+        }).catch(reject => {
+
         })
       }).catch(function (xhr) {})
     },

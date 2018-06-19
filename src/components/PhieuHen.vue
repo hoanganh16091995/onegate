@@ -239,18 +239,18 @@ export default {
         // promise.then(function (result) {
         //   vm.$store.dispatch('showMessageToastr', ['success', 'Gửi hồ sơ thành công'])
         // })
-        let dataPostAction = {
-          dossierId: vm.thongTinChungHoSo.dossierId,
-          actionCode: 10000
-        }
-        // var thongTinChungHoSoTemp = vm.thongTinChungHoSo
-        // if (thongTinChungHoSoTemp.dossierStatus === 'waiting') {
-        //   dataPostAction.actionCode = 20000
-        //   console.log('dataPostAction--------', dataPostAction)
-        // }
-        vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
-          router.push('/danh-sach-ho-so/3')
-          utils.showMessageToastr('success', 'Lưu thành công')
+        vm.$store.dispatch('getCpsAuthen').then(resultAuthen => {
+          let dataPostAction = {
+            dossierId: vm.thongTinChungHoSo.dossierId,
+            actionCode: 10000,
+            cps_auth: resultAuthen
+          }
+          vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
+            router.push('/danh-sach-ho-so/3')
+            utils.showMessageToastr('success', 'Lưu thành công')
+          })
+        }).catch(reject => {
+          console.log(reject)
         })
       }).catch(function (xhr) {
         console.log('kkk')

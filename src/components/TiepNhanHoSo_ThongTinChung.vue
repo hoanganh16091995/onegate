@@ -226,6 +226,7 @@
       },
       changeServiceConfigs () {
         var vm = this
+        vm.$store.commit('setSubStatusNew', false)
         setTimeout(function () {
           let optionItems = vm.thongTinChungHoSo.serviceConfig.options
           // console.log(optionItems)
@@ -238,18 +239,22 @@
             vm.dataPostDossier.templateNo = optionItems[0].templateNo
             vm.$store.commit('setServiceOptionItems', optionItems)
             vm.$store.commit('setServiceOptionThongTinChungHoSo', optionItems[0].templateNo)
-            let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
-            promise.then(function (result) {
-              console.log('result', result)
-              router.push('/danh-sach-ho-so/' + vm.$store.getters.index + '/tiep-nhan-ho-so/' + result.dossierId)
-              vm.$store.dispatch('loadDossierFiles')
-              vm.$store.dispatch('loadDossierTemplates', result).then(function (result) {
-                setTimeout(function (argument) {
-                  console.log('result dossierTemplates=-------', result)
-                  result.forEach(val => {
-                    vm.$store.dispatch('loadAlpcaForm', val)
-                  })
-                }, 500)
+            vm.$store.commit('setSubStatusNew', false)
+            vm.$store.dispatch('getCpsAuthen').then(function (result) {
+              vm.dataPostDossier.cps_auth = result
+              let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
+              promise.then(function (result) {
+                console.log('result', result)
+                router.push('/danh-sach-ho-so/' + vm.$store.getters.index + '/tiep-nhan-ho-so/' + result.dossierId)
+                vm.$store.dispatch('loadDossierFiles')
+                vm.$store.dispatch('loadDossierTemplates', result).then(function (result) {
+                  setTimeout(function (argument) {
+                    console.log('result dossierTemplates=-------', result)
+                    result.forEach(val => {
+                      vm.$store.dispatch('loadAlpcaForm', val)
+                    })
+                  }, 500)
+                })
               })
             })
           }
@@ -258,12 +263,18 @@
       },
       changeServiceOption () {
         var vm = this
+        vm.$store.commit('setSubStatusNew', false)
         setTimeout(function () {
           vm.dataPostDossier.templateNo = vm.thongTinChungHoSo.serviceOption
-          let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
-          promise.then(function (result) {
-            console.log('log', vm.$store.getters.index, result.dossierId)
-            router.push('/danh-sach-ho-so/' + vm.$store.getters.index + '/tiep-nhan-ho-so/' + result.dossierId)
+          vm.$store.dispatch('getCpsAuthen').then(function (result) {
+            vm.dataPostDossier.cps_auth = result
+            let promise = vm.$store.dispatch('postDossier', vm.dataPostDossier)
+            promise.then(function (result) {
+              console.log('log', vm.$store.getters.index, result.dossierId)
+              router.push('/danh-sach-ho-so/' + vm.$store.getters.index + '/tiep-nhan-ho-so/' + result.dossierId)
+            })
+          }).catch(reject => {
+            console.log(reject)
           })
         }, 300)
       }

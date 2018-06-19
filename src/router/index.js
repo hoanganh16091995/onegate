@@ -24,13 +24,16 @@ const routerOptions = [
     props: true,
     beforeEnter: function (to, from, next) {
       console.log('run active component tiếp nhận hồ sơ')
+      store.commit('setSubStatusNew', false)
       store.commit('setIsDetail', false)
       store.dispatch('resetThongTinChungHoSo')
       store.dispatch('resetThongTinChuHoSo')
       store.dispatch('resetThongTinNguoiNopHoSo')
       store.dispatch('resetThanhPhanHoSo')
       store.commit('setSameUser', true)
-      next()
+      setTimeout(function () {
+        next()
+      }, 200)
     }
   },
   { path: '/danh-sach-ho-so/:index/tiep-nhan-ho-so/:id',
