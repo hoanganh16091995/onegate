@@ -138,24 +138,24 @@ export default {
               }
             })
           }
-          let dataVNPOST = {
-            senderProvince: 10,
-            senderAddress: thongtinnguoinophoso.delegateApplicantName,
-            senderName: thongtinnguoinophoso.senderName,
-            senderTel: thongtinnguoinophoso.delegateContactTelNo,
-            receiverName: thongtinnguoinophoso.delegateApplicantName,
-            receiverAddress: dichvuchuyenphatketqua.postalAddress,
-            receiverTel: dichvuchuyenphatketqua.postalTelNo,
-            receiverProvince: dichvuchuyenphatketqua.vnPostCode
-          }
+          // let dataVNPOST = {
+          //   senderProvince: 10,
+          //   senderAddress: thongtinnguoinophoso.delegateApplicantName,
+          //   senderName: thongtinnguoinophoso.senderName,
+          //   senderTel: thongtinnguoinophoso.delegateContactTelNo,
+          //   receiverName: thongtinnguoinophoso.delegateApplicantName,
+          //   receiverAddress: dichvuchuyenphatketqua.postalAddress,
+          //   receiverTel: dichvuchuyenphatketqua.postalTelNo,
+          //   receiverProvince: dichvuchuyenphatketqua.vnPostCode
+          // }
           Promise.all(listDossierMark).then(values => {
           }).catch(function (xhr) {
           })
-          vm.$store.dispatch('postVNPOST', dataVNPOST).then(function (result) {
-            console.log('VNPOST Sucess-------------')
-          }).catch(function (xhr) {
-            console.log('VNPOST Error-------------')
-          })
+          // vm.$store.dispatch('postVNPOST', dataVNPOST).then(function (result) {
+          //   console.log('VNPOST Sucess-------------')
+          // }).catch(function (xhr) {
+          //   console.log('VNPOST Error-------------')
+          // })
           Promise.all(listAction).then(values => {
             console.log(values)
             let tempData = Object.assign(thongtinchung, thongtinchuhoso, thongtinnguoinophoso, thanhphanhoso, lephi, dichvuchuyenphatketqua)

@@ -589,7 +589,7 @@ export default {
       console.log(vm.selected)
     },
     toDetailDossier (index, dossierId) {
-      var url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + dossierId
+      var url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/chi-tiet-ho-so/' + dossierId
       if (index === '4') {
         url = '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/chi-tiet-ho-so/' + dossierId
       }
@@ -625,7 +625,7 @@ export default {
       if (item.dossierStatus === 'done') {
         return '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/chi-tiet-ho-so/' + item.dossierId
       } else {
-        return '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/tiep-nhan-ho-so/' + item.dossierId
+        return '/group/cong-xu-ly/mot-cua-dien-tu#/danh-sach-ho-so/' + index + '/chi-tiet-ho-so/' + item.dossierId
       }
     }
   },
