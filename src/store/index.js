@@ -726,8 +726,8 @@ export const store = new Vuex.Store({
           headers: {
             'groupId': state.api.groupId,
             'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded'
-            // 'cps_auth': data.cps_auth
+            'Content-Type': 'application/x-www-form-urlencoded',
+            'cps_auth': data.cps_auth
           }
         }
         var dataPostdossier = new URLSearchParams()

@@ -152,25 +152,25 @@
                   <div v-if="showContactDetail">
                     <v-layout wrap>
                       <v-flex xs12 sm2>
-                        <v-subheader class="pl-0">Tên doanh nghiệp: </v-subheader>
+                        <v-subheader class="pl-0"><i>Tên doanh nghiệp: </i></v-subheader>
                       </v-flex>
                       <v-flex xs12 sm4>
                         <v-subheader class="pl-0 header-text-field"> {{thongTinChuHoSo.applicantName}} </v-subheader>
                       </v-flex>
                       <v-flex xs12 sm2>
-                        <v-subheader class="pl-0">Địa chỉ Email: </v-subheader>
+                        <v-subheader class="pl-0"><i>Địa chỉ Email: </i></v-subheader>
                       </v-flex>
                       <v-flex xs12 sm4>
                         <v-subheader class="pl-0 header-text-field"> {{thongTinChuHoSo.contactEmail}} </v-subheader>
                       </v-flex>
                       <v-flex xs12 sm2>
-                        <v-subheader class="pl-0">Số điện thoại: </v-subheader>
+                        <v-subheader class="pl-0"><i>Số điện thoại: </i></v-subheader>
                       </v-flex>
                       <v-flex xs12 sm4>
                         <v-subheader class="pl-0 header-text-field"> {{thongTinChuHoSo.contactTelNo}} </v-subheader>
                       </v-flex>
                       <v-flex xs12 sm2>
-                        <v-subheader class="pl-0">Địa chỉ: </v-subheader>
+                        <v-subheader class="pl-0"><i>Địa chỉ: </i></v-subheader>
                       </v-flex>
                       <v-flex xs12 sm4>
                         <v-subheader class="pl-0 header-text-field"> {{thongTinChuHoSo.address}} </v-subheader>
@@ -187,7 +187,7 @@
     </v-expansion-panel>
     <!--  -->
     <div>
-      <v-tabs slider-color="primary">
+      <v-tabs slider-color="primary" style="background-color: #dae8e8;">
         <v-tab key="1" class="mr-2">
         THÀNH PHẦN HỒ SƠ
         </v-tab>
@@ -201,12 +201,15 @@
         TRAO ĐỔI THÔNG TIN
         </v-tab> -->
         <!--  -->
-        <v-tab-item key="1" reverse-transition="slide-y-transition" transition="slide-y-transition">
-          <v-expansion-panel expand class="my-0" style="border: none">
+        <v-tab-item key="1">
+          <v-expansion-panel expand class="my-0 expansion-pl-transparent" style="border: none">
             <v-expansion-panel-content v-bind:value="true">
-              <div slot="header" class="text-bold"> <span>I. </span>Tài liệu nộp</div>
+              <div slot="header" class="text-bold">
+                <div class="background-triangle-small"> I.</div>
+                Tài liệu nộp
+              </div>
               <div v-for="(item, index) in dossierTemplatesTN" v-bind:key="item.partNo">
-                <v-layout wrap class="px-4 align-center row-list-style"> 
+                <v-layout wrap class="px-3 py-1 align-center row-list-style" style="border-bottom: 1px solid #ddd"> 
                   <v-flex xs11>
                     <span class="text-bold" style="position: absolute;">{{index + 1}}.</span> 
                     <div style="margin-left: 30px;">{{item.partName}}</div>
@@ -223,11 +226,14 @@
               </div>
             </v-expansion-panel-content>
           </v-expansion-panel>
-          <v-expansion-panel expand class="my-0" style="border: none">
+          <v-expansion-panel expand class="my-0 expansion-pl-transparent" style="border: none">
             <v-expansion-panel-content v-bind:value="true">
-            <div slot="header" class="text-bold"> <span>II. </span>Kết quả</div>
+            <div slot="header" class="text-bold">
+              <div class="background-triangle-small"> II.</div>
+              Kết quả
+            </div>
             <div v-for="(item, index) in dossierTemplatesKQ" v-bind:key="item.partNo">
-                <v-layout wrap class="px-4 align-center row-list-style"> 
+                <v-layout wrap class="px-3 py-1 align-center row-list-style" style="border-bottom: 1px solid #ddd"> 
                   <v-flex xs11>
                     <span class="text-bold" style="position: absolute;">{{index + 1}}.</span> 
                     <div style="margin-left: 30px;">{{item.partName}}</div>
@@ -250,7 +256,7 @@
           
         </v-tab-item> -->
         <!--  -->
-        <v-tab-item key="2" reverse-transition="slide-y-transition" transition="slide-y-transition" style="background: #ffff;">
+        <v-tab-item key="2" style="background: #ffff;">
           <div v-for="(item, index) in listHistoryProcessing" v-bind:key="item.dossierLogId" class="list_history_style">
             <td style="padding-top: 5px;" class="px-2 text-bold">{{ index + 1 }}.</td>
             <td style="padding-top: 5px;" class="text-xs-left">
@@ -291,6 +297,7 @@ export default {
   props: ['index', 'id'],
   data: () => ({
     dossierTemplateFiles: [],
+    dossierTemplatesItems: [],
     showContactDetail: false,
     listHistoryProcessing: [],
     dossierTemplatesTN: [],
@@ -327,16 +334,16 @@ export default {
       promise.then(function (result) {
         let promise2 = vm.$store.dispatch('loadDossierTemplates', result)
         promise2.then(function (result) {
-          vm.dossierTemplates = []
-          vm.dossierTemplates = result
-          console.log('dossierTemplates', vm.dossierTemplates)
+          vm.dossierTemplatesItems = []
+          vm.dossierTemplatesItems = result
+          console.log('dossierTemplatesItems', vm.dossierTemplatesItems)
           vm.dossierTemplatesTN = []
           vm.dossierTemplatesKQ = []
-          for (var key in vm.dossierTemplates) {
-            if (vm.dossierTemplates[key].partType === 1) {
-              vm.dossierTemplatesTN.push(vm.dossierTemplates[key])
-            } else if (vm.dossierTemplates[key].partType === 2) {
-              vm.dossierTemplatesKQ.push(vm.dossierTemplates[key])
+          for (var key in vm.dossierTemplatesItems) {
+            if (vm.dossierTemplatesItems[key].partType === 1) {
+              vm.dossierTemplatesTN.push(vm.dossierTemplatesItems[key])
+            } else if (vm.dossierTemplatesItems[key].partType === 2) {
+              vm.dossierTemplatesKQ.push(vm.dossierTemplatesItems[key])
             }
           }
           console.log('dossierTemplatesTN', vm.dossierTemplatesTN)

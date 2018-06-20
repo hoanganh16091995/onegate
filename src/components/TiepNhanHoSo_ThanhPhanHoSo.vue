@@ -35,20 +35,20 @@
                 </v-card>
               </v-expansion-panel-content>
             </v-expansion-panel>
-            <div class="absolute__btn group__thanh_phan px-2 py-1">
+            <div class="absolute__btn group__thanh_phan px-2">
               <content-placeholders class="mt-1" v-if="loading">
                 <content-placeholders-text :lines="1" />
               </content-placeholders>
               <v-layout row wrap class="flex__checkbox" v-else>
                 <v-flex style="width: 300px;" class="layout wrap">
                   <v-checkbox light color="secondary" class="flex" v-model="thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-checkbox>
-                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row class="flex__checkbox">
-                    <v-radio :value="2" :disabled="!thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-radio>
-                    <v-radio :value="0" :disabled="!thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-radio>
-                    <v-radio :value="1" :disabled="!thanhPhanHoSo.dossierTemplates[index].fileCheck"></v-radio>
+                  <v-radio-group v-model="thanhPhanHoSo.dossierTemplates[index].fileType" row>
+                    <v-radio :value="2" :disabled="!thanhPhanHoSo.dossierTemplates[index].fileCheck" ></v-radio>
+                    <v-radio :value="0" :disabled="!thanhPhanHoSo.dossierTemplates[index].fileCheck" ></v-radio>
+                    <v-radio :value="1" :disabled="!thanhPhanHoSo.dossierTemplates[index].fileCheck" ></v-radio>
                   </v-radio-group>
                 </v-flex>
-                <v-flex style="width: 120px;" class="text-right">
+                <v-flex class="text-right" style="width: 120px;align-self: center;">
                   <v-tooltip top>
                     <v-btn slot="activator" icon class="mx-0 my-0">
                       <v-badge>
