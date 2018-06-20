@@ -651,10 +651,20 @@ export const store = new Vuex.Store({
         }
         if (data > 0) {
           axios.get(state.api.postDossierApi + '/' + data, param).then(function (response) {
+            let thongTinNguoiNop = {
+              delegateName: response.data.delegateName,
+              delegateCityCode: response.data.delegateCityCode,
+              delegateAddress: response.data.delegateAddress,
+              delegateDistrictCode: response.data.delegateDistrictCode,
+              delegateWardCode: response.data.delegateWardCode,
+              delegateEmail: response.data.delegateEmail,
+              delegateTelNo: response.data.delegateTelNo,
+              delegateIdNo: response.data.delegateIdNo
+            }
             commit('setDossier', response.data)
             commit('setThongTinChuHoSo', response.data)
             commit('setLePhi', response.data)
-            commit('setThongTinNguoiNopHoSo', response.data)
+            commit('setThongTinNguoiNopHoSo', thongTinNguoiNop)
             commit('setThongTinChungHoSo', response.data)
             commit('setDichVuChuyenPhatKetQua', response.data)
             resolve(response.data)
@@ -716,8 +726,8 @@ export const store = new Vuex.Store({
           headers: {
             'groupId': state.api.groupId,
             'Accept': 'application/json',
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'cps_auth': data.cps_auth
+            'Content-Type': 'application/x-www-form-urlencoded'
+            // 'cps_auth': data.cps_auth
           }
         }
         var dataPostdossier = new URLSearchParams()
