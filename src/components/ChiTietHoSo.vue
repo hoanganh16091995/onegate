@@ -325,8 +325,8 @@ export default {
     vm.$nextTick(function () {
       let promise = vm.$store.dispatch('getDetailDossier', vm.id)
       promise.then(function (result) {
-        let promise_2 = vm.$store.dispatch('loadDossierTemplates', result)
-        promise_2.then(function (result) {
+        let promise2 = vm.$store.dispatch('loadDossierTemplates', result)
+        promise2.then(function (result) {
           vm.dossierTemplates = []
           vm.dossierTemplates = result
           console.log('dossierTemplates', vm.dossierTemplates)
