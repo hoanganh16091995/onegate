@@ -1147,7 +1147,7 @@ export const store = new Vuex.Store({
           },
           params: {}
         }
-        axios.get('http://127.0.0.1:8081/api/onegate/token', param).then(function (response) {
+        axios.get('/o/rest/v2/onegate/token', param).then(function (response) {
           resolve(response.data)
         })
         .catch(function (error) {
