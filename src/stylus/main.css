@@ -416,16 +416,6 @@ body .input-group--select .input-group__selections__comma {
 .vdatetime-slot__not-available, .vdatetime-slot__available {
     display: none
 }
-.expansion-pl .expansion-panel__header {
-    padding-left: 0px;
-    padding-bottom: 5px;
-    padding-top: 5px;
-}
-.expansion-pl .expansion-panel__body .expansion-panel__container .expansion-panel__header {
-    padding-bottom: 0px;
-    padding-top: 0px;
-    border-bottom: 1px solid #ddd;
-}
 .group__thanh_phan .input-group.input-group--selection-controls .input-group__input .icon--selection-control {
     width: auto;
 }
@@ -526,8 +516,22 @@ body .input-group--select .input-group__selections__comma {
 .tabs {
     border: 1px solid #e1e2e1;
 }
+.expansion-pl .expansion-panel__header, .expansion-pl-transparent .expansion-panel__header {
+    padding-left: 0px;
+    padding-bottom: 5px;
+    padding-top: 5px;
+}
+.expansion-pl .expansion-panel__body .expansion-panel__container .expansion-panel__header,
+.expansion-pl-transparent .expansion-panel__container .expansion-panel__header {
+    /* padding-bottom: 0px;
+    padding-top: 0px; */
+    border-bottom: 1px solid #ddd
+}
 .form-chitiet .tabs .tabs__bar, .form-chitiet .expansion-pl .expansion-panel__header {
     background-color: #dae8e8
+}
+.form-chitiet .tabs .tabs__bar, .form-chitiet .expansion-pl-transparent .expansion-panel__header {
+    background-color: transparent
 }
 .tabs__container {
     height: 38px;
@@ -536,6 +540,38 @@ body .input-group--select .input-group__selections__comma {
 .list_history_style {
     border-bottom: 1px solid #e1e2e1;
 }
-
-
-
+.col-tien-trinh-1 {
+    background-color: #D9E7E8
+}
+.col-tien-trinh-2 {
+    background-color: #E9F7F8
+}
+/* fix form alpacal */
+.form_alpaca .alpaca-message {
+    display: none!important;
+}
+.form_alpaca .card_text {
+    padding: 10px 0px !important;
+}
+.form_alpaca .text-xs-right {
+    text-align: left!important;
+}
+/*  */
+.group__thanh_phan .input-group--selection-controls__ripple {
+    display: none
+}
+/* .group__thanh_phan, .group__thanh_phan .flex__checkbox, .group__thanh_phan .checkbox,.group__thanh_phan .radio-group,
+.group__thanh_phan .checkbox .input-group__input, .group__thanh_phan .radio-group .input-group__input, .group__thanh_phan .radio{
+    height: 100% !important;
+    max-height: none !important
+}
+.group__thanh_phan .flex__checkbox .input-group:first-child {
+    border-right: 0px;
+}
+.group__thanh_phan .flex__checkbox .input-group {
+    background: transparent!important
+}
+.group__thanh_phan .input-group--selection-controls__ripple {
+    display: none
+} */
+/*  */

@@ -443,8 +443,19 @@ export default {
       handler: function () {
         var vm = this
         let value = vm.thongTinNguoiNopHoSo
+        let dataChuHoSo = vm.thongTinChuHoSo
         if (value.sameUser) {
-          this.$store.dispatch('setThongTinNguoiNopHoSo', vm.thongTinChuHoSo)
+          let dataNguoiNop = {
+            delegateName: dataChuHoSo.applicantName,
+            delegateCityCode: dataChuHoSo.cityCode,
+            delegateAddress: dataChuHoSo.address,
+            delegateDistrictCode: dataChuHoSo.districtCode,
+            delegateWardCode: dataChuHoSo.wardCode,
+            delegateEmail: dataChuHoSo.contactEmail,
+            delegateTelNo: dataChuHoSo.contactTelNo,
+            delegateIdNo: dataChuHoSo.applicantIdNo
+          }
+          this.$store.dispatch('setThongTinNguoiNopHoSo', dataNguoiNop)
         } else {
           this.$store.dispatch('resetThongTinNguoiNopHoSo')
         }
