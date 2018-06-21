@@ -18,31 +18,48 @@
         </div>
       </div>
     </div>
-    <div class="list-traketqua">
-      <div class="px-2 py-2 text-bold" style="background-color: #e1f5fe;">Giấy tờ nộp vào là bản gốc</div>
-      <v-list class="py-0">
-        <v-list-tile v-for="(item, index) in mainItems" :key="item" style="height: auto;">
-          <v-list-tile-content style="font-size: 14px;">
-            <v-list-tile-title style="display: flex;height: auto;white-space:normal">
-              <span class="text-bold mr-2">{{index + 1}}.</span>
-              <span>{{item.partName}}</span>
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
+    <div>
+      <v-expansion-panel expand class="my-0 expansion-pl-transparent" style="border: none">
+        <v-expansion-panel-content v-bind:value="true">
+          <div slot="header" class="text-bold">
+            <div class="background-triangle-small"> I.</div>
+            Giấy tờ nộp vào là bản gốc
+          </div>
+          <div v-for="(item, index) in mainItems" v-bind:key="item.partNo">
+            <v-card>
+              <v-layout wrap class="px-3 py-1 align-center row-list-style" style="border-bottom: 1px solid #ddd"> 
+                <v-flex xs12>
+                  <span class="text-bold" style="position: absolute;">{{index + 1}}.</span> 
+                  <div style="margin-left: 30px;">{{item.partName}}</div>
+                </v-flex>
+              </v-layout>
+            </v-card>
+          </div>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+
     </div>
     <div>
-      <div class="px-2 py-2 text-bold" style="background-color: #e1f5fe;">Giấy tờ trả kết quả</div>
-      <v-list class="py-0">
-        <v-list-tile class="py-1" v-for="(item, index) in mainItems2" :key="item" style="height: auto;">
-          <v-list-tile-content style="font-size: 14px;">
-            <v-list-tile-title style="display: flex;align-items: center;height: auto;white-space:normal">
-              <span class="text-bold mr-2">{{index + 1}}.</span>
-              <span>{{item.partName}}</span>
-            </v-list-tile-title>
-          </v-list-tile-content>
-        </v-list-tile>
-      </v-list>
+      <v-expansion-panel expand class="my-0 expansion-pl-transparent" style="border: none">
+        <v-expansion-panel-content v-bind:value="true">
+          <div slot="header" class="text-bold">
+            <div class="background-triangle-small"> II.</div>
+            Giấy tờ trả kết quả
+          </div>
+          <div v-for="(item, index) in mainItems2" v-bind:key="item.partNo">
+            <v-card>
+              <v-layout wrap class="px-3 py-1 align-center row-list-style" style="border-bottom: 1px solid #ddd"> 
+                <v-flex xs12>
+                  <span class="text-bold" style="position: absolute;">{{index + 1}}.</span> 
+                  <div style="margin-left: 30px;">{{item.partName}}</div>
+                </v-flex>
+              </v-layout>
+            </v-card>
+            
+          </div>
+        </v-expansion-panel-content>
+      </v-expansion-panel>
+
     </div>
   </div>
 </template>
@@ -53,10 +70,8 @@ export default {
   props: ['index', 'id'],
   data: () => ({
     validTNHS: false,
-    mainItems: [
-    ],
-    mainItems2: [
-    ]
+    mainItems: [],
+    mainItems2: []
   }),
   computed: {
     loading () {
@@ -115,9 +130,3 @@ export default {
   }
 }
 </script>
-<style>
-  .list-traketqua .list__tile {
-    height: 100% !important;
-  }
-</style>
-

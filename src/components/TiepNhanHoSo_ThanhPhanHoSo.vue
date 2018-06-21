@@ -17,7 +17,7 @@
           <div class="form_alpaca" style="position: relative;" v-for="(item, index) in dossierTemplates" v-if="item.partType === 1" v-bind:key="item.partNo">
             <v-expansion-panel class="expaned__list__data">
               <v-expansion-panel-content hide-actions :value="false">
-                <div slot="header" class="pl-2 py-1">
+                <div slot="header" class="pl-2">
                   <div style="width: calc(100% - 420px );display: flex;align-items: center;min-height: 38px">
                     <span class="text-bold mr-2">{{index + 1}}.</span>
                     <span @click="loadAlpcaForm(item)">{{item.partName}} <span v-if="item.required" style="color: red"> (*)</span> <i v-if="item.hasForm">Form trực tuyến</i></span>
@@ -185,15 +185,3 @@ export default {
   }
 }
 </script>
-<style>
-  .form_alpaca .alpaca-message {
-    display: none!important;
-  }
-  .form_alpaca .card_text {
-    padding: 10px 0px !important;
-  }
-  .form_alpaca .text-xs-right {
-    text-align: left!important;
-  }
-</style>
-

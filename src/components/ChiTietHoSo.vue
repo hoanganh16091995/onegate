@@ -209,20 +209,23 @@
                 Tài liệu nộp
               </div>
               <div v-for="(item, index) in dossierTemplatesTN" v-bind:key="item.partNo">
-                <v-layout wrap class="px-3 py-1 align-center row-list-style" style="border-bottom: 1px solid #ddd"> 
-                  <v-flex xs11>
-                    <span class="text-bold" style="position: absolute;">{{index + 1}}.</span> 
-                    <div style="margin-left: 30px;">{{item.partName}}</div>
-                  </v-flex>
-                  <v-flex xs1 class="text-right">
-                    <v-tooltip top>
-                      <v-btn slot="activator" class="mx-0" fab dark small color="primary" @click="viewFile(item)" style="height:25px;width:25px">
-                        {{item.count}}
-                      </v-btn>
-                      <span>Xem</span>
-                    </v-tooltip>
-                  </v-flex>
-                </v-layout>
+                <v-card>
+                  <v-layout wrap class="px-3 py-1 align-center row-list-style" style="border-bottom: 1px solid #ddd"> 
+                    <v-flex xs11>
+                      <span class="text-bold" style="position: absolute;">{{index + 1}}.</span> 
+                      <div style="margin-left: 30px;">{{item.partName}}</div>
+                    </v-flex>
+                    <v-flex xs1 class="text-right">
+                      <v-tooltip top>
+                        <v-btn slot="activator" class="mx-0 my-0" fab dark small color="primary" @click="viewFile(item)" style="height:25px;width:25px">
+                          {{item.count}}
+                        </v-btn>
+                        <span>Xem</span>
+                      </v-tooltip>
+                    </v-flex>
+                  </v-layout>
+                </v-card>
+                
               </div>
             </v-expansion-panel-content>
           </v-expansion-panel>
@@ -233,6 +236,7 @@
               Kết quả
             </div>
             <div v-for="(item, index) in dossierTemplatesKQ" v-bind:key="item.partNo">
+              <v-card>
                 <v-layout wrap class="px-3 py-1 align-center row-list-style" style="border-bottom: 1px solid #ddd"> 
                   <v-flex xs11>
                     <span class="text-bold" style="position: absolute;">{{index + 1}}.</span> 
@@ -240,14 +244,16 @@
                   </v-flex>
                   <v-flex xs1 class="text-right">
                     <v-tooltip top>
-                      <v-btn slot="activator" class="mx-0" fab dark small color="primary" @click="viewFile(item)" style="height:25px;width:25px">
+                      <v-btn slot="activator" class="mx-0 my-0" fab dark small color="primary" @click="viewFile(item)" style="height:25px;width:25px">
                         {{item.count}}
                       </v-btn>
                       <span>Xem</span>
                     </v-tooltip>
                   </v-flex>
                 </v-layout>
-              </div>
+              </v-card>
+              
+            </div>
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-tab-item>
@@ -258,8 +264,8 @@
         <!--  -->
         <v-tab-item key="2" style="background: #ffff;">
           <div v-for="(item, index) in listHistoryProcessing" v-bind:key="item.dossierLogId" class="list_history_style">
-            <td style="padding-top: 5px;" class="px-2 text-bold">{{ index + 1 }}.</td>
-            <td style="padding-top: 5px;" class="text-xs-left">
+            <td class="px-2 pt-2" :class="index%2!==0?'col-tien-trinh-1':'col-tien-trinh-2'">{{ index + 1 }}</td>
+            <td class="text-xs-left px-2 py-2">
               <p class="mb-2"> Ông/bà <b>{{ item.author }}</b> 
                 <span style="color: #0b72ba">( {{ item.payload.stepName }} )</span>
                 <br/>
