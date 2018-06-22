@@ -289,17 +289,7 @@
         </v-tab-item> -->
 
         <v-tab-item key="4" style="background: #ffff;">
-          <comment
-            id="1"
-            @init-comment="initComment"
-            class_name="class_name_activity"
-            class_pk="123"
-            group_id="55301"
-            comments_api="http://127.0.0.1:8081/api/comments"
-            expanded="true"
-            user_id="123"
-            full_name="tradas"
-          ></comment>
+          <comment dossierId="77602"></comment>
         </v-tab-item>
       </v-tabs>
     </div>
@@ -324,8 +314,7 @@ export default {
     showContactDetail: false,
     listHistoryProcessing: [],
     dossierTemplatesTN: [],
-    dossierTemplatesKQ: [],
-    contacts: []
+    dossierTemplatesKQ: []
   }),
   computed: {
     loading () {
@@ -390,9 +379,6 @@ export default {
     })
   },
   methods: {
-    initComment: function (prevewConfig) {
-      $('#mobilink-comments-container').comments(prevewConfig)
-    },
     goBack () {
       window.history.back()
     },

@@ -1,10 +1,11 @@
 /* eslint-disable */
-//     jquery-comments.js 1.2.0
-
-//     (c) 2017 Joona Tykkyläinen, Viima Solutions Oy
-//     jquery-comments may be freely distributed under the MIT license.
-//     For all details and documentation:
-//     http://viima.github.io/jquery-comments/
+/*!     jquery-comments.js 1.3.0
+ *
+ *     (c) 2017 Joona Tykkyläinen, Viima Solutions Oy
+ *     jquery-comments may be freely distributed under the MIT license.
+ *     For all details and documentation:
+ *     http://viima.github.io/jquery-comments/
+ */
 
 (function (factory) {
     if (typeof define === 'function' && define.amd) {
@@ -113,12 +114,12 @@
         getDefaultOptions: function() {
             return {
 
-                // User        
+                // User
                 profilePictureURL: '',
                 currentUserIsAdmin: false,
                 currentUserId: null,
-                
-                // Font awesome icon overrides        
+
+                // Font awesome icon overrides
                 spinnerIconURL: '',
                 upvoteIconURL: '',
                 replyIconURL: '',
@@ -126,29 +127,29 @@
                 attachmentIconURL: '',
                 fileIconURL: '',
                 noCommentsIconURL: '',
-                
-                // Strings to be formatted (for example localization)     
-                textareaPlaceholderText: 'Thêm bình luận mới',
-                newestText: 'Mới nhất',
-                oldestText: 'Cũ nhất',
-                popularText: 'Phổ biến',
-                attachmentsText: 'Tệp đính kèm',
-                sendText: 'Gửi',
-                replyText: 'Trả lời',
-                editText: 'Sửa',
-                editedText: 'Đã sửa',
+
+                // Strings to be formatted (for example localization)
+                textareaPlaceholderText: 'Add a comment',
+                newestText: 'Newest',
+                oldestText: 'Oldest',
+                popularText: 'Popular',
+                attachmentsText: 'Attachments',
+                sendText: 'Send',
+                replyText: 'Reply',
+                editText: 'Edit',
+                editedText: 'Edited',
                 youText: 'You',
-                saveText: 'Ghi lại',
-                deleteText: 'Xoá',
-                newText: 'Mới',
+                saveText: 'Save',
+                deleteText: 'Delete',
+                newText: 'New',
                 viewAllRepliesText: 'View all __replyCount__ replies',
                 hideRepliesText: 'Hide replies',
-                noCommentsText: 'Không có bình luận nào',
-                noAttachmentsText: 'Không có tệp đính kèm',
-                attachmentDropText: 'Kéo thả tệp để tải lên',
+                noCommentsText: 'No comments',
+                noAttachmentsText: 'No attachments',
+                attachmentDropText: 'Drop files here',
                 textFormatter: function(text) {return text},
-                
-                // Functionalities        
+
+                // Functionalities
                 enableReplying: true,
                 enableEditing: true,
                 enableUpvoting: true,
@@ -162,18 +163,18 @@
                 forceResponsive: false,
                 readOnly: false,
                 defaultNavigationSortKey: 'newest',
-                
-                // Colors     
+
+                // Colors
                 highlightColor: '#2793e6',
                 deleteButtonColor: '#C9302C',
-                
+
                 scrollContainer: this.$el,
                 roundProfilePictures: false,
                 textareaRows: 2,
                 textareaRowsOnFocus: 2,
                 textareaMaxRows: 5,
                 maxRepliesVisible: 2,
-                
+
                 fieldMappings: {
                     id: 'id',
                     parent: 'parent',
@@ -194,7 +195,7 @@
                     upvoteCount: 'upvote_count',
                     userHasUpvoted: 'user_has_upvoted'
                 },
-                
+
                 getUsers: function(success, error) {success([])},
                 getComments: function(success, error) {success([])},
                 postComment: function(commentJSON, success, error) {success(commentJSON)},
@@ -205,8 +206,7 @@
                 pingClicked: function(userId) {},
                 uploadAttachments: function(commentArray, success, error) {success(commentArray)},
                 refresh: function() {},
-                timeFormatter: function(time) {return new Date(time).toLocaleDateString()},
-                appendNewComments: function(commentJSONs, success, error) {success([])}
+                timeFormatter: function(time) {return new Date(time).toLocaleDateString()}
             }
         },
 
@@ -278,8 +278,6 @@
 
         fetchDataAndRender: function () {
             var self = this;
-            
-            setTimeout(function(){self.appendNewComments()},30000);
 
             this.commentsById = {};
             this.usersById = {};
@@ -289,7 +287,6 @@
 
             // Render after data has been fetched
             var dataFetched = this.after(this.options.enablePinging ? 2 : 1, function() {
-                
                 self.dataFetched = true;
                 self.render();
             });
@@ -300,14 +297,13 @@
             var commentsFetched = function(commentsArray) {
                 // Convert comments to custom data model
                 var commentModels = commentsArray.map(function(commentsJSON){
-                    
                     return self.createCommentModel(commentsJSON)
                 });
 
                 // Sort comments by date (oldest first so that they can be appended to the data model
                 // without caring dependencies)
                 self.sortComments(commentModels, 'oldest');
-                
+
                 $(commentModels).each(function(index, commentModel) {
                     self.addCommentToDataModel(commentModel);
                 });
@@ -321,7 +317,6 @@
 
             if(this.options.enablePinging) {
                 var usersFetched = function(userArray) {
-                    
                     $(userArray).each(function(index, user) {
                         self.usersById[user.id] = user;
                     });
@@ -356,14 +351,10 @@
         createCommentModel: function(commentJSON) {
             var commentModel = this.applyInternalMappings(commentJSON);
             commentModel.childs = [];
-            
-            // custome 31/10/2017
-            this.commentsById[commentModel.id] = commentModel;
             return commentModel;
         },
 
         addCommentToDataModel: function(commentModel) {
-            
             if(!(commentModel.id in this.commentsById)) {
                 this.commentsById[commentModel.id] = commentModel;
 
@@ -392,7 +383,7 @@
             this.createComments();
 
             // Create attachments if enabled
-            if(this.options.enableAttachments) this.createAttachments(); 
+            if(this.options.enableAttachments) this.createAttachments();
 
             // Remove spinner
             this.$el.find('> .spinner').remove();
@@ -539,11 +530,11 @@
         uploadAttachments: function(files, commentingField) {
             var self = this;
             if(!commentingField) commentingField = this.$el.find('.commenting-field.main');
+            var uploadButton = commentingField.find('.upload');
             var isReply = !commentingField.hasClass('main');
             var fileCount = files.length;
 
             if(fileCount) {
-                var uploadButton = commentingField.find('.upload');
                 var textarea = commentingField.find('.textarea');
 
                 // Disable upload button and append spinners while request is pending
@@ -662,7 +653,6 @@
         },
 
         sortComments: function (comments, sortKey) {
-            
             var self = this;
 
             // Sort by popularity
@@ -701,16 +691,6 @@
             }
         },
 
-        sortUsers: function(users) {
-            users.sort(function(a,b) {
-                var nameA = a.fullname.toLowerCase().trim();
-                var nameB = b.fullname.toLowerCase().trim();
-                if(nameA < nameB) return -1;
-                if(nameA > nameB) return 1;
-                return 0;
-            });
-        },
-
         sortAndReArrangeComments: function(sortKey) {
             var commentList = this.$el.find('#comment-list');
 
@@ -740,7 +720,7 @@
              } else {
                 var defaultDropdownEl = this.$el.find('.navigation ul.dropdown').children().first();
                 titleEl.find('header').html(defaultDropdownEl.html());
-             } 
+             }
 
             // Show active container
             this.showActiveContainer();
@@ -761,7 +741,7 @@
             // Save comment on cmd/ctrl + enter
             if(ev.keyCode == 13) {
                 var metaKey = ev.metaKey || ev.ctrlKey;
-                if(this.options.postCommentOnEnter || metaKey) {                
+                if(this.options.postCommentOnEnter || metaKey) {
                     var el = $(ev.currentTarget);
                     el.siblings('.control-row').find('.save').trigger('click');
                     ev.stopPropagation();
@@ -777,6 +757,12 @@
 
         checkEditableContentForChange: function(ev) {
             var el = $(ev.currentTarget);
+
+            // Fix jquery-textcomplete on IE, empty text nodes will break up the autocomplete feature
+            $(el[0].childNodes).each(function() {
+                if(this.nodeType == Node.TEXT_NODE && this.length == 0 && this.removeNode) this.removeNode();
+            });
+
             if (el.data('before') != el.html()) {
                 el.data('before', el.html());
                 el.trigger('change');
@@ -809,6 +795,7 @@
             var mainTextarea = $(ev.currentTarget);
             mainTextarea.siblings('.control-row').show();
             mainTextarea.parent().find('.close').show();
+            mainTextarea.parent().find('.upload.inline-button').hide();
             mainTextarea.focus();
         },
 
@@ -822,6 +809,7 @@
 
             mainControlRow.hide();
             closeButton.hide();
+            mainTextarea.parent().find('.upload.inline-button').show();
             mainTextarea.blur();
         },
 
@@ -896,34 +884,6 @@
             commentingField.remove();
         },
 
-        appendNewComments: function() {
-            var self = this;
-            console.log($(self.$el.context), $(self.$el.context).length);
-            if ($(self.$el.context).length == 0) {
-            	clearTimeout(myVar);
-            	return;
-            }
-            var commentJSONs = this.getComments();
-
-            var success = function(commentsNew, commentsEdit) {
-            	for (var c in commentsNew) {
-            		self.createComment(commentsNew[c]);
-            	}
-            	
-            	for (var cmt in commentsEdit) {
-            		var commentModel = self.createCommentModel(commentsEdit[cmt]);
-                    self.updateCommentModel(commentModel);
-                    self.reRenderComment(commentModel.id);
-            	}
-            };
-
-            var error = function() {
-                console.log('jquery comment append new error');
-            };
-            var myVar = setTimeout(function(){self.appendNewComments()},30000);
-            this.options.appendNewComments(commentJSONs, success, error);
-        },
-        
         postComment: function(ev) {
             var self = this;
             var sendButton = $(ev.currentTarget);
@@ -974,19 +934,20 @@
                 pings: this.getPings(textarea),
                 modified: new Date().getTime()
             });
-     
+
             // Reverse mapping
             commentJSON = this.applyExternalMappings(commentJSON);
-            
+
             var success = function(commentJSON) {
                 // The outermost parent can not be changed by editing the comment so the childs array
                 // of parent does not require an update
 
                 var commentModel = self.createCommentModel(commentJSON);
-              
+
                 // Delete childs array from new comment model since it doesn't need an update
                 delete commentModel['childs'];
                 self.updateCommentModel(commentModel);
+
                 // Close the editing field
                 commentingField.find('.close').trigger('click');
 
@@ -1126,9 +1087,6 @@
             var editButton = $(ev.currentTarget);
             var commentEl = editButton.parents('li.comment').first();
             var commentModel = commentEl.data().model;
-            
-            //get model(edit by trungnt)
-            commentModel = this.commentsById[commentModel.id];
             commentEl.addClass('edit');
 
             // Create the editing field
@@ -1166,7 +1124,7 @@
             count--;
             $(ev.currentTarget).data('dnd-count', count);
 
-            if(count == 0) {            
+            if(count == 0) {
                 $(ev.currentTarget).removeClass('drag-over');
                 if(callback) callback();
             }
@@ -1217,8 +1175,7 @@
             var self = this;
 
             // Commenting field
-            var mainCommentingField = this.createCommentingFieldElement();
-            mainCommentingField.addClass('main');
+            var mainCommentingField = this.createMainCommentingFieldElement();
             this.$el.append(mainCommentingField);
 
             // Hide control row and close button
@@ -1255,7 +1212,7 @@
                 noCommentsIcon.css('background-image', 'url("'+this.options.noCommentsIconURL+'")');
                 noCommentsIcon.addClass('image');
             }
-            noComments.prepend($('<br/>')).prepend(noCommentsIcon);            
+            noComments.prepend($('<br/>')).prepend(noCommentsIcon);
             commentsContainer.append(noComments);
 
             // Attachments
@@ -1298,7 +1255,7 @@
                 });
 
                 var uploadIcon = $('<i/>', {
-                    'class': 'fa fa-upload fa-4x'
+                    'class': 'fa fa-paperclip fa-4x'
                 });
                 if(this.options.uploadIconURL.length) {
                     uploadIcon.css('background-image', 'url("'+this.options.uploadIconURL+'")');
@@ -1316,10 +1273,10 @@
             }
         },
 
-        createProfilePictureElement: function(src) {
+        createProfilePictureElement: function(src, userId) {
             if(src) {
-                var profilePicture = $('<img/>', {
-                    src: src
+              var profilePicture = $('<div/>').css({
+                  'background-image': 'url(' + src + ')'
                 });
             } else {
                 var profilePicture = $('<i/>', {
@@ -1327,25 +1284,36 @@
                 });
             }
             profilePicture.addClass('profile-picture');
+            profilePicture.attr('data-user-id', userId);
             if(this.options.roundProfilePictures) profilePicture.addClass('round');
             return profilePicture;
         },
 
-        createCommentingFieldElement: function(parentId, existingCommentId) {
+        createMainCommentingFieldElement: function() {
+            return this.createCommentingFieldElement(undefined, undefined, true);
+        },
+
+        createCommentingFieldElement: function(parentId, existingCommentId, isMain) {
             var self = this;
 
             // Commenting field
             var commentingField = $('<div/>', {
                 'class': 'commenting-field'
             });
+            if(isMain) commentingField.addClass('main');
 
-            // Profile picture
+            // Comment was modified, use existing data
             if(existingCommentId) {
                 var profilePictureURL = this.commentsById[existingCommentId].profilePictureURL;
+                var userId = this.commentsById[existingCommentId].creator;
+
+            // New comment was created
             } else {
                 var profilePictureURL = this.options.profilePictureURL;
+                var userId = this.options.creator;
             }
-            var profilePicture = this.createProfilePictureElement(profilePictureURL);
+
+            var profilePicture = this.createProfilePictureElement(profilePictureURL, userId);
 
             // New comment
             var textareaWrapper = $('<div/>', {
@@ -1369,7 +1337,7 @@
 
             // Close button
             var closeButton = $('<span/>', {
-                'class': 'close'
+                'class': 'close inline-button'
             }).append($('<span class="left"/>')).append($('<span class="right"/>'));
 
             // Save button text
@@ -1395,8 +1363,7 @@
                         'class': 'enabled upload'
                     });
                     var uploadIcon = $('<i/>', {
-                        'class': 'md-icon',
-                        text: 'Tải lên'
+                        'class': 'fa fa-paperclip'
                     });
                     var fileInput = $('<input/>', {
                         type: 'file',
@@ -1411,7 +1378,14 @@
                         uploadIcon.addClass('image');
                     }
                     uploadButton.append(uploadIcon).append(fileInput);
-                    controlRow.append(uploadButton);
+
+                    // Main upload button
+                    controlRow.append(uploadButton.clone());
+
+                    // Inline upload button for main commenting field
+                    if(isMain) {
+                        textareaWrapper.append(uploadButton.clone().addClass('inline-button'));
+                    }
                 }
             }
 
@@ -1440,7 +1414,9 @@
 
                     // Creating the reply-to tag
                     var replyToName = '@' + parentModel.fullname;
-                    var replyToTag = this.createTagElement(replyToName, 'reply-to', parentModel.creator);
+                    var replyToTag = this.createTagElement(replyToName, 'reply-to', parentModel.creator, {
+                        'data-user-id': parentModel.creator
+                    });
                     textarea.prepend(replyToTag);
                 }
             }
@@ -1448,10 +1424,9 @@
             // Pinging users
             if(this.options.enablePinging) {
                 textarea.textcomplete([{
-                    /**match: /(^|\s)@(([a-zäöüß]|\s)*)$/im,*/
-                	match: /(^|\s)@(([0-9]|[^\u0000-\u007F]|[a-zäöüß]|\s)*)$/im,
+                    match: /(^|\s)@([^@]*)$/i,
+                    index: 2,
                     search: function (term, callback) {
-                    	console.log(term);
                         term = self.normalizeSpaces(term);
 
                         // Users excluding self and already pinged users
@@ -1462,15 +1437,71 @@
                             return !isSelf && !alreadyPinged;
                         });
 
-                        // Sort users
-                        self.sortUsers(users);
+                        // Case: return all users sorted alphabetically
+                        if(term.length == 0) {
+                            var filteredUsers = users;
+                            filteredUsers.sort(function(a,b) {
+                                var nameA = a.fullname.toLowerCase().trim();
+                                var nameB = b.fullname.toLowerCase().trim();
+                                if(nameA < nameB) return -1;
+                                if(nameA > nameB) return 1;
+                                return 0;
+                            });
 
-                        callback($.map(users, function (user) {
-                            var lowercaseTerm = term.toLowerCase();
-                            var nameMatch = user.fullname.toLowerCase().indexOf(lowercaseTerm) != -1;
-                            var emailMatch = user.email.toLowerCase().indexOf(lowercaseTerm) != -1;
-                            return nameMatch || emailMatch ? user : null;
-                        }));
+                        // Case: filter users by search term and sort by similarity
+                        } else {
+                            var filteredUsers = $.map(users, function (user) {
+                                user.points = 0;
+                                var wordsInSearchTerm = term.split(' ');
+                                var wordsInName = user.fullname.split(' ');
+
+                                // Order words in name by priority (first name, last name, middle names)
+                                wordsInName.splice(1, 0, wordsInName.splice(wordsInName.length -1, 1)[0]);
+
+                                // Loop all words in search term and ensure that they are found in the words of the fullname
+                                var allSearchWordsFound = true;
+                                $(wordsInSearchTerm).each(function(index, searchWord) {
+                                    var trimmedSearchWord = searchWord.toLowerCase().trim();
+                                    var trimmedSearchWordFound = false;
+
+                                    // Loop all words in the name and ensure that at least one of those starts with the search word
+                                    $(wordsInName).each(function(index, wordInName) {
+                                        var trimmedWordInName = wordInName.toLowerCase().trim();
+                                        if(trimmedWordInName.indexOf(trimmedSearchWord) == 0) {
+                                            trimmedSearchWordFound = true;
+
+                                            // Case: first name
+                                            if(index == 0) {
+                                                var multiplier = 0.5;
+
+                                            // Case: last name
+                                            } else if(index == 1) {
+                                                var multiplier = 0.4;
+
+                                            // Case: middle name
+                                            } else {
+                                                var multiplier = 0.1;
+                                            }
+
+                                            // Calculate the points for the match based on similarity
+                                            user.points += (trimmedSearchWord.length / trimmedWordInName.length) * multiplier;
+                                        }
+                                    });
+
+                                    // Mark search as failed if even one search word was not found in the name
+                                    if(!trimmedSearchWordFound) allSearchWordsFound = false;
+                                });
+
+                                return allSearchWordsFound ? user : null;
+                            });
+
+                            // Sort by similarity points
+                            filteredUsers.sort(function(a,b) {
+                                return b.points - a.points;
+                            });
+                        }
+
+                        callback(filteredUsers);
                     },
                     template: function(user) {
                         var wrapper = $('<div/>');
@@ -1489,7 +1520,7 @@
                         var emailEl = $('<div/>', {
                             'class': 'email',
                         }).html(user.email);
-                            
+
                         if (user.email) {
                             detailsEl.append(nameEl).append(emailEl);
                         } else {
@@ -1501,7 +1532,9 @@
                         return wrapper.html();
                     },
                     replace: function (user) {
-                        var tag = self.createTagElement('@' + user.fullname, 'ping', user.id);
+                        var tag = self.createTagElement('@' + user.fullname, 'ping', user.id, {
+                            'data-user-id': user.id
+                        });
                         return ' ' + tag[0].outerHTML + ' ';
                     },
                 }], {
@@ -1688,7 +1721,7 @@
             });
 
             // Profile picture
-            var profilePicture = this.createProfilePictureElement(commentModel.profilePictureURL);
+            var profilePicture = this.createProfilePictureElement(commentModel.profilePictureURL, commentModel.creator);
 
             // Time
             var time = $('<time/>', {
@@ -1696,23 +1729,26 @@
                 'data-original': commentModel.created
             });
 
-            // Name
-            var nameText = commentModel.createdByCurrentUser ? this.options.textFormatter(this.options.youText) : commentModel.fullname;
-            var name = $('<div/>', {
-                'class': 'name'
+            // Name element
+            var name = $('<span/>', {
+                'data-user-id': commentModel.creator,
+                'text': commentModel.createdByCurrentUser ? this.options.textFormatter(this.options.youText) : commentModel.fullname
             });
+
             if(commentModel.profileURL) {
-                var link = $('<a/>', {
-                    href: commentModel.profileURL,
-                    text: nameText
+                name = $('<a/>', {
+                    'href': commentModel.profileURL,
+                    'html': name
                 });
-                name.html(link);
-            } else {
-                name.text(nameText);
             }
 
-            // Highlight name for own comments and admin
-            if(commentModel.createdByCurrentUser || commentModel.createdByAdmin) name.addClass('highlight-font-bold');
+            var nameEl = $('<div/>', {
+                'class': 'name',
+                'html': name
+            });
+
+            // Highlight admin names
+            if(commentModel.createdByAdmin) nameEl.addClass('highlight-font-bold');
 
             // Show reply-to name if parent of parent exists
             if(commentModel.parent) {
@@ -1720,7 +1756,8 @@
                 if(parent.parent) {
                     var replyTo = $('<span/>', {
                         'class': 'reply-to',
-                        text: parent.fullname
+                        'text': parent.fullname,
+                        'data-user-id': parent.creator
                     });
 
                     // reply icon
@@ -1733,7 +1770,7 @@
                     }
 
                     replyTo.prepend(replyIcon);
-                    name.append(replyTo);
+                    nameEl.append(replyTo);
                 }
             }
 
@@ -1743,7 +1780,7 @@
                     'class': 'new highlight-background',
                     text: this.options.newText
                 });
-                name.append(newTag);
+                nameEl.append(newTag);
             }
 
             // Wrapper
@@ -1772,19 +1809,12 @@
                 }
 
                 // Attachment link
-                /**
-                 * thanhnv custome view file attach
                 var link = $('<a/>', {
                     'class': 'attachment',
                     href: commentModel.fileURL,
                     target: '_blank'
                 });
-				*/
-                var link = $('<a/>', {
-                    'class': 'attachment',
-                    href: 'javascript:viewCommentFileAttach("' + commentModel.fileURL + '","' + commentModel.fileMimeType + '");'
-                });
-                
+
                 // Case: image preview
                 if(type == 'image') {
                     var image = $('<img/>', {
@@ -1807,7 +1837,7 @@
                     // Icon
                     var availableIcons = ['archive', 'audio', 'code', 'excel', 'image', 'movie', 'pdf', 'photo',
                         'picture', 'powerpoint', 'sound', 'video', 'word', 'zip'];
-                    
+
                     var iconClass = 'fa fa-file-o';
                     if(availableIcons.indexOf(format) > 0) {
                         iconClass = 'fa fa-file-' + format + '-o';
@@ -1824,13 +1854,11 @@
                     }
 
                     // File name
-                    /**
                     var parts = commentModel.fileURL.split('/');
                     var fileName = parts[parts.length - 1];
                     fileName = fileName.split('?')[0];
                     fileName = decodeURIComponent(fileName);
-					*/
-                    var fileName = commentModel.fileName;
+
                     link.text(fileName);
                     link.prepend(fileIcon);
                 }
@@ -1855,6 +1883,12 @@
             // Actions
             var actions = $('<span/>', {
                 'class': 'actions'
+            });
+
+            // Separator
+            var separator = $('<span/>', {
+                'class': 'separator',
+                text: '·'
             });
 
             // Reply
@@ -1900,9 +1934,16 @@
                 }
             }
 
+            // Append separators between the actions
+            actions.children().each(function(index, actionEl) {
+                if(!$(actionEl).is(':last-child')) {
+                    $(actionEl).after(separator.clone());
+                }
+            });
+
             wrapper.append(content);
             wrapper.append(actions);
-            commentWrapper.append(profilePicture).append(time).append(name).append(wrapper);
+            commentWrapper.append(profilePicture).append(time).append(nameEl).append(wrapper);
             return commentWrapper;
         },
 
@@ -1927,7 +1968,7 @@
             return upvoteEl;
         },
 
-        createTagElement: function(text, extraClasses, value) {
+        createTagElement: function(text, extraClasses, value, extraAttributes) {
             var tagEl = $('<input/>', {
                 'class': 'tag',
                 'type': 'button',
@@ -1936,6 +1977,7 @@
             if(extraClasses) tagEl.addClass(extraClasses);
             tagEl.val(text);
             tagEl.attr('data-value', value);
+            if (extraAttributes) tagEl.attr(extraAttributes);
             return tagEl;
         },
 
@@ -2021,7 +2063,6 @@
 
         getComments: function() {
             var self = this;
-            
             return Object.keys(this.commentsById).map(function(id){return self.commentsById[id]});
         },
 
@@ -2210,10 +2251,8 @@
         },
 
         after: function(times, func) {
-            
             var self = this;
             return function() {
-                
                 times--;
                 if (times == 0) {
                     return func.apply(self, arguments);
@@ -2251,7 +2290,9 @@
             if(html.indexOf('@') != -1) {
 
                 var __createTag = function(user) {
-                    var tag = self.createTagElement('@' + user.fullname, 'ping', user.id);
+                    var tag = self.createTagElement('@' + user.fullname, 'ping', user.id, {
+                        'data-user-id': user.id
+                    });
                     return tag[0].outerHTML;
                 }
 
@@ -2259,7 +2300,7 @@
                 $(commentModel.pings).each(function(index, id) {
                     if(id in self.usersById) {
                         var user = self.usersById[id];
-                        var pingText = '@' + user.id;
+                        var pingText = '@' + user.fullname;
 
                         var endIndex = html.indexOf(pingText) + pingText.length;
                         var current = html.slice(0, endIndex);
@@ -2321,7 +2362,6 @@
         },
 
         applyInternalMappings: function(commentJSON) {
-
             // Inverting field mappings
             var invertedMappings = {};
             var mappings = this.options.fieldMappings;
