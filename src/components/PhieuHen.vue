@@ -270,7 +270,7 @@ export default {
           }
           vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
             router.push('/danh-sach-ho-so/3')
-            utils.showMessageToastr('success', 'Lưu thành công')
+            utils.showMessageToastr('success', 'Tiếp nhận hồ sơ thành công')
           })
         }).catch(reject => {
           console.log(reject)
@@ -296,7 +296,7 @@ export default {
       printJS({
         printable: 'printContent',
         type: 'html',
-        css: 'http://hanoi.fds.vn:2080/o/front-end-onegate-npm/css/app.8f7a24e8f6bae02bfad0c29f2d1d5d90.css'
+        css: '/o/front-end-onegate-npm/css/app.dc4fcec5627606811472cd1f91e61bd0.css'
       })
     },
     receiveDateText () {

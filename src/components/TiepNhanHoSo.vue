@@ -217,7 +217,7 @@ export default {
           cps_auth: result
         }
         vm.$store.dispatch('postAction', dataPostAction).then(function (result) {
-          utils.showMessageToastr('success', 'Gửi hồ sơ thành công')
+          utils.showMessageToastr('success', 'Tiếp nhận hồ sơ thành công')
           router.push('/danh-sach-ho-so/2')
         })
       }).catch(reject => {
