@@ -87,7 +87,7 @@
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader v-else class="pl-0 text-right">Ghi chú: </v-subheader>
+                <v-subheader v-else class="pl-0 text-right">Trích yếu: </v-subheader>
               </v-flex>
               <v-flex xs12 sm10>
                 <content-placeholders class="mt-1" v-if="loading">
@@ -95,7 +95,7 @@
                 </content-placeholders>
                 <v-text-field
                   v-else
-                  v-model="thanhPhanHoSo.ghiChuThanhPhan"
+                  v-model="thongTinChuHoSo.applicantNote"
                   multi-line
                   rows="2"
                 ></v-text-field>
@@ -130,6 +130,9 @@ export default {
     },
     subStatusNew () {
       return this.$store.getters.subStatusNew
+    },
+    thongTinChuHoSo () {
+      return this.$store.getters.thongTinChuHoSo
     }
   },
   mounted () {
