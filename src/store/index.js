@@ -12,36 +12,36 @@ Vue.use(Vuex)
 export const store = new Vuex.Store({
   state: {
     printPH: true,
-    // api: {
-    //   apiLocal: true,
-    //   serviceInfoApi: '/o/rest/v2/serviceinfos',
-    //   serviceConfigApi: '/o/rest/v2/onegate/serviceconfigs/processes',
-    //   regionApi: '/o/rest/v2/dictcollections',
-    //   serviceOptionApi: '/o/rest/v2/serviceconfigs/301/processes',
-    //   postDossierApi: '/o/rest/v2/onegate',
-    //   dossierApi: '/o/rest/v2/dossiers',
-    //   dossierTemplatesApi: '/o/rest/v2/dossiertemplates',
-    //   applicantApi: '/o/rest/v2/applicant',
-    //   govAgency: 'abc',
-    //   dossierlogsApi: '/o/rest/v2/dossierlogs',
-    //   user: {},
-    //   groupId: 55301
-    // },
     api: {
-      serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
-      serviceConfigApi: 'http://127.0.0.1:8081/api/onegate/serviceconfigs/processes',
-      regionApi: 'http://127.0.0.1:8081/api/dictcollections',
-      serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
-      postDossierApi: 'http://127.0.0.1:8081/api/onegate',
-      dossierApi: 'http://127.0.0.1:8081/api/dossiers',
-      dossierTemplatesApi: 'http://127.0.0.1:8081/api/dossiertemplates',
+      apiLocal: true,
+      serviceInfoApi: '/o/rest/v2/serviceinfos',
+      serviceConfigApi: '/o/rest/v2/onegate/serviceconfigs/processes',
+      regionApi: '/o/rest/v2/dictcollections',
+      serviceOptionApi: '/o/rest/v2/serviceconfigs/301/processes',
+      postDossierApi: '/o/rest/v2/onegate',
+      dossierApi: '/o/rest/v2/dossiers',
+      dossierTemplatesApi: '/o/rest/v2/dossiertemplates',
       applicantApi: '/o/rest/v2/applicant',
-      dossierlogsApi: 'http://127.0.0.1:8081/api/dossiers/dossierlogs',
-      commentApi: 'http://127.0.0.1:8081/api/comments',
       govAgency: 'abc',
+      dossierlogsApi: '/o/rest/v2/dossierlogs',
       user: {},
-      groupId: 0
+      groupId: 55301
     },
+    // api: {
+    //   serviceInfoApi: 'http://hanoi.fds.vn:2281/api/serviceinfos',
+    //   serviceConfigApi: 'http://127.0.0.1:8081/api/onegate/serviceconfigs/processes',
+    //   regionApi: 'http://127.0.0.1:8081/api/dictcollections',
+    //   serviceOptionApi: 'http://hanoi.fds.vn:2281/api/serviceconfigs/301/processes',
+    //   postDossierApi: 'http://127.0.0.1:8081/api/onegate',
+    //   dossierApi: 'http://127.0.0.1:8081/api/dossiers',
+    //   dossierTemplatesApi: 'http://127.0.0.1:8081/api/dossiertemplates',
+    //   applicantApi: '/o/rest/v2/applicant',
+    //   dossierlogsApi: 'http://127.0.0.1:8081/api/dossiers/dossierlogs',
+    //   commentApi: 'http://127.0.0.1:8081/api/comments',
+    //   govAgency: 'abc',
+    //   user: {},
+    //   groupId: 0
+    // },
     usersComment: [],
     commentItems: [],
     dataDetailDossier: {},
@@ -1278,7 +1278,8 @@ export const store = new Vuex.Store({
         wardCode: payload.wardCode,
         contactEmail: payload.contactEmail,
         contactTelNo: payload.contactTelNo,
-        userType: userTypeCondition
+        userType: userTypeCondition,
+        applicantNote: payload.applicantNote
       }
       state.thongTinChuHoSo = thongTinChuHoSoPayLoad
     },

@@ -40,7 +40,8 @@
             <p>Địa chỉ: {{ thongTinChuHoSo.address }}</p>
             <p>Số điện thoại: {{ thongTinChuHoSo.contactTelNo}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Email: {{ thongTinChuHoSo.contactEmail }}</p>
             <!-- <p>Lệ phí tạm thu: {{ lePhi.fee }} đồng</p> -->
-            <p>Nội dung yêu cầu giải quyết: {{thongTinChungHoSo.serviceName}}</p>
+            <p>Thủ tục hành chính: {{thongTinChungHoSo.serviceName}}</p>
+            <p v-if="thongTinChuHoSo.applicantNote">Về việc: {{thongTinChuHoSo.applicantNote}}</p>
             <ul>
               <li>
                 <p>1. Thành phần hồ sơ nộp gồm:</p>
@@ -97,7 +98,8 @@
             <p>Địa chỉ: {{ thongTinChuHoSo.address }}</p>
             <p>Số điện thoại: {{ thongTinChuHoSo.contactTelNo}} &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; Email: {{ thongTinChuHoSo.contactEmail }}</p>
             <!-- <p>Lệ phí tạm thu: {{ lePhi.fee }} đồng</p> -->
-            <p>Nội dung yêu cầu giải quyết: {{thongTinChungHoSo.serviceName}}</p>
+            <p>Thủ tục hành chính: {{thongTinChungHoSo.serviceName}}</p>
+            <p v-if="thongTinChuHoSo.applicantNote">Về việc: {{thongTinChuHoSo.applicantNote}}</p>
             <ul>
               <li>
                 <p>1. Thành phần hồ sơ nộp gồm:</p>
