@@ -121,7 +121,6 @@ export default {
             vm.formatComment(vm.comment)
             data.push(vm.comment)
           })
-          console.log('Comments ========>', data)
           onSuccess(data)
         }).catch(reject => {
           onSuccess([])
@@ -131,17 +130,9 @@ export default {
       postComment: function(data, onSuccess, onError) {
         data.id = vm.dossierId
         vm.$store.dispatch('postComment', data).then(result => {
-          if (result !== []) {
-            var data = []
-            $.each(result, function (index, item) {
-              vm.comment = item
-              vm.formatComment(vm.comment)
-              data.push(vm.comment)
-            })
-            onSuccess(data)
-          } else {
-            onSuccess([])
-          }
+          vm.comment = result
+          vm.formatComment(vm.comment)
+          onSuccess(vm.comment)
         })
       }
     })
@@ -197,8 +188,7 @@ export default {
         vm.comment.profileUrl = '/image/user_male_portrait'
       }
       vm.comment.fullname = comment.fullname
-      let pings = comment.pings
-      vm.comment.pings = pings.toString().split(',')
+      vm.comment.pings = comment.pings.toString().split(',')
       vm.comment.createdDate = vm.dateTimeView(vm.comment.createDate)
       vm.comment.modifiedDate = vm.dateTimeView(vm.comment.modifiedDate)
     },

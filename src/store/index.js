@@ -1224,10 +1224,12 @@ export const store = new Vuex.Store({
       return new Promise((resolve, reject) => {
         const config = {
           headers: {
-            'groupId': vm.group_id
+            'groupId': state.api.groupId
           }
         }
-        var strPings = data.pings.join();
+        console.log('dataPost', data)
+        // var strPings = data.pings.join();
+        var strPings = 1101;
         var params = new URLSearchParams()
         params.append('className', 'org.opencps.dossiermgt.model.Dossier')
         params.append('classPK', data.id)
@@ -1237,16 +1239,12 @@ export const store = new Vuex.Store({
         params.append('upvoteCount', data.upvoteCount != null ? data.upvoteCount : 0)
         axios.post(state.api.commentApi, params, config)
         .then(function (response) {
-          var resPostCmt = []
+          var resPostCmt = {}
           if (response != null) {
-            // vm.comment = response.data
-            // vm.formatComment(vm.comment)
             resPostCmt = response.data
-          } else {
-            // onSuccess([]);
-            resPostCmt = []
+            console.log('resPostCmt', resPostCmt)
           }
-          result(resPostCmt);
+          resolve(resPostCmt);
         })
         .catch(function (error) {
           // onError();
