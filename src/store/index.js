@@ -1184,7 +1184,7 @@ export const store = new Vuex.Store({
           if(response != null && response.hasOwnProperty('data')){
             let contacts = response.data
             $.each(contacts, function(index, item){
-              let user = {}
+              var user = {}
               user.id = item.userId
               user.fullname = item.userName
               user.email = item.email
@@ -1194,13 +1194,11 @@ export const store = new Vuex.Store({
           } else {
             users = []
           }
-          commit(setUsersComment, users)
           resolve(users)
         })
         .catch(function (error) {
           users = []
-          commit(setUsersComment, users)
-          reject(error)
+          reject(users)
         })
       })
     },
@@ -1213,11 +1211,46 @@ export const store = new Vuex.Store({
           },
           params: {}
         }
-        axios.get(state.api.commentApi+ '/org.opencps.dossiermgt.model.Dossier' + '/' + id, param).then(function (response) {
-          resolve(response.data)
+        axios.get(state.api.commentApi + '/org.opencps.dossiermgt.model.Dossier' + '/' + id, param).then(function (response) {
+          resolve(response.data.data)
         })
         .catch(function (error) {
           reject(error)
+        })
+      })
+    },
+    postComment ({commit, state}, data) {
+      var vm = this
+      return new Promise((resolve, reject) => {
+        const config = {
+          headers: {
+            'groupId': vm.group_id
+          }
+        }
+        var strPings = data.pings.join();
+        var params = new URLSearchParams()
+        params.append('className', 'org.opencps.dossiermgt.model.Dossier')
+        params.append('classPK', data.id)
+        params.append('parent', data.parent != null ? data.parent : 0)
+        params.append('pings', strPings)
+        params.append('content', data.content)
+        params.append('upvoteCount', data.upvoteCount != null ? data.upvoteCount : 0)
+        axios.post(state.api.commentApi, params, config)
+        .then(function (response) {
+          var resPostCmt = []
+          if (response != null) {
+            // vm.comment = response.data
+            // vm.formatComment(vm.comment)
+            resPostCmt = response.data
+          } else {
+            // onSuccess([]);
+            resPostCmt = []
+          }
+          result(resPostCmt);
+        })
+        .catch(function (error) {
+          // onError();
+          console.log(error)
         })
       })
     }
@@ -1399,9 +1432,6 @@ export const store = new Vuex.Store({
     },
     setlistHistoryProcessingItems (state, payload) {
       state.listHistoryProcessingItems = payload
-    },
-    setUsersComment (state, payload) {
-      state.usersComment = payload
     },
     setCommentItems (state, payload) {
       state.commentItems = payload

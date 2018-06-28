@@ -21,6 +21,8 @@ import '../store/jquery_comment'
 export default {
   props: ['dossierId'],
   data: () => ({
+    usersComment: [],
+    comment: [],
     less: true,
     hidden__text: false,
     expanded: true
@@ -28,16 +30,16 @@ export default {
   computed: {
     loading () {
       return this.$store.getters.loading
-    },
-    usersComment () {
-      return this.$store.getter.usersComment
     }
   },
   watch: {},
   created () {
     var vm = this
     vm.$nextTick(function () {
-      vm.$store.dispatch('loadUsersComment', vm.dossierId)
+      vm.$store.dispatch('loadUsersComment', vm.dossierId).then(result => {
+        vm.usersComment = result
+        console.log('userComment', vm.usersComment)
+      })
     })
   },
   mounted () {
@@ -51,6 +53,7 @@ export default {
       postCommentOnEnter: false,
       forceResponsive: false,
       readOnly: false,
+      textareaPlaceholderText: 'Thêm bình luận mới',
       newestText: 'Mới nhất',
       oldestText: 'Cũ nhất',
       popularText: 'Phổ biến',
@@ -107,20 +110,38 @@ export default {
       /* eslint-disable */
       getUsers: function (onSuccess, onError) {
         onSuccess(vm.usersComment)
-        onError()
       },
       getComments: function (onSuccess, onError) {
         console.log('dossierId', vm.dossierId)
         let promise = vm.$store.dispatch('loadCommentItems', vm.dossierId)
         promise.then(result => {
-          let data = []
+          var data = []
           $.each(result, function (index, item) {
-            data.push(vm.formatComment(item, vm.usersComment))
+            vm.comment = item
+            vm.formatComment(vm.comment)
+            data.push(vm.comment)
           })
+          console.log('Comments ========>', data)
           onSuccess(data)
         }).catch(reject => {
           onSuccess([])
           onError()
+        })
+      },
+      postComment: function(data, onSuccess, onError) {
+        data.id = vm.dossierId
+        vm.$store.dispatch('postComment', data).then(result => {
+          if (result !== []) {
+            var data = []
+            $.each(result, function (index, item) {
+              vm.comment = item
+              vm.formatComment(vm.comment)
+              data.push(vm.comment)
+            })
+            onSuccess(data)
+          } else {
+            onSuccess([])
+          }
         })
       }
     })
@@ -154,44 +175,41 @@ export default {
       }, 1000)
     },
     //
-    /* eslint-disable */
     formatComment: function (comment) {
       var vm = this
       vm.comment = comment
-      if(comment.parent == 0){
-        vm.comment.parent = null;
+      if (comment.parent === 0) {
+        vm.comment.parent = null
       }
-      
-      if(comment.fileName == ''){
-        vm.comment.fileName = null;
+      if (comment.fileName === '') {
+        vm.comment.fileName = null
       }
-      
-      if(comment.fileType == ''){
-        vm.comment.fileType = null;
+      if (comment.fileType === '') {
+        vm.comment.fileType = null
       }
-      
-      if(comment.fileUrl == ''){
-        vm.comment.fileUrl = null;
+      if (comment.fileUrl === '') {
+        vm.comment.fileUrl = null
       }
-      
-      if(comment.pictureUrl == ''){
-        vm.comment.pictureUrl = null;
+      if (comment.pictureUrl === '') {
+        vm.comment.pictureUrl = null
       }
-      
-      if(comment.profileUrl == ''){
-        vm.comment.profileUrl = '/image/user_male_portrait';
+      if (comment.profileUrl === '') {
+        vm.comment.profileUrl = '/image/user_male_portrait'
       }
-
-      vm.comment.fullname = comment.fullName
-
+      vm.comment.fullname = comment.fullname
       let pings = comment.pings
       vm.comment.pings = pings.toString().split(',')
-      
-      vm.comment.createdDate = moment(vm.comment.createDate).format('YYYY-MM-DD HH:mm');
-      
-      vm.comment.modifiedDate = moment(vm.comment.modifiedDate).format('YYYY-MM-DD HH:mm');
+      vm.comment.createdDate = vm.dateTimeView(vm.comment.createDate)
+      vm.comment.modifiedDate = vm.dateTimeView(vm.comment.modifiedDate)
+    },
+    dateTimeView (arg) {
+      if (arg) {
+        let value = new Date(arg)
+        return `${value.getDate().toString().padStart(2, '0')}/${(value.getMonth() + 1).toString().padStart(2, '0')}/${value.getFullYear()} ${value.getHours().toString().padStart(2, '0')}:${value.getMinutes().toString().padStart(2, '0')}`
+      } else {
+        return ''
+      }
     }
-    /* eslint-disable */
     //
   }
 }
