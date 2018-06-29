@@ -5,8 +5,6 @@
 				<v-card class="comments__container">
 					<v-card-text>
 						<div id="comments-container-el"></div>
-						<div v-if="hidden__text"><span class="see__more primary--text" @click="changeSeemoreStatus" v-if="less">Xem thêm</span></div>
-						<div v-if="hidden__text"><span class="see__less primary--text" @click="changeSeemoreStatus" v-if="!less">Rút gọn</span></div>
 					</v-card-text>
 				</v-card>
 			</v-expansion-panel-content>
@@ -16,6 +14,7 @@
 
 <script>
 import $ from 'jquery'
+import axios from 'axios'
 import 'jquery-textcomplete'
 import '../store/jquery_comment'
 export default {
@@ -25,13 +24,13 @@ export default {
       id: 1,
       fullname: 'Trịnh Công Trình',
       email: 'trinhtc@fds.vn.com',
-      profile_picture_url: 'https://app.viima.com/static/media/user_profiles/user-icon.png'
+      pictureUrl: 'https://app.viima.com/static/media/user_profiles/user-icon.png'
     },
     {
       id: 2,
       fullname: 'Thái Hoàng Anh',
       email: 'anhth@fds.vn',
-      profile_picture_url: 'https://app.viima.com/static/media/user_profiles/user-icon.png'
+      pictureUrl: 'https://app.viima.com/static/media/user_profiles/user-icon.png'
     }
     ],
     comment: [],
@@ -155,7 +154,6 @@ export default {
       deleteComment: function (data, onSuccess, onError) {
         data.id = vm.dossierId
         vm.$store.dispatch('deleteComment', data).then(result => {
-          console.log('delete success')
           onSuccess()
         })
       },
@@ -170,6 +168,7 @@ export default {
       uploadAttachments: function (comments, onSuccess, onError) {
         var responses = 0
         var successfulUploads = []
+        console.log('comments===', comments)
         var serverResponded = function () {
           responses++
           if (responses === comments.length) {
@@ -182,9 +181,15 @@ export default {
         }
         $(comments).each(function (index, comment) {
           var formData = new FormData()
+          $(Object.keys(comment)).each(function (index, key) {
+            var value = comment[key]
+            if (value) {
+              formData.append(key, value)
+            }
+          })
           formData.append('file', comment.file)
           formData.append('className', 'org.opencps.dossiermgt.model.Dossier')
-          formData.append('classPK', vm.id)
+          formData.append('classPK', vm.dossierId)
           formData.append('parent', comment.parent != null ? comment.parent : 0)
           formData.append('fileName', comment.file.name)
           formData.append('fileType', comment.file.type)
@@ -205,6 +210,7 @@ export default {
             contentType: false,
             processData: false,
             success: function (comment) {
+              console.log('comment upload -->-->', comment)
               vm.formatComment(comment)
               successfulUploads.push(vm.comment)
               serverResponded()
@@ -213,6 +219,45 @@ export default {
               serverResponded()
             }
           })
+        })
+      },
+      appendNewComments: function (commentJSONs, onSuccess, onError) {
+        const config = {
+          headers: {
+            'groupId': vm.group_id
+          }
+        }
+        let commentById = {}
+        let oldCommentsId = commentJSONs.map(function (c) {
+          commentById[c.id] = c.id + '' + c.userHasUpvoted + '' + c.upvoteCount + '' + c.content
+          return c.id
+        })
+        let url = vm.comments_api + '/' + vm.class_name + '/' + vm.class_pk + '?start=0&end=10&sort=modified_Number&order=true'
+        axios.get(url, config).then(function (response) {
+          let data = []
+          let dataEdited = []
+          if (response.hasOwnProperty('data')) {
+            var serializable = response.data.data
+            let curId = 0
+            let code = ''
+            for (var key in serializable) {
+              vm.comment = serializable[key]
+              curId = vm.comment['commentId']
+              code = vm.comment['commentId'] + '' + vm.comment['userHasUpvoted'] + '' + vm.comment['upvoteCount'] + '' + vm.comment['content']
+              vm.formatComment(vm.comment)
+              /* check return if not exist */
+              if (oldCommentsId.indexOf(curId) === -1) {
+                data.push(vm.comment)
+              } else if (code !== commentById[curId]) {
+                /* if have changed */
+                dataEdited.push(vm.comment)
+              }
+            }
+            onSuccess(data, dataEdited)
+          }
+        })
+        .catch(function (error) {
+          console.log(error)
         })
       }
     })

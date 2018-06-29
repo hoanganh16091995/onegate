@@ -188,24 +188,24 @@
 							maxRepliesVisible: 2,
 							
 							fieldMappings: {
-									id: 'id',
-									parent: 'parent',
-									created: 'created',
-									modified: 'modified',
-									content: 'content',
-									file: 'file',
-									fileURL: 'file_url',
-									fileMimeType: 'file_mime_type',
-									pings: 'pings',
-									creator: 'creator',
-									fullname: 'fullname',
-									profileURL: 'profile_url',
-									profilePictureURL: 'profile_picture_url',
-									isNew: 'is_new',
-									createdByAdmin: 'created_by_admin',
-									createdByCurrentUser: 'created_by_current_user',
-									upvoteCount: 'upvote_count',
-									userHasUpvoted: 'user_has_upvoted'
+								id: 'id',
+								parent: 'parent',
+								created: 'created',
+								modified: 'modified',
+								content: 'content',
+								file: 'file',
+								fileURL: 'file_url',
+								fileMimeType: 'file_mime_type',
+								pings: 'pings',
+								creator: 'creator',
+								fullname: 'fullname',
+								profileURL: 'profile_url',
+								profilePictureURL: 'profile_picture_url',
+								isNew: 'is_new',
+								createdByAdmin: 'created_by_admin',
+								createdByCurrentUser: 'created_by_current_user',
+								upvoteCount: 'upvote_count',
+								userHasUpvoted: 'user_has_upvoted'
 							},
 							
 							getUsers: function(success, error) {success([])},
@@ -1489,7 +1489,7 @@
 											var wrapper = $('<div/>');
 
 											var profilePictureEl = $('<img/>', {
-													src: user.profile_picture_url,
+													src: user.pictureUrl,
 													'class': 'profile-picture round'
 											});
 											var detailsEl = $('<div/>', {
@@ -1894,7 +1894,7 @@
 
 					if(commentModel.createdByCurrentUser || this.options.currentUserIsAdmin) {
 
-							// Case: delete button for attachment
+							// Case: delete button for attachment and currentUser
 							if(isAttachment && this.isAllowedToDelete(commentModel.id)) {
 									var deleteButton = $('<button/>', {
 											'class': 'action delete enabled',
@@ -1909,6 +1909,11 @@
 											text: this.options.textFormatter(this.options.editText)
 									});
 									actions.append(editButton);
+									var deleteButton = $('<button/>', {
+											'class': 'action delete enabled',
+											text: this.options.textFormatter(this.options.deleteText)
+									});
+									actions.append(deleteButton);
 							}
 					}
 

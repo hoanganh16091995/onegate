@@ -1229,8 +1229,7 @@ export const store = new Vuex.Store({
           }
         }
         console.log('dataPost', data)
-        // var strPings = data.pings.join();
-        var strPings = 1101;
+        var strPings = data.pings.join()
         var params = new URLSearchParams()
         params.append('className', 'org.opencps.dossiermgt.model.Dossier')
         params.append('classPK', data.id)
