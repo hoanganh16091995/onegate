@@ -1785,18 +1785,17 @@
 							}
 
 							// Attachment link
-							/**
-							 * thanhnv custome view file attach
+
 							var link = $('<a/>', {
 									'class': 'attachment',
 									href: commentModel.fileURL,
 									target: '_blank'
 							});
-			*/
-							var link = $('<a/>', {
-									'class': 'attachment',
-									href: 'javascript:viewCommentFileAttach("' + commentModel.fileURL + '","' + commentModel.fileMimeType + '");'
-							});
+							
+							// var link = $('<a/>', {
+							// 		'class': 'attachment',
+							// 		href: 'javascript:viewCommentFileAttach("' + commentModel.fileURL + '","' + commentModel.fileMimeType + '");'
+							// });
 							
 							// Case: image preview
 							if(type == 'image') {

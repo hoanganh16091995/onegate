@@ -106,9 +106,8 @@ export default {
         className: 'className',
         classPK: 'classPK'
       },
-      /* eslint-disable */
       timeFormatter: function (time) {
-        if (time != null) {
+        if (time !== null) {
           var dt = time.split(/\ |\s/)
           if (dt.length === 2) {
             var d = dt[0].split(/\-|\s/)
@@ -119,7 +118,6 @@ export default {
         }
         return ''
       },
-      /* eslint-disable */
       getUsers: function (onSuccess, onError) {
         onSuccess(vm.usersComment)
       },
@@ -138,7 +136,7 @@ export default {
           onError()
         })
       },
-      postComment: function(data, onSuccess, onError) {
+      postComment: function (data, onSuccess, onError) {
         data.id = vm.dossierId
         vm.$store.dispatch('postComment', data).then(result => {
           vm.comment = result
@@ -146,7 +144,7 @@ export default {
           onSuccess(vm.comment)
         })
       },
-      putComment: function(data, onSuccess, onError) {
+      putComment: function (data, onSuccess, onError) {
         data.id = vm.dossierId
         vm.$store.dispatch('putComment', data).then(result => {
           vm.comment = result
@@ -154,14 +152,14 @@ export default {
           onSuccess(vm.comment)
         })
       },
-      deleteComment: function(data, onSuccess, onError) {
+      deleteComment: function (data, onSuccess, onError) {
         data.id = vm.dossierId
         vm.$store.dispatch('deleteComment', data).then(result => {
           console.log('delete success')
           onSuccess()
         })
       },
-      upvoteComment: function(data, onSuccess, onError) {
+      upvoteComment: function (data, onSuccess, onError) {
         data.id = vm.dossierId
         vm.$store.dispatch('upvoteComment', data).then(result => {
           vm.comment = result
@@ -169,20 +167,20 @@ export default {
           onSuccess(vm.comment)
         })
       },
-      uploadAttachments: function(comments, onSuccess, onError) {
+      uploadAttachments: function (comments, onSuccess, onError) {
         var responses = 0
         var successfulUploads = []
-        var serverResponded = function() {
+        var serverResponded = function () {
           responses++
-          if (responses === comments.length) {  
-            if (successfulUploads.length == 0) {
+          if (responses === comments.length) {
+            if (successfulUploads.length === 0) {
               onError()
             } else {
               onSuccess(successfulUploads)
             }
           }
         }
-        $(comments).each(function(index, comment) {
+        $(comments).each(function (index, comment) {
           var formData = new FormData()
           formData.append('file', comment.file)
           formData.append('className', 'org.opencps.dossiermgt.model.Dossier')
@@ -192,15 +190,15 @@ export default {
           formData.append('fileType', comment.file.type)
           formData.append('fileSize', comment.file.size)
           formData.append('pings', comment.pings.join())
-          formData.append('email', /*themeDisplay.getUserId() */ 'congtrinh0209@gmail.com')
-          formData.append('fullName', /*themeDisplay.getUserName()*/ 'congtrinh')
+          formData.append('email', /* themeDisplay.getUserId() */ 'congtrinh0209@gmail.com')
+          formData.append('fullName', /* themeDisplay.getUserName() */ 'congtrinh')
           $.ajax({
             url: 'http://127.0.0.1:8081/api/comments/uploads',
             dataType: 'json',
             type: 'POST',
             headers: {
               // "groupId": themeDisplay.getScopeGroupId()
-              "groupId": 55301
+              'groupId': 55301
             },
             data: formData,
             cache: false,
@@ -209,9 +207,9 @@ export default {
             success: function (comment) {
               vm.formatComment(comment)
               successfulUploads.push(vm.comment)
-              serverResponded()                      
+              serverResponded()
             },
-            error: function(xhr, data) {
+            error: function (xhr, data) {
               serverResponded()
             }
           })
