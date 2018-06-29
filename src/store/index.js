@@ -1168,6 +1168,7 @@ export const store = new Vuex.Store({
         })
       })
     },
+    // action for comment component
     loadUsersComment ({commit, state}, id) {
       var vm = this
       return new Promise((resolve, reject) => {
@@ -1244,14 +1245,106 @@ export const store = new Vuex.Store({
             resPostCmt = response.data
             console.log('resPostCmt', resPostCmt)
           }
-          resolve(resPostCmt);
+          resolve(resPostCmt)
         })
         .catch(function (error) {
           // onError();
           console.log(error)
         })
       })
+    },
+    putComment ({commit, state}, data) {
+      var vm = this
+      return new Promise((resolve, reject) => {
+        const config = {
+          headers: {
+            'groupId': state.api.groupId
+          }
+        }
+        console.log('dataPut', data)
+        var strPings = data.pings.join();
+        var params = new URLSearchParams()
+        params.append('className', 'org.opencps.dossiermgt.model.Dossier')
+        params.append('classPK', data.id)
+        params.append('parent', data.parent != null ? data.parent : 0)
+        params.append('pings', strPings)
+        params.append('content', data.content)
+        params.append('upvoteCount', data.upvoteCount != null ? data.upvoteCount : 0)
+        axios.put(state.api.commentApi + '/' + data.commentId, params, config)
+        .then(function (response) {
+          var resPutCmt = {}
+          if (response != null) {
+            resPutCmt = response.data
+          }
+          resolve(resPutCmt);
+        })
+        .catch(function (error) {
+          // onError();
+          console.log(error)
+        })
+      })
+    },
+    deleteComment ({commit, state}, data) {
+      var vm = this
+      return new Promise((resolve, reject) => {
+        const config = {
+          headers: {
+            'groupId': state.api.groupId
+          }
+        }
+        axios.delete(state.api.commentApi + '/' + data.commentId, config)
+        .then(function (response) {
+          resolve(response)
+        })
+        .catch(function (error) {
+          // onError();
+          console.log(error)
+        })
+      })
+    },
+    upvoteComment ({commit, state}, data) {
+      var vm = this
+      return new Promise((resolve, reject) => {
+        const config = {
+          headers: {
+            'groupId': state.api.groupId
+          }
+        }
+        if (data.userHasUpvoted) {
+          var params = new URLSearchParams()
+          params.append('className', 'org.opencps.dossiermgt.model.Dossier')
+          params.append('classPK', data.id)
+          params.append('commentId', data.commentId)
+          params.append('upvoteCount', data.upvoteCount != null ? data.upvoteCount : 0)
+          axios.put(state.api.commentApi + '/' + data.commentId + '/upvotes',
+            params,
+            config
+          )
+          .then(function (response) {
+            var res = {}
+            if (response != null) {
+              res = response.data
+            }
+            resolve(res)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })  
+        } else {
+          axios.delete(state.api.commentApi + '/' + data.commentId + '/upvotes', config).then(function (response) {
+            var res = {}
+            if (response != null) {
+              res = response.data
+            }
+            resolve(res)
+          })
+          .catch(function (error) {
+            console.log(error)
+          })  
+        }
+      })
     }
+    // ----End---------
   },
   mutations: {
     setLoading (state, payload) {

@@ -289,7 +289,7 @@
         </v-tab-item> -->
 
         <v-tab-item key="4" style="background: #ffff;">
-          <comment dossierId="77602"></comment>
+          <comment :dossierId="id"></comment>
         </v-tab-item>
       </v-tabs>
     </div>

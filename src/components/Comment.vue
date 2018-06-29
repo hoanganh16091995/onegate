@@ -21,7 +21,19 @@ import '../store/jquery_comment'
 export default {
   props: ['dossierId'],
   data: () => ({
-    usersComment: [],
+    usersComment: [{
+      id: 1,
+      fullname: 'Trịnh Công Trình',
+      email: 'trinhtc@fds.vn.com',
+      profile_picture_url: 'https://app.viima.com/static/media/user_profiles/user-icon.png'
+    },
+    {
+      id: 2,
+      fullname: 'Thái Hoàng Anh',
+      email: 'anhth@fds.vn',
+      profile_picture_url: 'https://app.viima.com/static/media/user_profiles/user-icon.png'
+    }
+    ],
     comment: [],
     less: true,
     hidden__text: false,
@@ -46,7 +58,7 @@ export default {
     var vm = this
     $('#comments-container-el').comments({
       profilePictureURL: 'https://viima-app.s3.amazonaws.com/media/user_profiles/user-icon.png',
-      textareaRows: 1,
+      textareaRows: 2,
       enableAttachments: true,
       enableHashtags: true,
       enablePinging: true,
@@ -65,7 +77,7 @@ export default {
       youText: 'Bạn',
       saveText: 'Ghi lại',
       deleteText: 'Xóa',
-      viewAllRepliesText: 'Xem tất cả câu trả lời',
+      // viewAllRepliesText: 'Xem tất cả câu trả lời',
       hideRepliesText: 'Ẩn câu trả lời',
       noCommentsText: 'Không có bình luận nào',
       noAttachmentsText: 'Không có tệp đính kèm',
@@ -112,7 +124,6 @@ export default {
         onSuccess(vm.usersComment)
       },
       getComments: function (onSuccess, onError) {
-        console.log('dossierId', vm.dossierId)
         let promise = vm.$store.dispatch('loadCommentItems', vm.dossierId)
         promise.then(result => {
           var data = []
@@ -133,6 +144,77 @@ export default {
           vm.comment = result
           vm.formatComment(vm.comment)
           onSuccess(vm.comment)
+        })
+      },
+      putComment: function(data, onSuccess, onError) {
+        data.id = vm.dossierId
+        vm.$store.dispatch('putComment', data).then(result => {
+          vm.comment = result
+          vm.formatComment(vm.comment)
+          onSuccess(vm.comment)
+        })
+      },
+      deleteComment: function(data, onSuccess, onError) {
+        data.id = vm.dossierId
+        vm.$store.dispatch('deleteComment', data).then(result => {
+          console.log('delete success')
+          onSuccess()
+        })
+      },
+      upvoteComment: function(data, onSuccess, onError) {
+        data.id = vm.dossierId
+        vm.$store.dispatch('upvoteComment', data).then(result => {
+          vm.comment = result
+          vm.formatComment(vm.comment)
+          onSuccess(vm.comment)
+        })
+      },
+      uploadAttachments: function(comments, onSuccess, onError) {
+        var responses = 0
+        var successfulUploads = []
+        var serverResponded = function() {
+          responses++
+          if (responses === comments.length) {  
+            if (successfulUploads.length == 0) {
+              onError()
+            } else {
+              onSuccess(successfulUploads)
+            }
+          }
+        }
+        $(comments).each(function(index, comment) {
+          var formData = new FormData()
+          formData.append('file', comment.file)
+          formData.append('className', 'org.opencps.dossiermgt.model.Dossier')
+          formData.append('classPK', vm.id)
+          formData.append('parent', comment.parent != null ? comment.parent : 0)
+          formData.append('fileName', comment.file.name)
+          formData.append('fileType', comment.file.type)
+          formData.append('fileSize', comment.file.size)
+          formData.append('pings', comment.pings.join())
+          formData.append('email', /*themeDisplay.getUserId() */ 'congtrinh0209@gmail.com')
+          formData.append('fullName', /*themeDisplay.getUserName()*/ 'congtrinh')
+          $.ajax({
+            url: 'http://127.0.0.1:8081/api/comments/uploads',
+            dataType: 'json',
+            type: 'POST',
+            headers: {
+              // "groupId": themeDisplay.getScopeGroupId()
+              "groupId": 55301
+            },
+            data: formData,
+            cache: false,
+            contentType: false,
+            processData: false,
+            success: function (comment) {
+              vm.formatComment(comment)
+              successfulUploads.push(vm.comment)
+              serverResponded()                      
+            },
+            error: function(xhr, data) {
+              serverResponded()
+            }
+          })
         })
       }
     })
@@ -182,7 +264,7 @@ export default {
         vm.comment.fileUrl = null
       }
       if (comment.pictureUrl === '') {
-        vm.comment.pictureUrl = null
+        vm.comment.pictureUrl = 'https://viima-app.s3.amazonaws.com/media/user_profiles/user-icon.png'
       }
       if (comment.profileUrl === '') {
         vm.comment.profileUrl = '/image/user_male_portrait'

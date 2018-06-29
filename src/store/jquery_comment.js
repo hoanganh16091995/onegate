@@ -156,7 +156,7 @@
 							saveText: 'Ghi lại',
 							deleteText: 'Xoá',
 							newText: 'Mới',
-							viewAllRepliesText: 'View all __replyCount__ replies',
+							viewAllRepliesText: 'Xem tất cả __replyCount__ trả lời',
 							hideRepliesText: 'Hide replies',
 							noCommentsText: 'Không có bình luận nào',
 							noAttachmentsText: 'Không có tệp đính kèm',
@@ -177,11 +177,9 @@
 							forceResponsive: false,
 							readOnly: false,
 							defaultNavigationSortKey: 'newest',
-							
 							// Colors     
 							highlightColor: '#2793e6',
 							deleteButtonColor: '#C9302C',
-							
 							scrollContainer: this.$el,
 							roundProfilePictures: false,
 							textareaRows: 2,
