@@ -119,7 +119,8 @@
                 <content-placeholders class="mt-1" v-if="loading">
                   <content-placeholders-text :lines="1" />
                 </content-placeholders>
-                <v-subheader :title="!showContactDetail?'Chi tiết liên hệ':'Thu gọn'" v-else class="pl-0 hover-pointer" @click.prevent.stop="showContactDetail = !showContactDetail">
+                <v-subheader :title="!showContactDetail?'Chi tiết liên hệ':'Thu gọn'" v-else class="pl-0 hover-pointer"
+                  @click.prevent.stop="showContactDetail = !showContactDetail" style="color:#1976D2">
                   Thông tin liên hệ:
                 </v-subheader>
               </v-flex>
@@ -191,15 +192,15 @@
         <v-tab key="1" class="mr-2">
         THÀNH PHẦN HỒ SƠ
         </v-tab>
-        <!-- <v-tab key="2" class="mr-2">
-        THỤ LÝ HỒ SƠ
-        </v-tab> -->
         <v-tab key="2" class="mr-2">
         TIẾN TRÌNH XỬ LÝ
         </v-tab>
-        <!-- <v-tab key="4" class="mr-2">
-        TRAO ĐỔI THÔNG TIN
+        <!-- <v-tab key="3" class="mr-2">
+        THỤ LÝ HỒ SƠ
         </v-tab> -->
+        <v-tab key="4" class="mr-2">
+        TRAO ĐỔI THÔNG TIN
+        </v-tab>
         <!--  -->
         <v-tab-item key="1">
           <v-expansion-panel expand class="my-0 expansion-pl-transparent" style="border: none">
@@ -257,11 +258,7 @@
             </v-expansion-panel-content>
           </v-expansion-panel>
         </v-tab-item>
-        <!--  -->
-        <!-- <v-tab-item key="2" reverse-transition="slide-y-transition" transition="slide-y-transition">
-          
-        </v-tab-item> -->
-        <!--  -->
+        
         <v-tab-item key="2" style="background: #ffff;">
           <div v-for="(item, index) in listHistoryProcessing" v-bind:key="item.dossierLogId" class="list_history_style">
             <td class="px-2 pt-2" :class="index%2!==0?'col-tien-trinh-1':'col-tien-trinh-2'">{{ index + 1 }}</td>
@@ -286,9 +283,14 @@
             </td>
           </div>
         </v-tab-item>
-        <!-- <v-tab-item key="4" reverse-transition="slide-y-transition" transition="slide-y-transition">
+
+        <!-- <v-tab-item key="3" reverse-transition="slide-y-transition" transition="slide-y-transition">
           
         </v-tab-item> -->
+
+        <v-tab-item key="4" style="background: #ffff;">
+          <comment :dossierId="id"></comment>
+        </v-tab-item>
       </v-tabs>
     </div>
     
@@ -296,11 +298,16 @@
 </template>
 
 <script>
-// import router from '@/router'
-// import * as utils from '../store/onegate_utils'
-// import printJS from 'print-js/dist/print.min.js'
+import router from '@/router'
+import $ from 'jquery'
+import '../store/jquery_comment'
+import * as utils from '../store/onegate_utils'
+import Comment from './Comment.vue'
 export default {
   props: ['index', 'id'],
+  components: {
+    'comment': Comment
+  },
   data: () => ({
     dossierTemplateFiles: [],
     dossierTemplatesItems: [],
