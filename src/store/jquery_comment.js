@@ -1,349 +1,326 @@
 /* eslint-disable */
-/*!     jquery-comments.js 1.3.0
- *
- *     (c) 2017 Joona Tykkyläinen, Viima Solutions Oy
- *     jquery-comments may be freely distributed under the MIT license.
- *     For all details and documentation:
- *     http://viima.github.io/jquery-comments/
- */
-
-//     jquery-comments.js 1.2.0
-
-//     (c) 2017 Joona Tykkyläinen, Viima Solutions Oy
-//     jquery-comments may be freely distributed under the MIT license.
-//     For all details and documentation:
-//     http://viima.github.io/jquery-comments/
-
-//     jquery-comments.js 1.2.0
-
-//     (c) 2017 Joona Tykkyläinen, Viima Solutions Oy
-//     jquery-comments may be freely distributed under the MIT license.
-//     For all details and documentation:
-//     http://viima.github.io/jquery-comments/
 
 (function (factory) {
 	if (typeof define === 'function' && define.amd) {
-			// AMD. Register as an anonymous module.
-			define(['jquery'], factory);
+		// AMD. Register as an anonymous module.
+		define(['jquery'], factory);
 	} else if (typeof module === 'object' && module.exports) {
-			// Node/CommonJS
-			module.exports = function(root, jQuery) {
-					if (jQuery === undefined) {
-							// require('jQuery') returns a factory that requires window to
-							// build a jQuery instance, we normalize how we use modules
-							// that require this pattern but the window provided is a noop
-							// if it's defined (how jquery works)
-							if (typeof window !== 'undefined') {
-									jQuery = require('jquery');
-							}
-							else {
-									jQuery = require('jquery')(root);
-							}
-					}
-					factory(jQuery);
-					return jQuery;
-			};
-	} else {
-			// Browser globals
+		// Node/CommonJS
+		module.exports = function(root, jQuery) {
+			if (jQuery === undefined) {
+				// require('jQuery') returns a factory that requires window to
+				// build a jQuery instance, we normalize how we use modules
+				// that require this pattern but the window provided is a noop
+				// if it's defined (how jquery works)
+				if (typeof window !== 'undefined') {
+					jQuery = require('jquery');
+				}
+				else {
+					jQuery = require('jquery')(root);
+				}
+			}
 			factory(jQuery);
+			return jQuery;
+		};
+	} else {
+		// Browser globals
+		factory(jQuery);
 	}
 }(function($) {
 
 	var Comments = {
 
-			// Instance variables
-			// ==================
+		// Instance variables
+		// ==================
 
-			$el: null,
-			commentsById: {},
-			usersById: {},
-			dataFetched: false,
-			currentSortKey: '',
-			options: {},
-			events: {
-					// Close dropdowns
-					'click': 'closeDropdowns',
+		$el: null,
+		commentsById: {},
+		usersById: {},
+		dataFetched: false,
+		currentSortKey: '',
+		options: {},
+		events: {
+			// Close dropdowns
+			'click': 'closeDropdowns',
 
-					// Save comment on keydown
-					'keydown [contenteditable]' : 'saveOnKeydown',
+			// Save comment on keydown
+			'keydown [contenteditable]' : 'saveOnKeydown',
 
-					// Listening changes in contenteditable fields (due to input event not working with IE)
-					'focus [contenteditable]' : 'saveEditableContent',
-					'keyup [contenteditable]' : 'checkEditableContentForChange',
-					'paste [contenteditable]' : 'checkEditableContentForChange',
-					'input [contenteditable]' : 'checkEditableContentForChange',
-					'blur [contenteditable]' : 'checkEditableContentForChange',
+			// Listening changes in contenteditable fields (due to input event not working with IE)
+			'focus [contenteditable]' : 'saveEditableContent',
+			'keyup [contenteditable]' : 'checkEditableContentForChange',
+			'paste [contenteditable]' : 'checkEditableContentForChange',
+			'input [contenteditable]' : 'checkEditableContentForChange',
+			'blur [contenteditable]' : 'checkEditableContentForChange',
 
-					// Navigation
-					'click .navigation li[data-sort-key]' : 'navigationElementClicked',
-					'click .navigation li.title' : 'toggleNavigationDropdown',
+			// Navigation
+			'click .navigation li[data-sort-key]' : 'navigationElementClicked',
+			'click .navigation li.title' : 'toggleNavigationDropdown',
 
-					// Main comenting field
-					'click .commenting-field.main .textarea': 'showMainCommentingField',
-					'click .commenting-field.main .close' : 'hideMainCommentingField',
+			// Main comenting field
+			'click .commenting-field.main .textarea': 'showMainCommentingField',
+			'click .commenting-field.main .close' : 'hideMainCommentingField',
 
-					// All commenting fields
-					'click .commenting-field .textarea' : 'increaseTextareaHeight',
-					'change .commenting-field .textarea' : 'increaseTextareaHeight textareaContentChanged',
-					'click .commenting-field:not(.main) .close' : 'removeCommentingField',
+			// All commenting fields
+			'click .commenting-field .textarea' : 'increaseTextareaHeight',
+			'change .commenting-field .textarea' : 'increaseTextareaHeight textareaContentChanged',
+			'click .commenting-field:not(.main) .close' : 'removeCommentingField',
 
-					// Edit mode actions
-					'click .commenting-field .send.enabled' : 'postComment',
-					'click .commenting-field .update.enabled' : 'putComment',
-					'click .commenting-field .delete.enabled' : 'deleteComment',
-					'change .commenting-field .upload.enabled input[type="file"]' : 'fileInputChanged',
+			// Edit mode actions
+			'click .commenting-field .send.enabled' : 'postComment',
+			'click .commenting-field .update.enabled' : 'putComment',
+			'click .commenting-field .delete.enabled' : 'deleteComment',
+			'change .commenting-field .upload.enabled input[type="file"]' : 'fileInputChanged',
 
-					// Other actions
-					'click li.comment button.upvote' : 'upvoteComment',
-					'click li.comment button.delete.enabled' : 'deleteComment',
-					'click li.comment .hashtag' : 'hashtagClicked',
-					'click li.comment .ping' : 'pingClicked',
+			// Other actions
+			'click li.comment button.upvote' : 'upvoteComment',
+			'click li.comment button.delete.enabled' : 'deleteComment',
+			'click li.comment .hashtag' : 'hashtagClicked',
+			'click li.comment .ping' : 'pingClicked',
 
-					// Other
-					'click li.comment ul.child-comments .toggle-all': 'toggleReplies',
-					'click li.comment button.reply': 'replyButtonClicked',
-					'click li.comment button.edit': 'editButtonClicked',
+			// Other
+			'click li.comment ul.child-comments .toggle-all': 'toggleReplies',
+			'click li.comment button.reply': 'replyButtonClicked',
+			'click li.comment button.edit': 'editButtonClicked',
 
-					// Drag & dropping attachments
-					'dragenter' : 'showDroppableOverlay',
+			// Drag & dropping attachments
+			'dragenter' : 'showDroppableOverlay',
 
-					'dragenter .droppable-overlay' : 'handleDragEnter',
-					'dragleave .droppable-overlay' : 'handleDragLeaveForOverlay',
-					'dragenter .droppable-overlay .droppable' : 'handleDragEnter',
-					'dragleave .droppable-overlay .droppable' : 'handleDragLeaveForDroppable',
+			'dragenter .droppable-overlay' : 'handleDragEnter',
+			'dragleave .droppable-overlay' : 'handleDragLeaveForOverlay',
+			'dragenter .droppable-overlay .droppable' : 'handleDragEnter',
+			'dragleave .droppable-overlay .droppable' : 'handleDragLeaveForDroppable',
 
-					'dragover .droppable-overlay' : 'handleDragOverForOverlay',
-					'drop .droppable-overlay' : 'handleDrop',
+			'dragover .droppable-overlay' : 'handleDragOverForOverlay',
+			'drop .droppable-overlay' : 'handleDrop',
 
-					// Prevent propagating the click event into buttons under the autocomplete dropdown
-					'click .dropdown.autocomplete': 'stopPropagation',
-					'mousedown .dropdown.autocomplete': 'stopPropagation',
-					'touchstart .dropdown.autocomplete': 'stopPropagation',
-			},
+			// Prevent propagating the click event into buttons under the autocomplete dropdown
+			'click .dropdown.autocomplete': 'stopPropagation',
+			'mousedown .dropdown.autocomplete': 'stopPropagation',
+			'touchstart .dropdown.autocomplete': 'stopPropagation',
+		},
 
+		// Default options
+		// ===============
 
-			// Default options
-			// ===============
-
-			getDefaultOptions: function() {
-					return {
-
-							// User        
-							profilePictureURL: '',
-							currentUserIsAdmin: false,
-							currentUserId: null,
-							
-							// Font awesome icon overrides        
-							spinnerIconURL: '',
-							upvoteIconURL: '',
-							replyIconURL: '',
-							uploadIconURL: '',
-							attachmentIconURL: '',
-							fileIconURL: '',
-							noCommentsIconURL: '',
-							
-							// Strings to be formatted (for example localization)     
-							textareaPlaceholderText: 'Thêm bình luận mới',
-							newestText: 'Mới nhất',
-							oldestText: 'Cũ nhất',
-							popularText: 'Phổ biến',
-							attachmentsText: 'Tệp đính kèm',
-							sendText: 'Gửi',
-							replyText: 'Trả lời',
-							editText: 'Sửa',
-							editedText: 'Đã sửa',
-							youText: 'You',
-							saveText: 'Ghi lại',
-							deleteText: 'Xoá',
-							newText: 'Mới',
-							viewAllRepliesText: 'Xem tất cả __replyCount__ trả lời',
-							hideRepliesText: 'Hide replies',
-							noCommentsText: 'Không có bình luận nào',
-							noAttachmentsText: 'Không có tệp đính kèm',
-							attachmentDropText: 'Kéo thả tệp để tải lên',
-							textFormatter: function(text) {return text},
-							
-							// Functionalities        
-							enableReplying: true,
-							enableEditing: true,
-							enableUpvoting: true,
-							enableDeleting: true,
-							enableAttachments: false,
-							enableHashtags: false,
-							enablePinging: false,
-							enableDeletingCommentWithReplies: false,
-							enableNavigation: true,
-							postCommentOnEnter: false,
-							forceResponsive: false,
-							readOnly: false,
-							defaultNavigationSortKey: 'newest',
-							// Colors     
-							highlightColor: '#2793e6',
-							deleteButtonColor: '#C9302C',
-							scrollContainer: this.$el,
-							roundProfilePictures: false,
-							textareaRows: 2,
-							textareaRowsOnFocus: 2,
-							textareaMaxRows: 5,
-							maxRepliesVisible: 2,
-							
-							fieldMappings: {
-								id: 'id',
-								parent: 'parent',
-								created: 'created',
-								modified: 'modified',
-								content: 'content',
-								file: 'file',
-								fileURL: 'file_url',
-								fileMimeType: 'file_mime_type',
-								pings: 'pings',
-								creator: 'creator',
-								fullname: 'fullname',
-								profileURL: 'profile_url',
-								profilePictureURL: 'profile_picture_url',
-								isNew: 'is_new',
-								createdByAdmin: 'created_by_admin',
-								createdByCurrentUser: 'created_by_current_user',
-								upvoteCount: 'upvote_count',
-								userHasUpvoted: 'user_has_upvoted'
-							},
-							
-							getUsers: function(success, error) {success([])},
-							getComments: function(success, error) {success([])},
-							postComment: function(commentJSON, success, error) {success(commentJSON)},
-							putComment: function(commentJSON, success, error) {success(commentJSON)},
-							deleteComment: function(commentJSON, success, error) {success()},
-							upvoteComment: function(commentJSON, success, error) {success(commentJSON)},
-							hashtagClicked: function(hashtag) {},
-							pingClicked: function(userId) {},
-							uploadAttachments: function(commentArray, success, error) {success(commentArray)},
-							refresh: function() {},
-							timeFormatter: function(time) {return new Date(time).toLocaleDateString()},
-							appendNewComments: function(commentJSONs, success, error) {success([])}
-					}
-			},
+		getDefaultOptions: function() {
+			return {
+				// User        
+				profilePictureURL: '',
+				currentUserIsAdmin: false,
+				currentUserId: null,
+				
+				// Font awesome icon overrides        
+				spinnerIconURL: '',
+				upvoteIconURL: '',
+				replyIconURL: '',
+				uploadIconURL: '',
+				attachmentIconURL: '',
+				fileIconURL: '',
+				noCommentsIconURL: '',
+				
+				// Strings to be formatted (for example localization)     
+				textareaPlaceholderText: 'Thêm bình luận mới',
+				newestText: 'Mới nhất',
+				oldestText: 'Cũ nhất',
+				popularText: 'Phổ biến',
+				attachmentsText: 'Tệp đính kèm',
+				sendText: 'Gửi',
+				replyText: 'Trả lời',
+				editText: 'Sửa',
+				editedText: 'Đã sửa',
+				youText: 'You',
+				saveText: 'Ghi lại',
+				deleteText: 'Xoá',
+				newText: 'Mới',
+				viewAllRepliesText: 'Xem tất cả __replyCount__ trả lời',
+				hideRepliesText: 'Hide replies',
+				noCommentsText: 'Không có bình luận nào',
+				noAttachmentsText: 'Không có tệp đính kèm',
+				attachmentDropText: 'Kéo thả tệp để tải lên',
+				textFormatter: function(text) {return text},
+				
+				// Functionalities        
+				enableReplying: true,
+				enableEditing: true,
+				enableUpvoting: true,
+				enableDeleting: true,
+				enableAttachments: false,
+				enableHashtags: false,
+				enablePinging: false,
+				enableDeletingCommentWithReplies: false,
+				enableNavigation: true,
+				postCommentOnEnter: false,
+				forceResponsive: false,
+				readOnly: false,
+				defaultNavigationSortKey: 'newest',
+				// Colors     
+				highlightColor: '#2793e6',
+				deleteButtonColor: '#C9302C',
+				scrollContainer: this.$el,
+				roundProfilePictures: false,
+				textareaRows: 2,
+				textareaRowsOnFocus: 2,
+				textareaMaxRows: 5,
+				maxRepliesVisible: 2,
+				
+				fieldMappings: {
+					id: 'id',
+					parent: 'parent',
+					created: 'created',
+					modified: 'modified',
+					content: 'content',
+					file: 'file',
+					fileURL: 'file_url',
+					fileMimeType: 'file_mime_type',
+					pings: 'pings',
+					creator: 'creator',
+					fullname: 'fullname',
+					profileURL: 'profile_url',
+					profilePictureURL: 'profile_picture_url',
+					isNew: 'is_new',
+					createdByAdmin: 'created_by_admin',
+					createdByCurrentUser: 'created_by_current_user',
+					upvoteCount: 'upvote_count',
+					userHasUpvoted: 'user_has_upvoted'
+				},
+				
+				getUsers: function(success, error) {success([])},
+				getComments: function(success, error) {success([])},
+				postComment: function(commentJSON, success, error) {success(commentJSON)},
+				putComment: function(commentJSON, success, error) {success(commentJSON)},
+				deleteComment: function(commentJSON, success, error) {success()},
+				upvoteComment: function(commentJSON, success, error) {success(commentJSON)},
+				hashtagClicked: function(hashtag) {},
+				pingClicked: function(userId) {},
+				uploadAttachments: function(commentArray, success, error) {success(commentArray)},
+				refresh: function() {},
+				timeFormatter: function(time) {return new Date(time).toLocaleDateString()},
+				appendNewComments: function(commentJSONs, success, error) {success([])}
+			}
+		},
 
 
-			// Initialization
-			// ==============
+		// Initialization
+		// ==============
 
-			init: function(options, el) {
-					this.$el = $(el);
-					this.$el.addClass('jquery-comments');
-					this.undelegateEvents();
-					this.delegateEvents();
+		init: function(options, el) {
+				this.$el = $(el);
+				this.$el.addClass('jquery-comments');
+				this.undelegateEvents();
+				this.delegateEvents();
 
-					// Detect mobile devices
-					(function(a){(jQuery.browser=jQuery.browser||{}).mobile=/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))})(navigator.userAgent||navigator.vendor||window.opera);
-					if($.browser.mobile) this.$el.addClass('mobile');
+				// Detect mobile devices
+				(function(a){(jQuery.browser=jQuery.browser||{}).mobile=/(android|bb\d+|meego).+mobile|avantgo|bada\/|blackberry|blazer|compal|elaine|fennec|hiptop|iemobile|ip(hone|od)|iris|kindle|lge |maemo|midp|mmp|mobile.+firefox|netfront|opera m(ob|in)i|palm( os)?|phone|p(ixi|re)\/|plucker|pocket|psp|series(4|6)0|symbian|treo|up\.(browser|link)|vodafone|wap|windows ce|xda|xiino/i.test(a)||/1207|6310|6590|3gso|4thp|50[1-6]i|770s|802s|a wa|abac|ac(er|oo|s\-)|ai(ko|rn)|al(av|ca|co)|amoi|an(ex|ny|yw)|aptu|ar(ch|go)|as(te|us)|attw|au(di|\-m|r |s )|avan|be(ck|ll|nq)|bi(lb|rd)|bl(ac|az)|br(e|v)w|bumb|bw\-(n|u)|c55\/|capi|ccwa|cdm\-|cell|chtm|cldc|cmd\-|co(mp|nd)|craw|da(it|ll|ng)|dbte|dc\-s|devi|dica|dmob|do(c|p)o|ds(12|\-d)|el(49|ai)|em(l2|ul)|er(ic|k0)|esl8|ez([4-7]0|os|wa|ze)|fetc|fly(\-|_)|g1 u|g560|gene|gf\-5|g\-mo|go(\.w|od)|gr(ad|un)|haie|hcit|hd\-(m|p|t)|hei\-|hi(pt|ta)|hp( i|ip)|hs\-c|ht(c(\-| |_|a|g|p|s|t)|tp)|hu(aw|tc)|i\-(20|go|ma)|i230|iac( |\-|\/)|ibro|idea|ig01|ikom|im1k|inno|ipaq|iris|ja(t|v)a|jbro|jemu|jigs|kddi|keji|kgt( |\/)|klon|kpt |kwc\-|kyo(c|k)|le(no|xi)|lg( g|\/(k|l|u)|50|54|\-[a-w])|libw|lynx|m1\-w|m3ga|m50\/|ma(te|ui|xo)|mc(01|21|ca)|m\-cr|me(rc|ri)|mi(o8|oa|ts)|mmef|mo(01|02|bi|de|do|t(\-| |o|v)|zz)|mt(50|p1|v )|mwbp|mywa|n10[0-2]|n20[2-3]|n30(0|2)|n50(0|2|5)|n7(0(0|1)|10)|ne((c|m)\-|on|tf|wf|wg|wt)|nok(6|i)|nzph|o2im|op(ti|wv)|oran|owg1|p800|pan(a|d|t)|pdxg|pg(13|\-([1-8]|c))|phil|pire|pl(ay|uc)|pn\-2|po(ck|rt|se)|prox|psio|pt\-g|qa\-a|qc(07|12|21|32|60|\-[2-7]|i\-)|qtek|r380|r600|raks|rim9|ro(ve|zo)|s55\/|sa(ge|ma|mm|ms|ny|va)|sc(01|h\-|oo|p\-)|sdk\/|se(c(\-|0|1)|47|mc|nd|ri)|sgh\-|shar|sie(\-|m)|sk\-0|sl(45|id)|sm(al|ar|b3|it|t5)|so(ft|ny)|sp(01|h\-|v\-|v )|sy(01|mb)|t2(18|50)|t6(00|10|18)|ta(gt|lk)|tcl\-|tdg\-|tel(i|m)|tim\-|t\-mo|to(pl|sh)|ts(70|m\-|m3|m5)|tx\-9|up(\.b|g1|si)|utst|v400|v750|veri|vi(rg|te)|vk(40|5[0-3]|\-v)|vm40|voda|vulc|vx(52|53|60|61|70|80|81|83|85|98)|w3c(\-| )|webc|whit|wi(g |nc|nw)|wmlb|wonu|x700|yas\-|your|zeto|zte\-/i.test(a.substr(0,4))})(navigator.userAgent||navigator.vendor||window.opera);
+				if($.browser.mobile) this.$el.addClass('mobile');
 
-					// Init options
-					this.options = $.extend(true, {}, this.getDefaultOptions(), options);;
+				// Init options
+				this.options = $.extend(true, {}, this.getDefaultOptions(), options);;
 
-					// Read-only mode
-					if(this.options.readOnly) this.$el.addClass('read-only');
+				// Read-only mode
+				if(this.options.readOnly) this.$el.addClass('read-only');
 
-					// Set initial sort key
-					this.currentSortKey = this.options.defaultNavigationSortKey;
+				// Set initial sort key
+				this.currentSortKey = this.options.defaultNavigationSortKey;
 
-					// Create CSS declarations for highlight color
-					this.createCssDeclarations();
+				// Create CSS declarations for highlight color
+				this.createCssDeclarations();
 
-					// Fetching data and rendering
-					this.fetchDataAndRender();
-			},
+				// Fetching data and rendering
+				this.fetchDataAndRender();
+		},
 
-			delegateEvents: function() {
-					this.bindEvents(false);
-			},
+		delegateEvents: function() {
+				this.bindEvents(false);
+		},
 
-			undelegateEvents: function() {
-					this.bindEvents(true);
-			},
+		undelegateEvents: function() {
+				this.bindEvents(true);
+		},
 
-			bindEvents: function(unbind) {
-					var bindFunction = unbind ? 'off' : 'on';
-					for (var key in this.events) {
-							var eventName = key.split(' ')[0];
-							var selector = key.split(' ').slice(1).join(' ');
-							var methodNames = this.events[key].split(' ');
+		bindEvents: function(unbind) {
+				var bindFunction = unbind ? 'off' : 'on';
+				for (var key in this.events) {
+						var eventName = key.split(' ')[0];
+						var selector = key.split(' ').slice(1).join(' ');
+						var methodNames = this.events[key].split(' ');
 
-							for(var index in methodNames) {
-									if(methodNames.hasOwnProperty(index)) {
-											var method = this[methodNames[index]];
+						for(var index in methodNames) {
+								if(methodNames.hasOwnProperty(index)) {
+										var method = this[methodNames[index]];
 
-											// Keep the context
-											method = $.proxy(method, this);
+										// Keep the context
+										method = $.proxy(method, this);
 
-											if (selector == '') {
-													this.$el[bindFunction](eventName, method);
-											} else {
-													this.$el[bindFunction](eventName, selector, method);
-											}
-									}
-							}
-					}
-			},
+										if (selector == '') {
+												this.$el[bindFunction](eventName, method);
+										} else {
+												this.$el[bindFunction](eventName, selector, method);
+										}
+								}
+						}
+				}
+		},
 
 
-			// Basic functionalities
-			// =====================
+		// Basic functionalities
+		// =====================
 
-			fetchDataAndRender: function () {
-					var self = this;
-					
-					setTimeout(function(){self.appendNewComments()},30000);
+		fetchDataAndRender: function () {
+				var self = this;
+				
+				setTimeout(function(){self.appendNewComments()},30000);
 
-					this.commentsById = {};
-					this.usersById = {};
+				this.commentsById = {};
+				this.usersById = {};
 
-					this.$el.empty();
-					this.createHTML();
+				this.$el.empty();
+				this.createHTML();
 
-					// Render after data has been fetched
-					var dataFetched = this.after(this.options.enablePinging ? 2 : 1, function() {
-							
-							self.dataFetched = true;
-							self.render();
-					});
+				// Render after data has been fetched
+				var dataFetched = this.after(this.options.enablePinging ? 2 : 1, function() {
+						
+						self.dataFetched = true;
+						self.render();
+				});
 
-					// Comments
-					// ========
+				// Comments
+				// ========
 
-					var commentsFetched = function(commentsArray) {
-							// Convert comments to custom data model
-							var commentModels = commentsArray.map(function(commentsJSON){
-									
-									return self.createCommentModel(commentsJSON)
-							});
+				var commentsFetched = function(commentsArray) {
+						// Convert comments to custom data model
+						var commentModels = commentsArray.map(function(commentsJSON){
+								
+								return self.createCommentModel(commentsJSON)
+						});
 
-							// Sort comments by date (oldest first so that they can be appended to the data model
-							// without caring dependencies)
-							self.sortComments(commentModels, 'oldest');
-							
-							$(commentModels).each(function(index, commentModel) {
-									self.addCommentToDataModel(commentModel);
-							});
+						// Sort comments by date (oldest first so that they can be appended to the data model
+						// without caring dependencies)
+						self.sortComments(commentModels, 'oldest');
+						
+						$(commentModels).each(function(index, commentModel) {
+								self.addCommentToDataModel(commentModel);
+						});
 
-							dataFetched();
-					};
-					this.options.getComments(commentsFetched, dataFetched);
+						dataFetched();
+				};
+				this.options.getComments(commentsFetched, dataFetched);
 
-					// Users
-					// =====
+				// Users
+				// =====
 
-					if(this.options.enablePinging) {
-							var usersFetched = function(userArray) {
-									
-									$(userArray).each(function(index, user) {
-											self.usersById[user.id] = user;
-									});
+				if(this.options.enablePinging) {
+						var usersFetched = function(userArray) {
+								
+								$(userArray).each(function(index, user) {
+										self.usersById[user.id] = user;
+								});
 
-									dataFetched();
-							}
-							this.options.getUsers(usersFetched, dataFetched);
-					}
-			},
+								dataFetched();
+						}
+						this.options.getUsers(usersFetched, dataFetched);
+				}
+		},
 
 			fetchNext: function() {
 					var self = this;
@@ -481,72 +458,72 @@
 			},
 
 			addComment: function(commentModel, commentList) {
-					commentList = commentList || this.$el.find('#comment-list');
-					var commentEl = this.createCommentElement(commentModel);
+				commentList = commentList || this.$el.find('#comment-list');
+				var commentEl = this.createCommentElement(commentModel);
 
-					// Case: reply
-					if(commentModel.parent) {
-							var directParentEl = commentList.find('.comment[data-id="'+commentModel.parent+'"]');
+				// Case: reply
+				if(commentModel.parent) {
+					var directParentEl = commentList.find('.comment[data-id="'+commentModel.parent+'"]');
 
-							// Re-render action bar of direct parent element
-							this.reRenderCommentActionBar(commentModel.parent);
+					// Re-render action bar of direct parent element
+					this.reRenderCommentActionBar(commentModel.parent);
 
-							// Force replies into one level only
-							var outerMostParent = directParentEl.parents('.comment').last();
-							if(outerMostParent.length == 0) outerMostParent = directParentEl;
+					// Force replies into one level only
+					var outerMostParent = directParentEl.parents('.comment').last();
+					if(outerMostParent.length == 0) outerMostParent = directParentEl;
 
-							// Append element to DOM
-							var childCommentsEl = outerMostParent.find('.child-comments');
-							var commentingField = childCommentsEl.find('.commenting-field');
-							if(commentingField.length) {
-									commentingField.before(commentEl)
-							} else {
-									childCommentsEl.append(commentEl);
-							}
-
-							// Update toggle all -button
-							this.updateToggleAllButton(outerMostParent);
-
-					// Case: main level comment
+					// Append element to DOM
+					var childCommentsEl = outerMostParent.find('.child-comments');
+					var commentingField = childCommentsEl.find('.commenting-field');
+					if(commentingField.length) {
+							commentingField.before(commentEl)
 					} else {
-							commentList.prepend(commentEl);
+							childCommentsEl.append(commentEl);
 					}
+
+					// Update toggle all -button
+					this.updateToggleAllButton(outerMostParent);
+
+				// Case: main level comment
+				} else {
+					commentList.prepend(commentEl);
+				}
 			},
 
 			addAttachment: function(commentModel, commentList) {
-					commentList = commentList || this.$el.find('#attachment-list');
-					var commentEl = this.createCommentElement(commentModel);
-					commentList.prepend(commentEl);
+				commentList = commentList || this.$el.find('#attachment-list');
+				var commentEl = this.createCommentElement(commentModel);
+				commentList.prepend(commentEl);
 			},
 
 			removeComment: function(commentId) {
-					var self = this;
-					var commentModel = this.commentsById[commentId];
+				var self = this;
+				var commentModel = this.commentsById[commentId];
 
-					// Remove child comments recursively
-					var childComments = this.getChildComments(commentModel.id);
-					$(childComments).each(function(index, childComment) {
-							self.removeComment(childComment.id);
-					});
+				// Remove child comments recursively
+				var childComments = this.getChildComments(commentModel.id);
+				$(childComments).each(function(index, childComment) {
+						self.removeComment(childComment.id);
+				});
 
-					// Update the child array of outermost parent
-					if(commentModel.parent) {
-							var outermostParent = this.getOutermostParent(commentModel.parent);
-							var indexToRemove = outermostParent.childs.indexOf(commentModel.id);
-							outermostParent.childs.splice(indexToRemove, 1);
-					}
+				// Update the child array of outermost parent
+				if(commentModel.parent) {
+						var outermostParent = this.getOutermostParent(commentModel.parent);
+						var indexToRemove = outermostParent.childs.indexOf(commentModel.id);
+						outermostParent.childs.splice(indexToRemove, 1);
+				}
 
-					// Remove the comment from data model
-					delete this.commentsById[commentId];
+				// Remove the comment from data model
+				delete this.commentsById[commentId];
 
-					var commentElements = this.$el.find('li.comment[data-id="'+commentId+'"]');
-					var parentEl = commentElements.parents('li.comment').last();
+				var commentElements = this.$el.find('li.comment[data-id="'+commentId+'"]');
+				var parentEl = commentElements.parents('li.comment').last();
 
-					// Remove the element
-					commentElements.remove();
+				// Remove the element
+				commentElements.remove();
 
-					// Update the toggle all button
-					this.updateToggleAllButton(parentEl);
+				// Update the toggle all button
+				this.updateToggleAllButton(parentEl);
 			},
 
 			uploadAttachments: function(files, commentingField) {
@@ -556,64 +533,64 @@
 					var fileCount = files.length;
 
 					if(fileCount) {
-							var uploadButton = commentingField.find('.upload');
-							var textarea = commentingField.find('.textarea');
+						var uploadButton = commentingField.find('.upload');
+						var textarea = commentingField.find('.textarea');
 
-							// Disable upload button and append spinners while request is pending
-							uploadButton.removeClass('enabled');
-							var attachmentListSpinner = this.createSpinner();
-							var commentListSpinner = this.createSpinner();
-							this.$el.find('ul#attachment-list').prepend(attachmentListSpinner);
-							if(isReply) {
-									commentingField.before(commentListSpinner);
-							} else {
-									this.$el.find('ul#comment-list').prepend(commentListSpinner);
-							}
+						// Disable upload button and append spinners while request is pending
+						uploadButton.removeClass('enabled');
+						var attachmentListSpinner = this.createSpinner();
+						var commentListSpinner = this.createSpinner();
+						this.$el.find('ul#attachment-list').prepend(attachmentListSpinner);
+						if(isReply) {
+							commentingField.before(commentListSpinner);
+						} else {
+							this.$el.find('ul#comment-list').prepend(commentListSpinner);
+						}
 
-							var success = function(commentArray) {
-									$(commentArray).each(function(index, commentJSON) {
-											var commentModel = self.createCommentModel(commentJSON);
-											self.addCommentToDataModel(commentModel);
-											self.addComment(commentModel);
-											self.addAttachment(commentModel);
-									});
-
-									// Close the commenting field if all the uploads were successfull
-									// and there's no content besides the attachment
-									if(commentArray.length == fileCount && self.getTextareaContent(textarea).length == 0) {
-											commentingField.find('.close').trigger('click');
-									}
-
-									// Enable upload button and remove spinners
-									uploadButton.addClass('enabled');
-									commentListSpinner.remove();
-									attachmentListSpinner.remove();
-							};
-
-							var error = function() {
-									// Enable upload button and remove spinners
-									uploadButton.addClass('enabled');
-									commentListSpinner.remove();
-									attachmentListSpinner.remove();
-							};
-
-							var commentArray = [];
-							$(files).each(function(index, file) {
-
-									// Create comment JSON
-									var commentJSON = self.createCommentJSON(textarea);
-									commentJSON.id += '-' + index;
-									commentJSON.content = '';
-									commentJSON.file = file;
-									commentJSON.fileURL = 'C:/fakepath/' + file.name;
-									commentJSON.fileMimeType = file.type;
-
-									// Reverse mapping
-									commentJSON = self.applyExternalMappings(commentJSON);
-									commentArray.push(commentJSON);
+						var success = function(commentArray) {
+							$(commentArray).each(function(index, commentJSON) {
+								var commentModel = self.createCommentModel(commentJSON);
+								self.addCommentToDataModel(commentModel);
+								self.addComment(commentModel);
+								self.addAttachment(commentModel);
 							});
 
-							self.options.uploadAttachments(commentArray, success, error);
+							// Close the commenting field if all the uploads were successfull
+							// and there's no content besides the attachment
+							if(commentArray.length == fileCount && self.getTextareaContent(textarea).length == 0) {
+								commentingField.find('.close').trigger('click');
+							}
+
+							// Enable upload button and remove spinners
+							uploadButton.addClass('enabled');
+							commentListSpinner.remove();
+							attachmentListSpinner.remove();
+						};
+
+						var error = function() {
+							// Enable upload button and remove spinners
+							uploadButton.addClass('enabled');
+							commentListSpinner.remove();
+							attachmentListSpinner.remove();
+						};
+
+						var commentArray = [];
+						$(files).each(function(index, file) {
+
+							// Create comment JSON
+							var commentJSON = self.createCommentJSON(textarea);
+							commentJSON.id += '-' + index;
+							commentJSON.content = '';
+							commentJSON.file = file;
+							commentJSON.fileURL = 'C:/fakepath/' + file.name;
+							commentJSON.fileMimeType = file.type;
+
+							// Reverse mapping
+							commentJSON = self.applyExternalMappings(commentJSON);
+							commentArray.push(commentJSON);
+						});
+
+						self.options.uploadAttachments(commentArray, success, error);
 					}
 
 					// Clear the input field
@@ -631,9 +608,9 @@
 
 					// Select replies to be hidden
 					if (this.options.maxRepliesVisible === 0) {
-							var hiddenReplies = childComments;
+						var hiddenReplies = childComments;
 					} else {
-							var hiddenReplies = childComments.slice(0, -this.options.maxRepliesVisible);
+						var hiddenReplies = childComments.slice(0, -this.options.maxRepliesVisible);
 					}
 
 					// Add identifying class for hidden replies so they can be toggled
@@ -641,36 +618,36 @@
 
 					// Show all replies if replies are expanded
 					if(toggleAllButton.find('span.text').text() == this.options.textFormatter(this.options.hideRepliesText)) {
-							hiddenReplies.addClass('visible');
+						hiddenReplies.addClass('visible');
 					}
 
 					// Make sure that toggle all button is present
 					if(childComments.length > this.options.maxRepliesVisible) {
 
-							// Append button to toggle all replies if necessary
-							if(!toggleAllButton.length) {
+						// Append button to toggle all replies if necessary
+						if(!toggleAllButton.length) {
 
-									toggleAllButton = $('<li/>', {
-											'class': 'toggle-all highlight-font-bold'
-									});
-									var toggleAllButtonText = $('<span/>', {
-											'class': 'text'
-									});
-									var caret = $('<span/>', {
-											'class': 'caret'
-									});
+							toggleAllButton = $('<li/>', {
+								'class': 'toggle-all highlight-font-bold'
+							});
+							var toggleAllButtonText = $('<span/>', {
+								'class': 'text'
+							});
+							var caret = $('<span/>', {
+								'class': 'caret'
+							});
 
-									// Append toggle button to DOM
-									toggleAllButton.append(toggleAllButtonText).append(caret);
-									childCommentsEl.prepend(toggleAllButton);
-							}
+							// Append toggle button to DOM
+							toggleAllButton.append(toggleAllButtonText).append(caret);
+							childCommentsEl.prepend(toggleAllButton);
+						}
 
-							// Update the text of toggle all -button
-							this.setToggleAllButtonText(toggleAllButton, false);
+						// Update the text of toggle all -button
+						this.setToggleAllButtonText(toggleAllButton, false);
 
 					// Make sure that toggle all button is not present
 					} else {
-							toggleAllButton.remove();
+						toggleAllButton.remove();
 					}
 			},
 
@@ -1799,10 +1776,10 @@
 							
 							// Case: image preview
 							if(type == 'image') {
-									var image = $('<img/>', {
-											src: commentModel.fileURL
-									});
-									link.html(image);
+								var image = $('<img/>', {
+										src: commentModel.fileURL
+								});
+								link.html(image);
 
 							// Case: video preview
 							} else if(type == 'video') {
