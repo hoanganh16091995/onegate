@@ -10,7 +10,7 @@
       </v-btn>
       <content-placeholders class="mt-3" v-if="loading">
         <content-placeholders-text :lines="7" />
-        </content-placeholders>
+      </content-placeholders>
       <v-list v-else class="py-0 nav_trang_thai_ho_so">
         <v-list-tile v-for="(item, index) in trangThaiHoSoList" :key="item.id" :to="changeList(item, index)">
           <v-list-tile-action>

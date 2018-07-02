@@ -22,6 +22,8 @@ export const store = new Vuex.Store({
     //   dossierApi: '/o/rest/v2/dossiers',
     //   dossierTemplatesApi: '/o/rest/v2/dossiertemplates',
     //   applicantApi: '/o/rest/v2/applicant',
+    //   dossierlogsApi: 'http://127.0.0.1:8081/api/dossiers/dossierlogs',
+    //   commentApi: 'http://127.0.0.1:8081/api/comments',
     //   govAgency: 'abc',
     //   dossierlogsApi: '/o/rest/v2/dossierlogs',
     //   user: {},
@@ -1195,6 +1197,7 @@ export const store = new Vuex.Store({
           } else {
             users = []
           }
+
           resolve(users)
         })
         .catch(function (error) {
@@ -1402,7 +1405,8 @@ export const store = new Vuex.Store({
         wardCode: payload.wardCode,
         contactEmail: payload.contactEmail,
         contactTelNo: payload.contactTelNo,
-        userType: userTypeCondition
+        userType: userTypeCondition,
+        applicantNote: payload.applicantNote
       }
       state.thongTinChuHoSo = thongTinChuHoSoPayLoad
     },

@@ -1,3 +1,4 @@
+import 'babel-polyfill'
 import 'vuetify/dist/vuetify.min.css'
 import 'toastr/build/toastr.min.css'
 import 'alpaca/dist/alpaca/bootstrap/alpaca.min.css'
